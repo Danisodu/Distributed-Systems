@@ -1,18 +1,13 @@
 # Projeto de Sistemas Distribuídos 2015-2016 #
 
-Grupo de SD ... - Campus ...
-*(preencher com número do grupo de SD no Fénix e depois apagar esta linha)*
+Grupo de SD 53 - Campus AL
 
-... ... ...
-
-... ... ...
-
-... ... ...
-*(preencher com nome, número e email de membro do grupo e depois apagar esta linha)*
-
+Margarida Correia 78352 margarida.correia@ist.utl.pt
+Daniela Duarte 78542 danisodu@gmail.com
+Ana Cláudia Amorim 78576 ana-claudia1995@hotmail.com 
 
 Repositório:
-[tecnico-distsys/C_XX-project](https://github.com/tecnico-distsys/C_XX-project/)
+[tecnico-distsys/A_53-project](https://github.com/tecnico-distsys/A_53-project/)
 
 -------------------------------------------------------------------------------
 
@@ -101,7 +96,7 @@ mvn exec:java
 
 [2] Construir **cliente** e executar testes
 
-```
+```C_XX
 cd ...-ws-cli
 mvn clean install
 ```
