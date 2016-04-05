@@ -6,6 +6,8 @@ Margarida Correia 78352 margarida.correia@ist.utl.pt
 Daniela Duarte 78542 danisodu@gmail.com
 Ana Cláudia Amorim 78576 ana-claudia1995@hotmail.com 
 
+
+
 Repositório:
 [tecnico-distsys/A_53-project](https://github.com/tecnico-distsys/A_53-project/)
 
