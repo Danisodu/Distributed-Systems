@@ -4,17 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
     <!-- http://maven.apache.org/pom.html#Quick_Overview -->
 
-    <!-- Please replace 'cxx' below with 
-        your c (campus) with a (Alameda) / t (Tagus); and 
-        your group number with two digits.
-        Then delete this comment. -->
-    <groupId>pt.upa.cxx</groupId>
+    <groupId>pt.upa.A53</groupId>
     <artifactId>transporter-ws</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>${project.artifactId}</name>
-
+    
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -28,14 +24,16 @@
         <mainclass>pt.upa.transporter.TransporterApplication</mainclass>
 
         <!-- instance number - redefine using -D option - e.g. mvn -Dws.i=2 exec:java -->
-        <ws.i>1</ws.i>
+        <!-- <ws.i>1</ws.i> -->
 
-        <ws.host>localhost</ws.host>
-        <ws.port>808${ws.i}</ws.port>
-        <ws.url>http://${ws.host}:${ws.port}/transporter-ws/endpoint</ws.url>
+        <!-- <ws.host>localhost</ws.host> -->
+        <!-- <ws.port>808${ws.i}</ws.port> -->
+        <!-- <ws.url>http://${ws.host}:${ws.port}/transporter-ws/endpoint</ws.url> -->
 
-        <ws.name>UpaTransporter${ws.i}</ws.name>
         <uddi.url>http://localhost:9090</uddi.url>
+        <ws.name>TransporterWebService</ws.name> <!--UpaTransporter${ws.i} -->
+        <ws.url>http://localhost:8080/transporter-ws/endpoint</ws.url>
+        
     </properties>
 
     <dependencies>
@@ -58,6 +56,12 @@
             <artifactId>junit</artifactId>
             <version>4.12</version>
             <scope>test</scope>
+        </dependency>
+            <!-- UDDI Naming -->
+        <dependency>
+            <groupId>pt.ulisboa.tecnico.sdis</groupId>
+            <artifactId>uddi-naming</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
 
