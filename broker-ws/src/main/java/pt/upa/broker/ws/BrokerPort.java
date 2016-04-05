@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.jws.WebService;
 
+import pt.upa.transporter.ws.cli.TransporterClient;
+
 @WebService(
 	    endpointInterface="pt.upa.broker.ws.BrokerPortType",
 	    wsdlLocation="broker.1_0.wsdl",
@@ -13,10 +15,13 @@ import javax.jws.WebService;
 	    serviceName="BrokerService"
 	)
 public class BrokerPort implements BrokerPortType{
+	
+	private TransporterClient ts = new TransporterClient(); //este vai lidar com as transportadoras
 
 	@Override
 	public String ping(String name) {
 		// TODO Auto-generated method stub
+		// tem que chamar algo do transporter client para falar com as transportadoras
 		return name;
 	}
 
@@ -45,7 +50,5 @@ public class BrokerPort implements BrokerPortType{
 		// TODO Auto-generated method stub
 		
 	}
-
-	// TODO
 
 }

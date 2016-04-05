@@ -15,6 +15,8 @@ import pt.upa.transporter.ws.cli.TransporterClient;
 public class TransporterClientApplication {
 
 	public static void main(String[] args) throws Exception {
+		
+		
 		// Check arguments
 		if (args.length < 2) {
 			System.err.println("Argument(s) missing!");
