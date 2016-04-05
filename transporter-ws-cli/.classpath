@@ -28,5 +28,14 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/DanielaD/.m2/repository/pt/ulisboa/tecnico/sdis/uddi-naming/1.0/uddi-naming-1.0.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="pt.ulisboa.tecnico.sdis"/>
+			<attribute name="maven.artifactId" value="uddi-naming"/>
+			<attribute name="maven.version" value="1.0"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
