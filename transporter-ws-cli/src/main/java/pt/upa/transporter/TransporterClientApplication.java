@@ -48,7 +48,9 @@ public class TransporterClientApplication {
 		requestContext.put(ENDPOINT_ADDRESS_PROPERTY, endpointAddress);
 
 		String result = port.ping("friend");
-		System.out.println(result);
+		System.out.println(result); 
+		//e a excepcao?
+		
 	}
 
 }
