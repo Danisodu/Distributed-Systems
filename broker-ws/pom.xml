@@ -87,6 +87,7 @@
                     <wsdlFiles>
                         <wsdlFile>${wsdl.filename}</wsdlFile>
                     </wsdlFiles>
+                  
                 </configuration>
                 <dependencies>
                     <dependency>
