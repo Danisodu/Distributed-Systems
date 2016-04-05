@@ -17,7 +17,8 @@ import pt.upa.transporter.ws.cli.TransporterClient;
 public class BrokerPort implements BrokerPortType{
 	
 	private TransporterClient ts = new TransporterClient(); //este vai lidar com as transportadoras
-
+	private ObjectFactory of = new ObjectFactory();
+	
 	@Override
 	public String ping(String name) {
 		// TODO Auto-generated method stub
