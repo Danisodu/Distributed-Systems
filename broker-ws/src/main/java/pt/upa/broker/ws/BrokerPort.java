@@ -16,14 +16,12 @@ import pt.upa.transporter.ws.cli.TransporterClient;
 	)
 public class BrokerPort implements BrokerPortType{
 	
-	private TransporterClient ts = new TransporterClient(); //este vai lidar com as transportadoras
-	private ObjectFactory of = new ObjectFactory();
+	private TransporterClient tc = new TransporterClient(); //este vai lidar com as transportadoras
 	
 	@Override
 	public String ping(String name) {
-		// TODO Auto-generated method stub
-		// tem que chamar algo do transporter client para falar com as transportadoras
-		return name;
+		// TODO Auto-generated method stub		
+		return tc.ping();
 	}
 
 	@Override
