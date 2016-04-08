@@ -30,7 +30,6 @@ public class TransporterPort implements TransporterPortType{
 	
 	@Override
 	public String ping(String name) {
-
 		return name;
 	}
 
@@ -61,30 +60,37 @@ public class TransporterPort implements TransporterPortType{
 		TransporterJob newTj = new TransporterJob(name,""+jobs.size(),origin,destination,price,JobState.PROPOSED);
 		//change size
 
-		addTransport(newTj);
+		addJob(newTj);
 		
 		return createJobView(origin, destination, price);
 	}
 
 	@Override
 	public JobView decideJob(String id, boolean accept) throws BadJobFault_Exception {
-		return null;
+		
+		TransporterJob job = getJobById(id);
+		
+		if(accept){ 
+			job.setState(JobState.ACCEPTED);
+		} else{
+			job.setState(JobState.REJECTED);
+		}
+		
+		return this.convertJob(job);
 	}
 
 	@Override
-	public JobView jobStatus(String id) throws IndexOutOfBoundsException{
+	public JobView jobStatus(String id){
 		
-		int index = Integer.parseInt(id);
 		TransporterJob job = null;
 		
 		try{
-			job = getTransport(index);
-		} catch(IndexOutOfBoundsException e){ return null; }
+			job = getJobById(id);
+		} catch(BadJobFault_Exception e){ return null; }
 		
 		JobView view = createJobView(job.getOrigin(), job.getDestination(), job.getPrice());
 		
 		return view;
-		
 	}
 
 	@SuppressWarnings("null")
@@ -105,19 +111,39 @@ public class TransporterPort implements TransporterPortType{
 	public void clearJobs() {
 		
 		for(int index = 0; index < jobs.size(); index++){
-			removeTransport(index);
+			removeJob(index);
 		}
 	}
 
-	public TransporterJob getTransport(int id) {
-		return jobs.get(id);
+	public TransporterJob getJob(int id) throws BadJobFault_Exception{
+		
+		TransporterJob job = null;
+
+		try{
+			job = jobs.get(id);
+		} 
+		
+		catch(IndexOutOfBoundsException e){ 
+			BadJobFault fault = new BadJobFault();
+			fault.setId(""+id); //change
+			throw new BadJobFault_Exception("O id do job específicado não existe",fault); 
+		}		
+		
+		return job;
+	}
+	
+	public TransporterJob getJobById(String id) throws BadJobFault_Exception{
+		
+		int index = Integer.parseInt(id);
+		
+		return getJob(index);
 	}
 
-	public void addTransport(TransporterJob transport) {
+	public void addJob(TransporterJob transport) {
 		jobs.add(transport);
 	}
 	
-	public void removeTransport(int index){
+	public void removeJob(int index){
 		jobs.remove(index);
 	}
 	
