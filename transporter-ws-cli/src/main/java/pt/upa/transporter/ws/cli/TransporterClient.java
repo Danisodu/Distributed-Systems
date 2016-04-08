@@ -2,30 +2,34 @@ package pt.upa.transporter.ws.cli;
 
 import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.registry.JAXRException;
 import javax.xml.ws.BindingProvider;
 
 import pt.ulisboa.tecnico.sdis.ws.uddi.UDDINaming;
+import pt.upa.transporter.ws.BadJobFault_Exception;
+import pt.upa.transporter.ws.BadLocationFault_Exception;
+import pt.upa.transporter.ws.BadPriceFault_Exception;
+import pt.upa.transporter.ws.JobView;
 import pt.upa.transporter.ws.TransporterPortType;
 import pt.upa.transporter.ws.TransporterService;
 
-public class TransporterClient {
+public class TransporterClient{
 	
 	//tem que ter aqui funcoes que chamam os do TransporterServer
-	//object factory
 	//como fazer look up de todos os serviços existentes?
 	//e dps chamá-los dentro 
 	
 	private String uddiURL;
 	private String serviceName;
+	private TransporterPortType handler;
 	
-	public TransporterClient(String uURL){
+	public TransporterClient(String uURL, String sName){
 		uddiURL = uURL;
-		serviceName = "FIXME";
+		serviceName = sName;
 	}
-	//como definir o transporter client sem main?
 	
 	public TransporterClient(){
 	}
@@ -78,20 +82,39 @@ public class TransporterClient {
 		System.out.println("Creating stub ...");
 		TransporterService service = new TransporterService();
 		TransporterPortType port = service.getTransporterPort();
+		
+		handler = port;
 
 		System.out.println("Setting endpoint address ...");
 		BindingProvider bindingProvider = (BindingProvider) port;
 		Map<String, Object> requestContext = bindingProvider.getRequestContext();
 		requestContext.put(ENDPOINT_ADDRESS_PROPERTY, endpointAddress);
 
-		String result = port.ping("friend");
-		System.out.println(result); 
-		//e a excepcao?
-		
 	}
 	
-	public String ping(){
-		return "sabes";
+	public String ping(String name) {
+		return handler.ping(name);
+	}
+	
+	public JobView requestJob(String origin, String destination, int price)
+			throws BadLocationFault_Exception, BadPriceFault_Exception {
+		return handler.requestJob(origin, destination, price);
+	}
+	
+	public JobView decideJob(String id, boolean accept) throws BadJobFault_Exception {
+		return handler.decideJob(id, accept);
+	}
+	
+	public JobView jobStatus(String id) {
+		return handler.jobStatus(id);
+	}
+	
+	public List<JobView> listJobs() {
+		return handler.listJobs();
+	}
+	
+	public void clearJobs() {
+		handler.clearJobs();
 	}
 	
 }

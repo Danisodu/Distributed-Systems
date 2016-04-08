@@ -1,6 +1,9 @@
 package pt.upa.broker.ws.it;
 
 import org.junit.*;
+
+import pt.upa.broker.ws.cli.BrokerClient;
+
 import static org.junit.Assert.*;
 
 /**
@@ -48,6 +51,14 @@ public class ExampleIT {
 
         // assertEquals(expected, actual);
         // if the assert fails, the test fails
+    	
+    	BrokerClient bc = new BrokerClient("http://localhost:9090");
+    	
+    	bc.find();
+    	
+    	bc.ping("eu");
+    	
+    	
     }
 
 }
