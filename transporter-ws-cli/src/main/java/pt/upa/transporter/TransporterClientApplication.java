@@ -3,6 +3,8 @@ package pt.upa.transporter;
 import pt.upa.transporter.ws.cli.TransporterClient;
 
 public class TransporterClientApplication {
+	
+	//vai buscar o que e publicado atraves do find
 
 	public static void main(String[] args) throws Exception {
 				
