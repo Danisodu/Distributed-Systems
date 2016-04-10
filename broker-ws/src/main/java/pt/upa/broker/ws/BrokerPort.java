@@ -41,8 +41,10 @@ public class BrokerPort implements BrokerPortType{
 			Collection<String> endpointAddresses = uddiNaming.list("UpaTransporter%");
 			ArrayList<String> addresses = (ArrayList<String>) endpointAddresses;
 			
+			
 			for (String id: addresses){
-				TransporterClient clientHandler = new TransporterClient("http://localhost:9090", "UpaTransporter" + id);
+				System.out.println(id);
+				TransporterClient clientHandler = new TransporterClient("http://localhost:9090", "UpaTransporter1");
 			    addClientHandler(clientHandler);  
 			    //here, every transporterClient stays with its own transporterServer
 			}
@@ -68,7 +70,6 @@ public class BrokerPort implements BrokerPortType{
 		job = bestOffer(origin, destination, price);
 		
 		// Id is the broker's identifier, while job.identifier() is the transporter's identifier
-		// Making the identifier right (broker's side)
 		job.setIdentifier(id);
 		
 		

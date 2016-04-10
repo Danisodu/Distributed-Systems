@@ -56,10 +56,10 @@ public interface BrokerPortType {
      * @throws UnknownLocationFault_Exception
      * @throws InvalidPriceFault_Exception
      * @throws UnavailableTransportFault_Exception
+     * @throws BadJobFault_Exception 
+     * @throws UnknownTransportFault_Exception 
      * @throws BadPriceFault_Exception 
      * @throws BadLocationFault_Exception 
-     * @throws UnknownTransportFault_Exception 
-     * @throws BadJobFault_Exception 
      */
     @WebMethod
     @WebResult(targetNamespace = "")
