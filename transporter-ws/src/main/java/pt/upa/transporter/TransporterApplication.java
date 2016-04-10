@@ -26,7 +26,6 @@ public class TransporterApplication {
 		EndpointManager endpointManager = new EndpointManager(uddiURL, name, url);
 		
 		endpointManager.publish();
-
 	}
 
 }

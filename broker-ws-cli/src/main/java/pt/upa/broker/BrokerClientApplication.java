@@ -14,12 +14,11 @@ public class BrokerClientApplication {
 		}
 		
 		String uddiURL = args[0];
-		String name = args[1];
+		String serviceName = args[1];
 		
-		BrokerClient brokerClient = new BrokerClient(uddiURL);
+		BrokerClient brokerClient = new BrokerClient(uddiURL,serviceName);
 		
-		brokerClient.find();
-
+		System.out.println(brokerClient.requestTransport("Lisboa", "Castelo Branco", 14));
 	}
 
 }
