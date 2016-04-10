@@ -25,10 +25,11 @@ public class TransporterClient{
 	private String uddiURL;
 	private String serviceName;
 	private TransporterPortType handler;
-	
+		
 	public TransporterClient(String uURL, String sName){
 		uddiURL = uURL;
 		serviceName = sName;
+		initHandlerSearch();
 	}
 	
 	public TransporterClient(){
@@ -50,7 +51,7 @@ public class TransporterClient{
 		this.serviceName = serviceName;
 	}
 	
-	public void find(){
+	public void initHandlerSearch(){
 		
 		System.out.printf("Contacting UDDI at %s%n", uddiURL);
 		UDDINaming uddiNaming = null;
@@ -83,7 +84,7 @@ public class TransporterClient{
 		TransporterService service = new TransporterService();
 		TransporterPortType port = service.getTransporterPort();
 		
-		handler = port;
+		handler = port; 
 
 		System.out.println("Setting endpoint address ...");
 		BindingProvider bindingProvider = (BindingProvider) port;

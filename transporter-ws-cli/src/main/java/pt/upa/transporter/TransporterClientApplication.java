@@ -19,14 +19,48 @@ public class TransporterClientApplication {
 		
 		TransporterClient transporterClient = new TransporterClient(uddiURL, serviceName);
 		
-		transporterClient.find();
-		
-		
-		JobView j = transporterClient.requestJob("Lisboa","Castelo Branco",14);
-		
+		JobView j = transporterClient.requestJob("Lisboa","Castelo Branco",14);	
+				
+		System.out.println(j.getCompanyName());
 		System.out.println(j.getJobDestination());
-		//System.out.println(j.getJobState().value());
-	
+		System.out.println(j.getJobOrigin());
+		System.out.println(j.getJobPrice());
+		System.out.println(j.getJobState().name());
+		
+		j = transporterClient.jobStatus("0");
+		
+		System.out.println(j.getCompanyName());
+		System.out.println(j.getJobDestination());
+		System.out.println(j.getJobOrigin());
+		System.out.println(j.getJobPrice());
+		System.out.println(j.getJobIdentifier());
+		System.out.println(j.getJobState().name());
+		
+		j = transporterClient.decideJob("0", true);
+				
+		System.out.println(j.getJobIdentifier());
+		System.out.println(j.getJobState().name());
+		
+		j = transporterClient.jobStatus("0");
+		
+		System.out.println(j.getJobIdentifier());
+		System.out.println(j.getJobState().name());
+		
+		j = transporterClient.jobStatus("0");
+		
+		System.out.println(j.getJobIdentifier());
+		System.out.println(j.getJobState().name());
+		
+		j = transporterClient.jobStatus("0");
+		
+		System.out.println(j.getJobIdentifier());
+		System.out.println(j.getJobState().name());
+		
+		j = transporterClient.jobStatus("0");
+		
+		System.out.println(j.getJobIdentifier());
+		System.out.println(j.getJobState().name());
+		
 	}
 
 }

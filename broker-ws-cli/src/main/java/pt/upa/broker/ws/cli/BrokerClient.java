@@ -19,16 +19,15 @@ import pt.upa.broker.ws.UnknownLocationFault_Exception;
 import pt.upa.broker.ws.UnknownTransportFault_Exception;
 
 public class BrokerClient{
-	
-	//ter funções aqui, que depois fazem as repetivas no objeto?
-	
+		
 	private String uddiURL;
 	private String serviceName;
 	private BrokerPortType handler;
 	
-	public BrokerClient(String uURL){
+	public BrokerClient(String uURL, String serviceName){
 		setUddiURL(uURL);
-		setServiceName("UpaBroker"); //FIXME NO XML
+		setServiceName(serviceName);
+		initHandlerSearch();
 	}
 	
 	public BrokerClient(){
@@ -50,7 +49,7 @@ public class BrokerClient{
 		this.serviceName = serviceName;
 	}
 	
-	public void find(){
+	public void initHandlerSearch(){
 
 		System.out.printf("Contacting UDDI at %s%n", uddiURL);
 		UDDINaming uddiNaming = null;
@@ -89,11 +88,7 @@ public class BrokerClient{
 		handler = port;
 		
 		Map<String, Object> requestContext = bindingProvider.getRequestContext();
-		requestContext.put(ENDPOINT_ADDRESS_PROPERTY, endpointAddress);
-
-		/*String result = port.ping("friend");
-		System.out.println(result); */
-		
+		requestContext.put(ENDPOINT_ADDRESS_PROPERTY, endpointAddress);		
 	}
 
 	public String ping(String name) {
@@ -103,19 +98,19 @@ public class BrokerClient{
 	public String requestTransport(String origin, String destination, int price)
 			throws InvalidPriceFault_Exception, UnavailableTransportFault_Exception,
 			UnavailableTransportPriceFault_Exception, UnknownLocationFault_Exception {
-		return null;
+		return handler.requestTransport(origin, destination, price);
 	}
 
 	public TransportView viewTransport(String id) throws UnknownTransportFault_Exception {
-		return null;
+		return handler.viewTransport(id);
 	}
 
 	public List<TransportView> listTransports() {
-		return null;
+		return handler.listTransports();
 	}
 
 	public void clearTransports() {
-		
+		handler.clearTransports();
 	}
 
 }

@@ -1,8 +1,10 @@
 package pt.upa.transporter.ws;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Vector;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.jws.WebService;
 
@@ -18,7 +20,7 @@ public class TransporterPort implements TransporterPortType{
 	
 	private int id;
 	private String name;
-	private List<TransporterJob> jobs = new Vector<TransporterJob>();
+	private List<TransporterJob> jobs = new ArrayList<TransporterJob>();
 	private String[] centerTravels = {"Lisboa","Leiria","Santarém","Castelo Branco","Coimbra",
 				"Aveiro","Viseu","Guarda"};
 
@@ -41,7 +43,7 @@ public class TransporterPort implements TransporterPortType{
 		
 		if(id%2==0){
 			travels = new String[] {"Porto","Braga","Viana do Castelo","Vila Real","Bragança"};
-		} else{ 
+		} else{
 			travels = new String[] {"Setúbal","Évora","Portalegre","Beja","Faro"};
 		}
 		
@@ -53,16 +55,16 @@ public class TransporterPort implements TransporterPortType{
 			BadPriceFault fault = new BadPriceFault();
 			fault.setPrice(price);
 			throw new BadPriceFault_Exception("O preço tem que ser positivo",fault);
-		} //change eventually
+		} //change
 		
 		price = decidePrice(price);
 		
-		TransporterJob newTj = new TransporterJob(name,""+jobs.size(),origin,destination,price,JobState.PROPOSED);
-		//change size
-
+		TransporterJob newTj = new TransporterJob(name,""+jobs.size(),origin,destination,price,JobState.PROPOSED); 
+		//change
+		
 		addJob(newTj);
 		
-		return createJobView(origin, destination, price);
+		return convertJob(newTj);
 	}
 
 	@Override
@@ -71,12 +73,36 @@ public class TransporterPort implements TransporterPortType{
 		TransporterJob job = getJobById(id);
 		
 		if(accept){ 
+			Random rand = new Random();
+			Timer timer = new Timer();
+			int time = rand.nextInt(6) + 1;
+			
 			job.setState(JobState.ACCEPTED);
+			timer.schedule( new TimerTask(){
+
+				@Override
+				public void run() {
+					String state = job.getState().name();
+
+					if(state.equals("ACCEPTED")){
+						job.setState(JobState.HEADING);
+					}
+					
+					else if(state.equals("HEADING")){
+						job.setState(JobState.ONGOING);
+					}
+					
+					else{
+						job.setState(JobState.COMPLETED);
+						timer.cancel();
+					}
+				}
+			}, time);
 		} else{
 			job.setState(JobState.REJECTED);
 		}
 		
-		return this.convertJob(job);
+		return convertJob(job);
 	}
 
 	@Override
@@ -88,7 +114,7 @@ public class TransporterPort implements TransporterPortType{
 			job = getJobById(id);
 		} catch(BadJobFault_Exception e){ return null; }
 		
-		JobView view = createJobView(job.getOrigin(), job.getDestination(), job.getPrice());
+		JobView view = convertJob(job);
 		
 		return view;
 	}
@@ -109,10 +135,7 @@ public class TransporterPort implements TransporterPortType{
 
 	@Override
 	public void clearJobs() {
-		
-		for(int index = 0; index < jobs.size(); index++){
-			removeJob(index);
-		}
+		jobs.clear();
 	}
 
 	public TransporterJob getJob(int id) throws BadJobFault_Exception{
@@ -170,7 +193,7 @@ public class TransporterPort implements TransporterPortType{
 		
 		return false;
 	}
-	
+
 	public int decidePrice(int price){
 		
 		Random rand = new Random();
@@ -199,34 +222,20 @@ public class TransporterPort implements TransporterPortType{
 		
 		return price;
 	}
-
-	public JobView createJobView(String origin, String destination, int price){
-		
-		JobView jv = new JobView();
-		int numJobs = jobs.size();
-		
-		jv.setCompanyName(name);
-		jv.setJobIdentifier("" + numJobs++); //change
-		jv.setJobOrigin(origin);
-		jv.setJobDestination(destination);
-		jv.setJobPrice(price);
-		
-		return jv;
-	}
 	
-	public JobView convertJob(TransporterJob t){
+	public JobView convertJob(TransporterJob job){
 			    
 	    JobView newJv = new JobView();
-	    String state = t.getState().value();
+	    String state = job.getState().name();
 	    
-	    newJv.setCompanyName(t.getCompanyName());
-	    newJv.setJobDestination(t.getDestination());
-	    newJv.setJobIdentifier(t.getIdentifier());
-	    newJv.setJobOrigin(t.getOrigin());
-	    newJv.setJobPrice(t.getPrice());
+	    newJv.setCompanyName(job.getCompanyName());
+	    newJv.setJobDestination(job.getDestination());
+	    newJv.setJobIdentifier(job.getIdentifier());
+	    newJv.setJobOrigin(job.getOrigin());
+	    newJv.setJobPrice(job.getPrice());
 	    newJv.setJobState(JobStateView.fromValue(state));
 	    
 	    return newJv;
 	}
-
+	
 }
