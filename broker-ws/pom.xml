@@ -22,11 +22,11 @@
         <wsdl.filename>broker.1_0.wsdl</wsdl.filename>
 
         <mainclass>pt.upa.broker.BrokerApplication</mainclass>
-
+		
+		<uddi.url>http://localhost:9090</uddi.url>
         <ws.url>http://localhost:8080/broker-ws/endpoint</ws.url>
-
-        <ws.name>BrokerWebService</ws.name> <!-- UpaService -->
-        <uddi.url>http://localhost:9090</uddi.url>
+        <ws.name>UpaBroker</ws.name>
+        
     </properties>
 
     <dependencies>
@@ -55,6 +55,11 @@
             <groupId>pt.ulisboa.tecnico.sdis</groupId>
             <artifactId>uddi-naming</artifactId>
             <version>1.0</version>
+        </dependency>
+        <dependency>
+        	 <groupId>pt.upa.a48</groupId>
+    		<artifactId>transporter-ws-cli</artifactId>
+    		<version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

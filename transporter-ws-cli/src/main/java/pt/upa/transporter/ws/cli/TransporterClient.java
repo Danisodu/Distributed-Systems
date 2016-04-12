@@ -2,30 +2,30 @@ package pt.upa.transporter.ws.cli;
 
 import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.registry.JAXRException;
 import javax.xml.ws.BindingProvider;
 
 import pt.ulisboa.tecnico.sdis.ws.uddi.UDDINaming;
+import pt.upa.transporter.ws.BadJobFault_Exception;
+import pt.upa.transporter.ws.BadLocationFault_Exception;
+import pt.upa.transporter.ws.BadPriceFault_Exception;
+import pt.upa.transporter.ws.JobView;
 import pt.upa.transporter.ws.TransporterPortType;
 import pt.upa.transporter.ws.TransporterService;
 
-public class TransporterClient {
-	
-	//tem que ter aqui funcoes que chamam os do TransporterServer
-	//object factory
-	//como fazer look up de todos os serviços existentes?
-	//e dps chamá-los dentro 
-	
+public class TransporterClient{
+		
 	private String uddiURL;
-	private String serviceName;
-	
+	private String serviceName = null;
+	private String endpointAddress = null;
+	private TransporterPortType service;
+		
 	public TransporterClient(String uURL){
 		uddiURL = uURL;
-		serviceName = "FIXME";
 	}
-	//como definir o transporter client sem main?
 	
 	public TransporterClient(){
 	}
@@ -38,15 +38,7 @@ public class TransporterClient {
 		this.uddiURL = uddiURL;
 	}
 
-	public String getServiceName() {
-		return serviceName;
-	}
-
-	public void setServiceName(String serviceName) {
-		this.serviceName = serviceName;
-	}
-	
-	public void find(){
+	public void initServiceSearch(){
 		
 		System.out.printf("Contacting UDDI at %s%n", uddiURL);
 		UDDINaming uddiNaming = null;
@@ -58,16 +50,6 @@ public class TransporterClient {
 			e1.printStackTrace();
 		}
 
-		System.out.printf("Looking for '%s'%n", serviceName);
-		String endpointAddress = null;
-		
-		try {
-			endpointAddress = uddiNaming.lookup(serviceName);
-		} catch (JAXRException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 		if (endpointAddress == null) {
 			System.out.println("Not found!");
 			return;
@@ -76,22 +58,61 @@ public class TransporterClient {
 		}
 
 		System.out.println("Creating stub ...");
-		TransporterService service = new TransporterService();
-		TransporterPortType port = service.getTransporterPort();
+		TransporterService transporterService = new TransporterService();
+		TransporterPortType port = transporterService.getTransporterPort();
+
+		service = port; 
 
 		System.out.println("Setting endpoint address ...");
 		BindingProvider bindingProvider = (BindingProvider) port;
 		Map<String, Object> requestContext = bindingProvider.getRequestContext();
 		requestContext.put(ENDPOINT_ADDRESS_PROPERTY, endpointAddress);
-
-		String result = port.ping("friend");
-		System.out.println(result); 
-		//e a excepcao?
 		
+		System.out.println("Transporter Client is ready.");
+
+	}
+
+	public String getServiceName() {
+		return serviceName;
+	}
+
+	public void setServiceName(String serviceName) {
+		this.serviceName = serviceName;
 	}
 	
-	public String ping(){
-		return "sabes";
+	public String getEndpointAddress() {
+		return endpointAddress;
 	}
+
+	public void setEndpointAddress(String endpointAddress) {
+		this.endpointAddress = endpointAddress;
+	}
+
+	public String ping(String name) {
+		return service.ping(name);
+	}
+	
+	public JobView requestJob(String origin, String destination, int price)
+			throws BadLocationFault_Exception, BadPriceFault_Exception {
+		return service.requestJob(origin, destination, price);
+	}
+	
+	public JobView decideJob(String id, boolean accept) throws BadJobFault_Exception {
+		return service.decideJob(id, accept);
+	}
+	
+	public JobView jobStatus(String id) {
+		return service.jobStatus(id);
+	}
+	
+	public List<JobView> listJobs() {
+		return service.listJobs();
+	}
+	
+	public void clearJobs() {
+		service.clearJobs();
+	}
+
+
 	
 }
