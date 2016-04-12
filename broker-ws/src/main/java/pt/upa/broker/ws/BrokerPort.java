@@ -25,29 +25,40 @@ import pt.upa.transporter.ws.cli.TransporterClient;
 	)
 public class BrokerPort implements BrokerPortType{
 	
-	List<TransporterClient> clientHandlers;
-	List<BrokerJob> jobs = new ArrayList<BrokerJob>();
-	//é preciso ter aqui alguns valores do uddi url etc etc?
+	private List<TransporterClient> clientHandlers = new ArrayList<TransporterClient>();
+	private List<BrokerJob> jobs = new ArrayList<BrokerJob>();
+	private String[] centerTravels = {"Lisboa","Leiria","Santarém","Castelo Branco","Coimbra",
+			"Aveiro","Viseu","Guarda"};
+	private String[] southTravels = {"Setúbal","Évora","Portalegre","Beja","Faro"};
+	private String[] northTravels = {"Porto","Braga","Viana do Castelo","Vila Real","Bragança"};
+
 	
 	public BrokerPort(){
-		initHandlersSearch();
 	}
 	
 	public void initHandlersSearch(){
-				
+		
+		System.out.printf("Contacting UDDI...");
+		UDDINaming uddiNaming = null;
+		
 		try {
-			UDDINaming uddiNaming = new UDDINaming("http://localhost:9090");
-			
+			uddiNaming = new UDDINaming("http://localhost:9090");
+		
 			Collection<String> endpointAddresses = uddiNaming.list("UpaTransporter%");
-			ArrayList<String> addresses = (ArrayList<String>) endpointAddresses;
+			ArrayList<String> urls = (ArrayList<String>) endpointAddresses;
 			
-			
-			for (String id: addresses){
-				System.out.println(id);
-				TransporterClient clientHandler = new TransporterClient("http://localhost:9090", "UpaTransporter1");
+			for (String url: urls){
+				
+				System.out.println(url);
+				TransporterClient clientHandler = new TransporterClient("http://localhost:9090");
+				
+				clientHandler.setEndpointAddress(url);
+				clientHandler.initServiceSearch();
+				
 			    addClientHandler(clientHandler);  
 			    //here, every transporterClient stays with its own transporterServer
 			}
+			
 		} catch (JAXRException e) {
 			e.printStackTrace();
 		}
@@ -55,25 +66,33 @@ public class BrokerPort implements BrokerPortType{
 	
 	@Override
 	public String ping(String name) {
-		return name;
+		
+		return clientHandlers.get(0).ping(name);
 	}
 
 	@Override
 	public String requestTransport(String origin, String destination, int price)
-			throws InvalidPriceFault_Exception, UnavailableTransportFault_Exception,
-			UnavailableTransportPriceFault_Exception, UnknownLocationFault_Exception, BadLocationFault_Exception, BadPriceFault_Exception, UnknownTransportFault_Exception, BadJobFault_Exception {
+			throws InvalidPriceFault_Exception, UnavailableTransportFault_Exception, UnavailableTransportPriceFault_Exception,
+			UnknownLocationFault_Exception {
 		
-		String id = ""+jobs.size(), info; // Change
-		BrokerJob job = createJob("Não atribuido", id, origin, destination, price, JobState.REQUESTED); // Ask about state changes
+		int index = jobs.size();
+		String id = "" + index, info = null;
+		
+		verifyLocations(origin, destination);
+		
+		if(price < 0){
+			InvalidPriceFault fault = new InvalidPriceFault();
+			fault.setPrice(price);
+			throw new InvalidPriceFault_Exception("The price must be positive.", fault);
+		}
+		
+		BrokerJob job = createJobRequested(id, origin, destination, price, JobState.REQUESTED);
 
-		// What if job variable doesn't have any best offer?
-		job = bestOffer(origin, destination, price);
-		
-		// Id is the broker's identifier, while job.identifier() is the transporter's identifier
-		job.setIdentifier(id);
-		
-		
-		info = decideOffer(job, price);
+		job = changeJob(bestOffer(origin, destination, price, id), id);
+
+		try {
+			info = decideOffer(job, price);
+		} catch (UnknownTransportFault_Exception e) {/*No special treatment, because this will never happen*/}
 	
 		return info;
 	}
@@ -82,16 +101,25 @@ public class BrokerPort implements BrokerPortType{
 	public TransportView viewTransport(String id) throws UnknownTransportFault_Exception {
 		
 		BrokerJob job = getJobById(id);
-		String convertedId = job.getIdentifier(); //that's how the convertion is made
-		TransporterClient clientHandler = getTransporterByJobId(id);
+		String idT = job.getTransporterIdentifier();
+		TransporterClient clientHandler = null;
 		
-		/*if(clientHandler == null){
-			UnknownTransportFault fault = new UnknownTransportFault();
+		try {
+			clientHandler = getTransporterByJobId(id);
+		} catch (ClientHandlerProblems_Exception e) {
+			System.out.println(e.getMsg());
+		}
+		
+		JobView view = clientHandler.jobStatus(idT);
+		
+		if(view == null){
+			UnknownTransportFault fault =
+					new UnknownTransportFault();
 			fault.setId(id);
-			throw new UnknownTransportFault_Exception("",);
-		}*/
-				
-		JobView view = clientHandler.jobStatus(convertedId);
+			throw new UnknownTransportFault_Exception("The specified transport doesn't exist",fault);
+		}
+		
+		view.setJobIdentifier(id);
 		
 		return convertJobView2(view);
 	}
@@ -115,6 +143,7 @@ public class BrokerPort implements BrokerPortType{
 		jobs.clear();
 	}
 	
+	
 	public void addClientHandler(TransporterClient client){
 		clientHandlers.add(client);
 	}
@@ -130,8 +159,11 @@ public class BrokerPort implements BrokerPortType{
 		try{
 			job = jobs.get(id);
 		} catch(IndexOutOfBoundsException e){
+			
 			UnknownTransportFault fault = new UnknownTransportFault();
+			
 			fault.setId(""+id); //change
+			
 			throw new UnknownTransportFault_Exception("The specified job doesn't exist.", fault);
 		}
 		
@@ -145,30 +177,64 @@ public class BrokerPort implements BrokerPortType{
 		return getJob(index);
 	}
 	
-	public TransporterClient getTransporterByJobId(String id) throws UnknownTransportFault_Exception{
+	public TransporterClient getTransporterByJobId(String id) throws UnknownTransportFault_Exception, ClientHandlerProblems_Exception{
 		
 		BrokerJob job = getJobById(id);
 		
 		String serviceName =  job.getCompanyName();
 		
 		for(TransporterClient tc: clientHandlers){
+			
 			if(tc.getServiceName().equals(serviceName)){
 				return tc;
 			}
 		}
 		
-		return null; //this will never happen
+		throw new ClientHandlerProblems_Exception();
 	}
 	
-	public BrokerJob createJob(String companyName, String id, String origin, String destination, int price, JobState state){
+	public BrokerJob createJob(String companyName, String id, String idT, String origin, String destination, int price, JobState state){
 
-		BrokerJob job = new BrokerJob(companyName, id, origin, destination, price, state);
+		BrokerJob job = new BrokerJob(companyName, id, idT, origin, destination, price, state);
 		
 		addJob(job);
 		
 		return job;
 	}
 	
+	public BrokerJob createJobRequested(String id, String origin, String destination, int price, JobState state){
+
+		BrokerJob job = new BrokerJob(id, origin, destination, price, state);
+		
+		addJob(job);
+		
+		return job;
+	}
+	
+	public void verifyLocations(String origin, String destination) throws UnknownLocationFault_Exception{
+		
+		if(!(containsLocation(centerTravels,origin)) && !(containsLocation(southTravels, origin)) && !(containsLocation(northTravels, origin))){
+			UnknownLocationFault fault = new UnknownLocationFault();
+			fault.setLocation(origin);
+			throw new UnknownLocationFault_Exception("Unknown origin.", fault);
+		}
+				
+		if(!(containsLocation(centerTravels,destination)) && !(containsLocation(southTravels, destination)) && !(containsLocation(northTravels, origin))){
+			UnknownLocationFault fault = new UnknownLocationFault();
+			fault.setLocation(destination);
+			throw new UnknownLocationFault_Exception("Unknown destination.", fault);
+		}
+	}
+	
+	public boolean containsLocation(String[] vector, String name){
+		
+		for(String s: vector){
+			if(s.equals(name)) return true;
+		}
+		
+		return false;
+	}
+
 	public String convertJobStateView(JobStateView state){
 		
 		String name = state.name(), nameConverted;
@@ -193,7 +259,7 @@ public class BrokerPort implements BrokerPortType{
 				nameConverted = name;
 				break;
 			default:
-				nameConverted = ""; // this will never happen, change (?)
+				nameConverted = ""; // This will never happen, but could throw an exception
 				break;
 		}
 
@@ -206,10 +272,9 @@ public class BrokerPort implements BrokerPortType{
 	    JobStateView stateVw = view.getJobState();
 	    String state = convertJobStateView(stateVw);
 	    
-	    newBj.setIdentifier(view.getJobIdentifier());
 	    newBj.setCompanyName(view.getCompanyName());
+	    newBj.setTransporterIdentifier(view.getJobIdentifier());
 	    newBj.setDestination(view.getJobDestination());
-	    newBj.setIdentifier(view.getJobIdentifier());
 	    newBj.setOrigin(view.getJobOrigin());
 	    newBj.setPrice(view.getJobPrice());
 	    newBj.setState(JobState.fromValue(state));
@@ -234,21 +299,35 @@ public class BrokerPort implements BrokerPortType{
 	    return newTv;
 	}
 	
-	public BrokerJob bestOffer(String origin, String destination, int price) throws BadLocationFault_Exception, BadPriceFault_Exception, UnavailableTransportFault_Exception{
+	public JobView bestOffer(String origin, String destination, int price, String id) throws UnavailableTransportFault_Exception, UnknownLocationFault_Exception, InvalidPriceFault_Exception{
 		
 		int minPrice = Integer.MAX_VALUE, givenPrice;
-		JobView temp, view = null;
+		JobView temp = null, view = null;
 		
 		if(clientHandlers.size() == 0){
 			UnavailableTransportFault fault = new UnavailableTransportFault();
 			fault.setOrigin(origin);
 			fault.setDestination(destination);
 			throw new UnavailableTransportFault_Exception("No transporters available.", fault);
-		}
+		} //é assim?
 
 		for(TransporterClient tc: clientHandlers){
 			
-			temp = tc.requestJob(origin,destination,price);
+			try {
+				temp = tc.requestJob(origin,destination,price);
+			} catch (BadLocationFault_Exception e) {
+				UnknownLocationFault fault = new UnknownLocationFault();
+				fault.setLocation(e.getFaultInfo().getLocation());
+				throw new UnknownLocationFault_Exception(e.getMessage(),fault);
+				
+			} catch (BadPriceFault_Exception e) {
+				InvalidPriceFault fault = new InvalidPriceFault();
+				fault.setPrice(e.getFaultInfo().getPrice());
+				throw new InvalidPriceFault_Exception(e.getMessage(),fault);
+			}
+			
+			tc.setServiceName(temp.getCompanyName());
+					
 			givenPrice = temp.getJobPrice();
 			
 			//verify conditions
@@ -256,31 +335,69 @@ public class BrokerPort implements BrokerPortType{
 				minPrice = givenPrice;
 				view = temp;
 			}
-		}
-		
-		return convertJobView1(view);
+		} //falta rejeitar as outras ofertas
+				
+		return view;
 	}
 	
-	public String decideOffer(BrokerJob job, int price) throws BadJobFault_Exception, UnknownTransportFault_Exception, UnavailableTransportPriceFault_Exception{
+	public String decideOffer(BrokerJob job, int price) throws UnknownTransportFault_Exception, UnavailableTransportPriceFault_Exception{
 		
+		String id = job.getIdentifier(), idT = job.getTransporterIdentifier();
 		int bestPrice = job.getPrice();
-		String id = job.getIdentifier();
-		TransporterClient clientHandler = getTransporterByJobId(id);
-		JobView view;
+		TransporterClient clientHandler = null;
 		
+		try {
+			clientHandler = getTransporterByJobId(id);
+		} catch (ClientHandlerProblems_Exception e) {
+			e.getMsg();
+		}
+		
+		JobView view = null;
+
 		if(bestPrice >= price){
-			view = clientHandler.decideJob(job.getIdentifier(), false);
-			job = convertJobView1(view);
+			try {
+				view = clientHandler.decideJob(idT, false);
+			} catch (BadJobFault_Exception e) { // O job com esse id nao existe
+				UnknownTransportFault fault = new UnknownTransportFault();
+				
+				fault.setId(id);
+				
+				throw new UnknownTransportFault_Exception(e.getMessage(),fault);
+			}  //lança erro caso não exista um transporte disponível com o preço pretendido
+			//isto pode chegar a não ser feito
+			changeJob(view,id);
+			
 			UnavailableTransportPriceFault fault = new UnavailableTransportPriceFault();
 			fault.setBestPriceFound(bestPrice);
 			throw new UnavailableTransportPriceFault_Exception("No transporters with the price requested.",fault);
+		
 		} else{
-			view = clientHandler.decideJob(job.getIdentifier(), true);
-			job = convertJobView1(view); //this changes vector's job?
-			//falta rejeitar todas as outras ofertas
-		}
-	
-		return "Transport " + id + "handled by " + job.getCompanyName();
-	} //lança erro caso não exista um transporte disponível com o preço pretendido
+			
+			try {
+				view = clientHandler.decideJob(idT, true);
+			} catch (BadJobFault_Exception e) {
+				UnknownTransportFault fault = new UnknownTransportFault();
 
+				fault.setId(id);
+				
+				throw new UnknownTransportFault_Exception(e.getMessage(),fault);
+			}
+		}
+		
+		changeJob(view,id);
+		
+		return id;
+	}
+	
+	public BrokerJob changeJob(JobView view, String id){
+		
+		int index = Integer.parseInt(id);
+				 
+		BrokerJob job = convertJobView1(view);
+		
+		job.setIdentifier(id);
+		jobs.add(index,job);
+		
+		return job;
+	}
 }

@@ -6,6 +6,7 @@ public class BrokerJob {
 	
  	private String companyName;
     private String identifier;
+    private String transporterIdentifier;
     private String origin;
     private String destination;
     private int price;
@@ -13,11 +14,24 @@ public class BrokerJob {
     
     public BrokerJob(){}
     
-    public BrokerJob(String jobCompanyName, String jobIdentifier, String jobOrigin,
+    public BrokerJob(String jobCompanyName, String jobId, String transporterId, String jobOrigin,
     		String jobDestination, int jobPrice, JobState jobState) {
     	
     	setCompanyName(jobCompanyName);
-    	setIdentifier(jobIdentifier);
+    	setIdentifier(jobId);
+    	setTransporterIdentifier(transporterId);
+    	setOrigin(jobOrigin);
+    	setDestination(jobDestination);
+    	setPrice(jobPrice);
+    	setState(jobState);
+	}
+    
+    public BrokerJob(String jobId, String jobOrigin,
+    		String jobDestination, int jobPrice, JobState jobState) {
+    	
+    	setCompanyName(null);
+    	setIdentifier(jobId);
+    	setTransporterIdentifier(null);
     	setOrigin(jobOrigin);
     	setDestination(jobDestination);
     	setPrice(jobPrice);
@@ -70,5 +84,13 @@ public class BrokerJob {
 
 	public void setState(JobState state) {
 		this.state = state;
+	}
+
+	public String getTransporterIdentifier() {
+		return transporterIdentifier;
+	}
+
+	public void setTransporterIdentifier(String transporterId) {
+		this.transporterIdentifier = transporterId;
 	}
 }
