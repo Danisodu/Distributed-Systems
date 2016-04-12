@@ -38,7 +38,7 @@ public class BrokerPort implements BrokerPortType{
 	
 	public void initHandlersSearch(){
 		
-		System.out.printf("Contacting UDDI....");
+		System.out.printf("Contacting UDDI...");
 		UDDINaming uddiNaming = null;
 		
 		try {

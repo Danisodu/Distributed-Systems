@@ -1,4 +1,4 @@
-package pt.upa.broker.ws;
+package pt.upa.transporter.ws;
 
 import org.junit.*;
 import static org.junit.Assert.*;
@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
  *  Invoked by Maven in the "test" life-cycle phase
  *  If necessary, should invoke "mock" remote servers 
  */
-public class BrokerPortTest {
+public class ExampleTest {
 
     // static members
 
@@ -29,34 +29,25 @@ public class BrokerPortTest {
 
     // members
 
-    BrokerJob brokerjob;
 
     // initialization and clean-up for each test
 
     @Before
     public void setUp() {
-
-        brokerjob = new BrokerJob("2", "Porto","Beja", 58, JobState.ACCEPTED);
     }
 
     @After
     public void tearDown() {
-        brokerjob = null;
     }
 
 
     // tests
 
-    @Test(expected = UnknownLocationFault_Exception)
-    public void testUnknownOrigin() throws Exception{
-            brokerjob.requestTransport("Barreiro", "Faro", 45);
+    @Test
+    public void test() {
 
-    }
-
-    @Test(expected = UnknownLocationFault_Exception)
-    public void testUnknownDestinity() throws Exception{
-            brokerjob.requestTransport("Vila Real", "Amadora", 45);
-
+        // assertEquals(expected, actual);
+        // if the assert fails, the test fails
     }
 
 }

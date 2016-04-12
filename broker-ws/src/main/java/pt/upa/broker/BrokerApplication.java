@@ -4,9 +4,6 @@ import pt.upa.broker.ws.EndpointManager;
 
 public class BrokerApplication {
 
-	
-	//publicar os servicos dele
-	
 	public static void main(String[] args) throws Exception {
 			
 		System.out.println(BrokerApplication.class.getSimpleName() + " starting...");
