@@ -232,5 +232,29 @@ public class TransporterPort implements TransporterPortType{
 		}
 		
 		return price;
+<<<<<<< HEAD
 	}	
+=======
+	}
+	
+	public JobView convertJob(TransporterJob job){
+			    
+	    JobView newJv = new JobView();
+	    String state = job.getState().name();
+	    
+	    newJv.setCompanyName(job.getCompanyName());
+	    newJv.setJobDestination(job.getDestination());
+	    newJv.setJobIdentifier(job.getIdentifier());
+	    newJv.setJobOrigin(job.getOrigin());
+	    newJv.setJobPrice(job.getPrice());
+	    newJv.setJobState(JobStateView.fromValue(state));
+	    
+	    return newJv;
+	}
+
+	public void setTransporterIdentifier(int identifier){
+		id=identifier;
+	}
+	
+>>>>>>> master
 }
