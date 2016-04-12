@@ -17,7 +17,11 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
+<<<<<<< HEAD
 @WebServiceClient(name = "TransporterService", targetNamespace = "http://ws.transporter.upa.pt/", wsdlLocation = "file:/Users/claudiaamorim/Desktop/Projeto/A_53-project/transporter-ws/src/main/resources/transporter.1_0.wsdl")
+=======
+@WebServiceClient(name = "TransporterService", targetNamespace = "http://ws.transporter.upa.pt/", wsdlLocation = "file:/C:/Users/Margarida/Desktop/Faculdade/3ano/2semestre/SD/Projeto/A_53-project/transporter-ws/src/main/resources/transporter.1_0.wsdl")
+>>>>>>> 6999727d7614f1b02a703073698cc35335e347bd
 public class TransporterService
     extends Service
 {
@@ -30,7 +34,11 @@ public class TransporterService
         URL url = null;
         WebServiceException e = null;
         try {
+<<<<<<< HEAD
             url = new URL("file:/Users/claudiaamorim/Desktop/Projeto/A_53-project/transporter-ws/src/main/resources/transporter.1_0.wsdl");
+=======
+            url = new URL("file:/C:/Users/Margarida/Desktop/Faculdade/3ano/2semestre/SD/Projeto/A_53-project/transporter-ws/src/main/resources/transporter.1_0.wsdl");
+>>>>>>> 6999727d7614f1b02a703073698cc35335e347bd
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }

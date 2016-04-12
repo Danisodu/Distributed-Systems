@@ -247,5 +247,9 @@ public class TransporterPort implements TransporterPortType{
 	    
 	    return newJv;
 	}
+
+	public void setTransporterIdentifier(int identifier){
+		id=identifier;
+	}
 	
 }
