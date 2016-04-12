@@ -19,6 +19,7 @@ public class BrokerClientApplication {
 		BrokerClient brokerClient = new BrokerClient(uddiURL,serviceName);
 		
 		System.out.println(brokerClient.requestTransport("Lisboa", "Castelo Branco", 14));
+		
 	}
 
 }

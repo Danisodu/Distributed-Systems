@@ -12,7 +12,7 @@ import javax.jws.WebService;
 	    endpointInterface="pt.upa.transporter.ws.TransporterPortType",
 	    wsdlLocation="transporter.1_0.wsdl",
 	    name="UpaTransporter",
-	    portName="TransporterPort",
+	    portName="TransporterPort", 
 	    targetNamespace="http://ws.transporter.upa.pt/",
 	    serviceName="TransporterService"
 	)
@@ -24,10 +24,9 @@ public class TransporterPort implements TransporterPortType{
 	private String[] centerTravels = {"Lisboa","Leiria","Santarém","Castelo Branco","Coimbra",
 				"Aveiro","Viseu","Guarda"};
 
-	public TransporterPort(int i, String companyName){
-		
-		id = i;
+	public TransporterPort(String companyName){
 		name = companyName;
+		id = createIdByCompanyName();
 	}
 	
 	@Override
@@ -168,6 +167,15 @@ public class TransporterPort implements TransporterPortType{
 	
 	public void removeJob(int index){
 		jobs.remove(index);
+	}
+	
+	public int createIdByCompanyName(){
+		
+		String id = name.replaceAll("\\D+","");
+		
+		int idConverted = Integer.parseInt(id);		
+		
+		return idConverted;
 	}
 	
 	public void verifyLocations(String origin, String destination, String[] travels) throws BadLocationFault_Exception{

@@ -15,9 +15,12 @@ public class TransporterClientApplication {
 		}
 
 		String uddiURL = args[0];
-		String serviceName = args[1];
 		
-		TransporterClient transporterClient = new TransporterClient(uddiURL, serviceName);
+		TransporterClient transporterClient = new TransporterClient(uddiURL);
+				
+		transporterClient.setEndpointAddress("http://localhost:8081/transporter-ws/endpoint");
+		
+		transporterClient.initServiceSearch();
 		
 		JobView j = transporterClient.requestJob("Lisboa","Castelo Branco",14);	
 				
