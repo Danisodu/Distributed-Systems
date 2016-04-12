@@ -3,6 +3,8 @@ package pt.upa.transporter;
 import pt.upa.transporter.ws.EndpointManager;
 
 public class TransporterApplication {
+	
+	//transporter server
 		
 	public static void main(String[] args) throws Exception {
 		
@@ -18,6 +20,8 @@ public class TransporterApplication {
 		String uddiURL = args[0];
 		String name = args[1];
 		String url = args[2];
+		
+		//publicar serviço
 		
 		EndpointManager endpointManager = new EndpointManager(uddiURL, name, url);
 		
