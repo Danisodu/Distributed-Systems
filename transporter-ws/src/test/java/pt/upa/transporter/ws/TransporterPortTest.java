@@ -34,7 +34,7 @@ public class TransporterPortTest {
 
     @Before
     public void setUp() {
-        transporter = new TransporterPort(1, "UpaTransporter1");
+        transporter = new TransporterPort("UpaTransporter1");
         transporterjob = new TransporterJob("UpaTransporter1", "1", "Castelo Branco", "Faro", 60, JobState.ACCEPTED);
     }
 
@@ -45,57 +45,60 @@ public class TransporterPortTest {
 
     //testes individuais ao RequestJob
     @Test(expected = BadPriceFault_Exception.class)
-    public void testRequestJobNegativePrice() {
+    public void testRequestJobNegativePrice() throws BadLocationFault_Exception, BadPriceFault_Exception {
       
         transporter.requestJob("Lisboa", "Leiria", -3) ;
        
     }
 
     @Test(expected = BadLocationFault_Exception.class)
-    public void testUnknownOrigin(){
+    public void testUnknownOrigin() throws BadLocationFault_Exception, BadPriceFault_Exception{
   
         transporter.requestJob("Madrid", "Leiria", 3);  
     }
 
     @Test(expected = BadLocationFault_Exception.class)
-    public void testUnknownDestination(){
+    public void testUnknownDestination() throws BadLocationFault_Exception, BadPriceFault_Exception{
 
         transporter.requestJob("Lisboa", "Madrid", 3);        
     }
 
     @Test(expected = BadJobFault_Exception.class)
-    public void testImparIDSouth(){
+    public void testImparIDSouth() throws BadLocationFault_Exception, BadPriceFault_Exception{
 
         transporter.requestJob("Braga", "Leiria", 3);        
     }
 
     @Test(expected = BadJobFault_Exception.class)
-    public void testParIDNorth(){
+    public void testParIDNorth() throws BadLocationFault_Exception, BadPriceFault_Exception{
         transporter.setTransporterIdentifier(2);
         transporter.requestJob("Braga", "Setúbal", 3);        
     }
+    
+    // NESTE TIPO DE FUNÇÕES PERGUNTEM SE É PARA USAR THROWS OU TRY CATCH
 
     @Test 
-    public void testPriceGreaterThan100(){
-        JobView jobview = transporter.requestJob("Braga", "Lisboa", 150);    
+    public void testPriceGreaterThan100() throws BadLocationFault_Exception, BadPriceFault_Exception{
+        JobView jobview;
+		jobview = transporter.requestJob("Braga", "Lisboa", 150);
         assertEquals(null, jobview);    
     }
 
     @Test 
-    public void testPriceMinorThan10(){
+    public void testPriceMinorThan10() throws BadLocationFault_Exception, BadPriceFault_Exception{
         JobView jobview = transporter.requestJob("Braga", "Lisboa", 8);   
         assertTrue(0<jobview.getJobPrice()&&jobview.getJobPrice()<8);    
     }
 
     @Test 
-    public void testImparPriceImparID(){
+    public void testImparPriceImparID() throws BadLocationFault_Exception, BadPriceFault_Exception{
         transporter.setTransporterIdentifier(1);
         JobView jobview = transporter.requestJob("Setúbal", "Lisboa", 31);   
         assertTrue(10<jobview.getJobPrice()&&jobview.getJobPrice()<31);    
     }
 
     @Test 
-    public void testImparPriceParID(){
+    public void testImparPriceParID() throws BadLocationFault_Exception, BadPriceFault_Exception{
         transporter.setTransporterIdentifier(2);
         JobView jobview = transporter.requestJob("Braga", "Lisboa", 31);   
         assertTrue(31<jobview.getJobPrice()&&jobview.getJobPrice()<100);    
@@ -104,14 +107,26 @@ public class TransporterPortTest {
     @Test 
     public void testParPriceParID(){
         transporter.setTransporterIdentifier(2);
-        JobView jobview = transporter.requestJob("Braga", "Lisboa", 30);   
+        JobView jobview = null;
+		try {
+			jobview = transporter.requestJob("Braga", "Lisboa", 30);
+		} catch (BadLocationFault_Exception | BadPriceFault_Exception e) {
+			// TODO Auto-generated catch block
+			e.getMessage();
+		}   
         assertTrue(10<jobview.getJobPrice()&&jobview.getJobPrice()<30);    
     }
 
     @Test 
     public void testParPriceImparID(){
         transporter.setTransporterIdentifier(1);
-        JobView jobview = transporter.requestJob("Setúbal", "Lisboa", 30);   
+        JobView jobview = null;
+		try {
+			jobview = transporter.requestJob("Setúbal", "Lisboa", 30);
+		} catch (BadLocationFault_Exception | BadPriceFault_Exception e) {
+			e.getMessage();
+		}   
+        
         assertTrue(31<jobview.getJobPrice()&&jobview.getJobPrice()<100);    
     }
 
