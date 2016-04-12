@@ -25,8 +25,13 @@ import pt.upa.transporter.ws.cli.TransporterClient;
 	)
 public class BrokerPort implements BrokerPortType{
 	
-	List<TransporterClient> clientHandlers = new ArrayList<TransporterClient>();
-	List<BrokerJob> jobs = new ArrayList<BrokerJob>();
+	private List<TransporterClient> clientHandlers = new ArrayList<TransporterClient>();
+	private List<BrokerJob> jobs = new ArrayList<BrokerJob>();
+	private String[] centerTravels = {"Lisboa","Leiria","Santarém","Castelo Branco","Coimbra",
+			"Aveiro","Viseu","Guarda"};
+	private String[] southTravels = {"Setúbal","Évora","Portalegre","Beja","Faro"};
+	private String[] northTravels = {"Porto","Braga","Viana do Castelo","Vila Real","Bragança"};
+
 	
 	public BrokerPort(){
 	}
@@ -72,6 +77,15 @@ public class BrokerPort implements BrokerPortType{
 		
 		int index = jobs.size();
 		String id = "" + index, info = null;
+		
+		verifyLocations(origin, destination);
+		
+		if(price < 0){
+			InvalidPriceFault fault = new InvalidPriceFault();
+			fault.setPrice(price);
+			throw new InvalidPriceFault_Exception("The price must be positive.", fault);
+		}
+		
 		BrokerJob job = createJobRequested(id, origin, destination, price, JobState.REQUESTED);
 
 		job = changeJob(bestOffer(origin, destination, price, id), id);
@@ -87,15 +101,20 @@ public class BrokerPort implements BrokerPortType{
 	public TransportView viewTransport(String id) throws UnknownTransportFault_Exception {
 		
 		BrokerJob job = getJobById(id);
-		String convertedId = job.getTransporterIdentifier(); //that's how the convertion is made
-		TransporterClient clientHandler = getTransporterByJobId(id);
+		String idT = job.getTransporterIdentifier();
+		TransporterClient clientHandler = null;
 		
-		//if(clientHandler == null)
-							
-		JobView view = clientHandler.jobStatus(convertedId);
+		try {
+			clientHandler = getTransporterByJobId(id);
+		} catch (ClientHandlerProblems_Exception e) {
+			System.out.println(e.getMsg());
+		}
+		
+		JobView view = clientHandler.jobStatus(idT);
 		
 		if(view == null){
-			UnknownTransportFault fault = new UnknownTransportFault();
+			UnknownTransportFault fault =
+					new UnknownTransportFault();
 			fault.setId(id);
 			throw new UnknownTransportFault_Exception("The specified transport doesn't exist",fault);
 		}
@@ -124,6 +143,7 @@ public class BrokerPort implements BrokerPortType{
 		jobs.clear();
 	}
 	
+	
 	public void addClientHandler(TransporterClient client){
 		clientHandlers.add(client);
 	}
@@ -139,8 +159,11 @@ public class BrokerPort implements BrokerPortType{
 		try{
 			job = jobs.get(id);
 		} catch(IndexOutOfBoundsException e){
+			
 			UnknownTransportFault fault = new UnknownTransportFault();
+			
 			fault.setId(""+id); //change
+			
 			throw new UnknownTransportFault_Exception("The specified job doesn't exist.", fault);
 		}
 		
@@ -154,7 +177,7 @@ public class BrokerPort implements BrokerPortType{
 		return getJob(index);
 	}
 	
-	public TransporterClient getTransporterByJobId(String id) throws UnknownTransportFault_Exception{
+	public TransporterClient getTransporterByJobId(String id) throws UnknownTransportFault_Exception, ClientHandlerProblems_Exception{
 		
 		BrokerJob job = getJobById(id);
 		
@@ -167,7 +190,7 @@ public class BrokerPort implements BrokerPortType{
 			}
 		}
 		
-		return null; //throw exception
+		throw new ClientHandlerProblems_Exception();
 	}
 	
 	public BrokerJob createJob(String companyName, String id, String idT, String origin, String destination, int price, JobState state){
@@ -188,6 +211,30 @@ public class BrokerPort implements BrokerPortType{
 		return job;
 	}
 	
+	public void verifyLocations(String origin, String destination) throws UnknownLocationFault_Exception{
+		
+		if(!(containsLocation(centerTravels,origin)) && !(containsLocation(southTravels, origin)) && !(containsLocation(northTravels, origin))){
+			UnknownLocationFault fault = new UnknownLocationFault();
+			fault.setLocation(origin);
+			throw new UnknownLocationFault_Exception("Unknown origin.", fault);
+		}
+				
+		if(!(containsLocation(centerTravels,destination)) && !(containsLocation(southTravels, destination)) && !(containsLocation(northTravels, origin))){
+			UnknownLocationFault fault = new UnknownLocationFault();
+			fault.setLocation(destination);
+			throw new UnknownLocationFault_Exception("Unknown destination.", fault);
+		}
+	}
+	
+	public boolean containsLocation(String[] vector, String name){
+		
+		for(String s: vector){
+			if(s.equals(name)) return true;
+		}
+		
+		return false;
+	}
+
 	public String convertJobStateView(JobStateView state){
 		
 		String name = state.name(), nameConverted;
@@ -262,7 +309,7 @@ public class BrokerPort implements BrokerPortType{
 			fault.setOrigin(origin);
 			fault.setDestination(destination);
 			throw new UnavailableTransportFault_Exception("No transporters available.", fault);
-		}
+		} //é assim?
 
 		for(TransporterClient tc: clientHandlers){
 			
@@ -297,13 +344,16 @@ public class BrokerPort implements BrokerPortType{
 		
 		String id = job.getIdentifier(), idT = job.getTransporterIdentifier();
 		int bestPrice = job.getPrice();
-		TransporterClient clientHandler = getTransporterByJobId(id);
-		JobView view = null;
+		TransporterClient clientHandler = null;
 		
-		if(clientHandler == null){
-			System.out.println("ClientHandler in decideOffer is null");
+		try {
+			clientHandler = getTransporterByJobId(id);
+		} catch (ClientHandlerProblems_Exception e) {
+			e.getMsg();
 		}
 		
+		JobView view = null;
+
 		if(bestPrice >= price){
 			try {
 				view = clientHandler.decideJob(idT, false);

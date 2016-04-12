@@ -74,7 +74,7 @@ public class TransporterPort implements TransporterPortType{
 		if(accept){ 
 			Random rand = new Random();
 			Timer timer = new Timer();
-			int time = rand.nextInt(6) + 1;
+			long time = rand.nextInt(6) + 1;
 			
 			job.setState(JobState.ACCEPTED);
 			timer.schedule( new TimerTask(){
@@ -96,7 +96,7 @@ public class TransporterPort implements TransporterPortType{
 						timer.cancel();
 					}
 				}
-			}, time);
+			}, time, 30);
 		} else{
 			job.setState(JobState.REJECTED);
 		}
@@ -180,13 +180,13 @@ public class TransporterPort implements TransporterPortType{
 	
 	public void verifyLocations(String origin, String destination, String[] travels) throws BadLocationFault_Exception{
 		
-		if(!(containsLocation(centerTravels,origin) || containsLocation(travels, origin))){
+		if(!(containsLocation(centerTravels,origin)) && !(containsLocation(travels, origin))){
 			BadLocationFault fault = new BadLocationFault();
 			fault.setLocation(origin);
 			throw new BadLocationFault_Exception("Origem errada", fault);
 		}
 		
-		else if(!(containsLocation(centerTravels,destination) || containsLocation(travels, destination))){
+		else if(!(containsLocation(centerTravels,destination)) && !(containsLocation(travels, destination))){
 			BadLocationFault fault = new BadLocationFault();
 			fault.setLocation(destination);
 			throw new BadLocationFault_Exception("Destino errado", fault);
