@@ -113,8 +113,7 @@ public class BrokerPort implements BrokerPortType{
 		JobView view = clientHandler.jobStatus(idT);
 		
 		if(view == null){
-			UnknownTransportFault fault =
-					new UnknownTransportFault();
+			UnknownTransportFault fault = new UnknownTransportFault();
 			fault.setId(id);
 			throw new UnknownTransportFault_Exception("The specified transport doesn't exist",fault);
 		}

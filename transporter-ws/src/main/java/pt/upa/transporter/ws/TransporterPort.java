@@ -20,7 +20,7 @@ public class TransporterPort implements TransporterPortType{
 	
 	private int id;
 	private String name;
-	private List<TransporterJob> jobs = new ArrayList<TransporterJob>();
+	private List<JobView> jobs = new ArrayList<JobView>();
 	private String[] centerTravels = {"Lisboa","Leiria","Santarém","Castelo Branco","Coimbra",
 				"Aveiro","Viseu","Guarda"};
 
@@ -54,82 +54,68 @@ public class TransporterPort implements TransporterPortType{
 			BadPriceFault fault = new BadPriceFault();
 			fault.setPrice(price);
 			throw new BadPriceFault_Exception("O preço tem que ser positivo",fault);
-		} //change
+		}
 		
 		price = decidePrice(price);
 		
-		TransporterJob newTj = new TransporterJob(name,""+jobs.size(),origin,destination,price,JobState.PROPOSED); 
-		//change
-		
-		addJob(newTj);
-		
-		return convertJob(newTj);
+		JobView newJv = createJob(name,""+jobs.size(),origin,destination,price,JobStateView.PROPOSED); 
+				
+		return newJv;
 	}
 
 	@Override
 	public JobView decideJob(String id, boolean accept) throws BadJobFault_Exception {
 		
-		TransporterJob job = getJobById(id);
+		JobView job = getJobById(id);
 		
 		if(accept){ 
 			Random rand = new Random();
 			Timer timer = new Timer();
 			long time = rand.nextInt(6) + 1;
 			
-			job.setState(JobState.ACCEPTED);
+			job.setJobState(JobStateView.ACCEPTED);
 			timer.schedule( new TimerTask(){
 
 				@Override
 				public void run() {
-					String state = job.getState().name();
+					String state = job.getJobState().name();
 
 					if(state.equals("ACCEPTED")){
-						job.setState(JobState.HEADING);
+						job.setJobState(JobStateView.HEADING);
 					}
 					
 					else if(state.equals("HEADING")){
-						job.setState(JobState.ONGOING);
+						job.setJobState(JobStateView.ONGOING);
 					}
 					
 					else{
-						job.setState(JobState.COMPLETED);
+						job.setJobState(JobStateView.COMPLETED);
 						timer.cancel();
 					}
 				}
 			}, time, 30);
 		} else{
-			job.setState(JobState.REJECTED);
+			job.setJobState(JobStateView.REJECTED);
 		}
 		
-		return convertJob(job);
+		return job;
 	}
 
 	@Override
 	public JobView jobStatus(String id){
 		
-		TransporterJob job = null;
+		JobView job = null;
 		
 		try{
 			job = getJobById(id);
 		} catch(BadJobFault_Exception e){ return null; }
-		
-		JobView view = convertJob(job);
-		
-		return view;
+				
+		return job;
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	public List<JobView> listJobs() {
-		
-		List<JobView> list = null;
-		
-		for(TransporterJob jb: jobs){
-			JobView jv = this.convertJob(jb);
-			list.add(jv);
-		}
-	    
-		return list;
+		return jobs;
 	}
 
 	@Override
@@ -137,9 +123,9 @@ public class TransporterPort implements TransporterPortType{
 		jobs.clear();
 	}
 
-	public TransporterJob getJob(int id) throws BadJobFault_Exception{
+	public JobView getJob(int id) throws BadJobFault_Exception{
 		
-		TransporterJob job = null;
+		JobView job = null;
 
 		try{
 			job = jobs.get(id);
@@ -154,15 +140,15 @@ public class TransporterPort implements TransporterPortType{
 		return job;
 	}
 	
-	public TransporterJob getJobById(String id) throws BadJobFault_Exception{
+	public JobView getJobById(String id) throws BadJobFault_Exception{
 		
 		int index = Integer.parseInt(id);
 		
 		return getJob(index);
 	}
 
-	public void addJob(TransporterJob transport) {
-		jobs.add(transport);
+	public void addJob(JobView job) {
+		jobs.add(job);
 	}
 	
 	public void removeJob(int index){
@@ -176,6 +162,23 @@ public class TransporterPort implements TransporterPortType{
 		int idConverted = Integer.parseInt(id);		
 		
 		return idConverted;
+	}
+	
+	public JobView createJob(String companyName, String identifier, String origin, String destination, 
+			int price, JobStateView state){
+		
+		JobView job = new JobView();
+		
+		job.setCompanyName(companyName);
+		job.setJobIdentifier(identifier);
+		job.setJobOrigin(origin);
+		job.setJobDestination(destination);
+		job.setJobPrice(price);
+		job.setJobState(state);
+		
+		addJob(job);
+		
+		return job;
 	}
 	
 	public void verifyLocations(String origin, String destination, String[] travels) throws BadLocationFault_Exception{
@@ -229,21 +232,5 @@ public class TransporterPort implements TransporterPortType{
 		}
 		
 		return price;
-	}
-	
-	public JobView convertJob(TransporterJob job){
-			    
-	    JobView newJv = new JobView();
-	    String state = job.getState().name();
-	    
-	    newJv.setCompanyName(job.getCompanyName());
-	    newJv.setJobDestination(job.getDestination());
-	    newJv.setJobIdentifier(job.getIdentifier());
-	    newJv.setJobOrigin(job.getOrigin());
-	    newJv.setJobPrice(job.getPrice());
-	    newJv.setJobState(JobStateView.fromValue(state));
-	    
-	    return newJv;
-	}
-	
+	}	
 }
