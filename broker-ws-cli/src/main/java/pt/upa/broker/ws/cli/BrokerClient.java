@@ -18,16 +18,17 @@ import pt.upa.broker.ws.UnavailableTransportPriceFault_Exception;
 import pt.upa.broker.ws.UnknownLocationFault_Exception;
 import pt.upa.broker.ws.UnknownTransportFault_Exception;
 
+
 public class BrokerClient{
 		
 	private String uddiURL;
 	private String serviceName;
-	private BrokerPortType handler;
+	private BrokerPortType service;
 	
 	public BrokerClient(String uURL, String serviceName){
 		setUddiURL(uURL);
 		setServiceName(serviceName);
-		initHandlerSearch();
+		initServiceSearch();
 	}
 	
 	public BrokerClient(){
@@ -49,7 +50,7 @@ public class BrokerClient{
 		this.serviceName = serviceName;
 	}
 	
-	public void initHandlerSearch(){
+	public void initServiceSearch(){
 
 		System.out.printf("Contacting UDDI at %s%n", uddiURL);
 		UDDINaming uddiNaming = null;
@@ -79,38 +80,37 @@ public class BrokerClient{
 		}
 
 		System.out.println("Creating stub ...");
-		BrokerService service = new BrokerService();
-		BrokerPortType port = service.getBrokerPort();
+		BrokerService serviceBs = new BrokerService();
+		BrokerPortType port = serviceBs.getBrokerPort();
 
-		System.out.println("Setting endpoint address ...");
-		BindingProvider bindingProvider = (BindingProvider) port;
-
-		handler = port;
+		service = port;
 		
+		System.out.println("Setting endpoint address ...");
+		BindingProvider bindingProvider = (BindingProvider) port;	
 		Map<String, Object> requestContext = bindingProvider.getRequestContext();
 		requestContext.put(ENDPOINT_ADDRESS_PROPERTY, endpointAddress);		
 	}
 
 	public String ping(String name) {
-		return handler.ping(name);
+		return service.ping(name);
 	}
 
 	public String requestTransport(String origin, String destination, int price)
-			throws InvalidPriceFault_Exception, UnavailableTransportFault_Exception,
-			UnavailableTransportPriceFault_Exception, UnknownLocationFault_Exception {
-		return handler.requestTransport(origin, destination, price);
+			throws InvalidPriceFault_Exception, UnavailableTransportFault_Exception, UnavailableTransportPriceFault_Exception, 
+			UnknownLocationFault_Exception {
+		return service.requestTransport(origin, destination, price);
 	}
 
 	public TransportView viewTransport(String id) throws UnknownTransportFault_Exception {
-		return handler.viewTransport(id);
+		return service.viewTransport(id);
 	}
 
 	public List<TransportView> listTransports() {
-		return handler.listTransports();
+		return service.listTransports();
 	}
 
 	public void clearTransports() {
-		handler.clearTransports();
+		service.clearTransports();
 	}
 
 }

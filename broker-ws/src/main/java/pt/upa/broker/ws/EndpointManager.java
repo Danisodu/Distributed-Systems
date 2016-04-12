@@ -59,8 +59,9 @@ public class EndpointManager {
 		
 		Endpoint endpoint = null;
 		UDDINaming uddiNaming = null;
+		BrokerPort broker = new BrokerPort();
 		try {
-			endpoint = Endpoint.create(new BrokerPort());
+			endpoint = Endpoint.create(broker);
 
 			// publish endpoint
 			System.out.printf("Starting %s%n", serviceURL);
@@ -74,6 +75,7 @@ public class EndpointManager {
 			// wait
 			System.out.println("Awaiting connections");
 			System.out.println("Press enter to shutdown");
+			broker.initHandlersSearch();
 			System.in.read();
 
 		} catch (Exception e) {
@@ -100,6 +102,8 @@ public class EndpointManager {
 				System.out.printf("Caught exception when deleting: %s%n", e);
 			}
 		}
+		
+
 	}
 	
 }

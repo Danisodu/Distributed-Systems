@@ -28,5 +28,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="/transporter-ws-cli"/>
+	<classpathentry kind="src" path="/broker-ws-cli"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
