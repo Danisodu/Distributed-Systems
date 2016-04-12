@@ -17,6 +17,8 @@ import javax.jws.WebService;
 	    serviceName="TransporterService"
 	)
 public class TransporterPort implements TransporterPortType{
+
+
 	
 	private int id;
 	private String name;
@@ -39,6 +41,8 @@ public class TransporterPort implements TransporterPortType{
 			throws BadLocationFault_Exception, BadPriceFault_Exception {
 		
 		String[] travels;
+	
+
 		
 		if(id%2==0){
 			travels = new String[] {"Porto","Braga","Viana do Castelo","Vila Real","Bragança"};
@@ -46,6 +50,7 @@ public class TransporterPort implements TransporterPortType{
 			travels = new String[] {"Setúbal","Évora","Portalegre","Beja","Faro"};
 		}
 		
+		//BadLocationFault_Exception
 		verifyLocations(origin, destination, travels);
 		
 		if(price > 100){ return null; }
@@ -71,7 +76,7 @@ public class TransporterPort implements TransporterPortType{
 	@Override
 	public JobView decideJob(String id, boolean accept) throws BadJobFault_Exception {
 		
-		TransporterJob job = getJobById(id);  // o TransporterJob e um JobView, estamos a retirar a proposta que tem o id
+		TransporterJob job = getJobById(id);  // o TransporterJob e um JobView, estamos a retirar a proposta que tem o id lança BadJobFault_Exception
 		
 		if(accept){ 
 			Random rand = new Random();
