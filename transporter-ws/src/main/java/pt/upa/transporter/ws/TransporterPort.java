@@ -59,6 +59,8 @@ public class TransporterPort implements TransporterPortType{
 		
 		price = decidePrice(price);
 		
+		//Nao tem que ser criado um novo TransporterJob...tem que ser retirado o transporterjob da list que esta transportadora tem??
+
 		TransporterJob newTj = new TransporterJob(name,""+jobs.size(),origin,destination,price,JobState.PROPOSED); 
 		//change
 		
@@ -70,7 +72,7 @@ public class TransporterPort implements TransporterPortType{
 	@Override
 	public JobView decideJob(String id, boolean accept) throws BadJobFault_Exception {
 		
-		TransporterJob job = getJobById(id);
+		TransporterJob job = getJobById(id);  // o TransporterJob e um JobView, estamos a retirar a proposta que tem o id
 		
 		if(accept){ 
 			Random rand = new Random();
