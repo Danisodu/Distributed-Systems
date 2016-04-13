@@ -209,7 +209,7 @@ public class TransporterPortTest {
     @Test 
     public void testinvalidID() throws Exception{
         transporter.clearJobs();
-        jobview = transporter.requestJob("Leiria", "Lisboa", 30);  
+        jobview = transporter.requestJob("Leiria", "Lisboa", 30);
         assertNull(transporter.jobStatus("20"));
         
     }    
@@ -222,7 +222,8 @@ public class TransporterPortTest {
         
         jobview = transporter.requestJob("Leiria", "Lisboa", 30);  
         transporter.clearJobs();
-        assertNull(transporter.listJobs());
+        assertTrue(transporter.listJobs().isEmpty());
+        //assertNull(transporter.listJobs());
         
     }   
 
