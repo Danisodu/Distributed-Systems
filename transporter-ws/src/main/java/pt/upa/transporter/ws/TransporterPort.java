@@ -28,6 +28,10 @@ public class TransporterPort implements TransporterPortType{
 		name = companyName;
 		id = createIdByCompanyName();
 	}
+
+	public void setTransporterIdentifier(int identifier){
+		id=identifier;
+	}
 	
 	@Override
 	public String ping(String name) {
