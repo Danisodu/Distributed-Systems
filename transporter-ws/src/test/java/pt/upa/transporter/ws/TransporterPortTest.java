@@ -67,29 +67,30 @@ public class TransporterPortTest {
         transporter.requestJob("Lisboa", "Madrid", 3);
         transporter.clearJobs();       
     }
-    /*
-    @Test(expected = BadLocationFault_Exception.class)
+    
+    @Test
     public void testImparIDSouth() throws Exception{
     	transporter.setTransporterIdentifier(1);
-        transporter.requestJob("Braga", "Leiria", 3);
+        assertNull(transporter.requestJob("Braga", "Leiria", 3));
         transporter.clearJobs();     
-    }*/   
+    }  
     	
-   /* @Test(expected = BadLocationFault_Exception.class) //nao e bad location     
+    @Test 
     public void testParIDNorth() throws Exception{
 
         transporter.setTransporterIdentifier(2);
-        transporter.requestJob("Braga", "Setúbal", 3);
+        assertNull(transporter.requestJob("Braga", "Setúbal", 3));
         transporter.clearJobs();     
-    }*/  
+    }  
     
 
     @Test 
     public void testPriceGreaterThan100() throws Exception{
         transporter.setTransporterIdentifier(2);
 
-        jobview = transporter.requestJob("Faro", "Lisboa", 150);    
-        assertEquals(null, jobview);
+        jobview = transporter.requestJob("Faro", "Lisboa", 150);
+        assertNull(jobview);    
+        //assertEquals(null, jobview);
         transporter.clearJobs();    
     }
 
@@ -97,7 +98,7 @@ public class TransporterPortTest {
     public void testPriceMinorThan10() throws Exception{
 
         jobview = transporter.requestJob("Faro", "Lisboa", 8);   
-        assertTrue(0<=jobview.getJobPrice()&&jobview.getJobPrice()<8);
+        assertTrue(0<jobview.getJobPrice()&&jobview.getJobPrice()<8);
         transporter.clearJobs();
            
     }
@@ -108,7 +109,7 @@ public class TransporterPortTest {
 
         transporter.setTransporterIdentifier(1);  
         jobview = transporter.requestJob("Leiria", "Lisboa", 31);  
-        assertTrue(0<=jobview.getJobPrice()&& jobview.getJobPrice()<31);
+        assertTrue(0<jobview.getJobPrice() && jobview.getJobPrice()<31);
         transporter.clearJobs();
          
     }
@@ -125,7 +126,7 @@ public class TransporterPortTest {
         transporter.setTransporterIdentifier(1);
 
         jobview = transporter.requestJob("Leiria", "Lisboa", 30);   
-        assertTrue(30<jobview.getJobPrice()&&jobview.getJobPrice()<100);
+        assertTrue(0<jobview.getJobPrice() && jobview.getJobPrice()<100);
         transporter.clearJobs();
        
     } 
@@ -150,7 +151,7 @@ public class TransporterPortTest {
         System.out.println("\n");
         transporter.setTransporterIdentifier(2);
         jobview = transporter.requestJob("Leiria", "Lisboa", 30); 
-        assertTrue(0<=jobview.getJobPrice()&&jobview.getJobPrice()<30);
+        assertTrue(0<jobview.getJobPrice()&&jobview.getJobPrice()<30);
             
     }
       

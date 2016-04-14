@@ -48,8 +48,8 @@ public interface TransporterPortType {
      * @param destination
      * @return
      *     returns pt.upa.transporter.ws.JobView
-     * @throws BadLocationFault_Exception
      * @throws BadPriceFault_Exception
+     * @throws BadLocationFault_Exception
      */
     @WebMethod
     @WebResult(targetNamespace = "")
