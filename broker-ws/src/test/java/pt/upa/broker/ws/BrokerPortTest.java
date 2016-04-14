@@ -2,6 +2,7 @@ package pt.upa.broker.ws;
 
 import org.junit.*;
 import static org.junit.Assert.*;
+import mockit.*;
 
 
 
@@ -52,7 +53,7 @@ public class BrokerPortTest {
     }
 
 
-    // tests
+    // testes ao requestJob
 
     @Test(expected = UnknownLocationFault_Exception.class)
     public void testUnknownOrigin() throws Exception{
