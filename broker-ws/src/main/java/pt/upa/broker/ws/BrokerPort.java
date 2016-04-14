@@ -38,7 +38,7 @@ public class BrokerPort implements BrokerPortType{
 	
 	public void initHandlersSearch(){
 		
-		System.out.printf("Contacting UDDI...");
+		System.out.printf("Contacting UDDI to find Transporters...");
 		UDDINaming uddiNaming = null;
 		
 		try {
@@ -67,7 +67,13 @@ public class BrokerPort implements BrokerPortType{
 	@Override
 	public String ping(String name) {
 		
-		return clientHandlers.get(0).ping(name);
+		String pong = "";
+		
+		for(TransporterClient tc: clientHandlers){
+			pong += tc.ping(name);
+		}
+		
+		return pong;
 	}
 
 	@Override
@@ -78,17 +84,13 @@ public class BrokerPort implements BrokerPortType{
 		int index = jobs.size();
 		String id = "" + index, info = null;
 		
-		verifyLocations(origin, destination);
-		
-		if(price < 0){
-			InvalidPriceFault fault = new InvalidPriceFault();
-			fault.setPrice(price);
-			throw new InvalidPriceFault_Exception("The price must be positive.", fault);
-		}
+		verifyErrorCases(origin, destination, price);
 		
 		BrokerJob job = createJobRequested(id, origin, destination, price, JobState.REQUESTED);
+		
+		JobView view = bestOffer(origin, destination, price, id);
 
-		job = changeJob(bestOffer(origin, destination, price, id), id);
+		job = changeJob(view, id);
 
 		try {
 			info = decideOffer(job, price);
@@ -102,23 +104,17 @@ public class BrokerPort implements BrokerPortType{
 		
 		BrokerJob job = getJobById(id);
 		String idT = job.getTransporterIdentifier();
-		TransporterClient clientHandler = null;
-		
-		try {
-			clientHandler = getTransporterByJobId(id);
-		} catch (ClientHandlerProblems_Exception e) {
-			System.out.println(e.getMsg());
-		}
-		
-		JobView view = clientHandler.jobStatus(idT);
+		TransporterClient clientHandler = getTransporterByJobId(id);
+		JobView view = clientHandler.jobStatus(idT); //!!
 		
 		if(view == null){
 			UnknownTransportFault fault = new UnknownTransportFault();
 			fault.setId(id);
 			throw new UnknownTransportFault_Exception("The specified transport doesn't exist",fault);
 		}
-		
-		view.setJobIdentifier(id);
+				
+		changeJob(view, id);
+		view.setJobIdentifier(id); 
 		
 		return convertJobView2(view);
 	}
@@ -128,7 +124,7 @@ public class BrokerPort implements BrokerPortType{
 		
 		/*
 		for(TransporterClient tc: clientHandlers){
-			tc.clearJobs();
+			tc.listJobs();
 		}*/ return null; //juntar as duas listas
 	}
 
@@ -138,10 +134,8 @@ public class BrokerPort implements BrokerPortType{
 		for(TransporterClient tc: clientHandlers){
 			tc.clearJobs();
 		}
-		
 		jobs.clear();
 	}
-	
 	
 	public void addClientHandler(TransporterClient client){
 		clientHandlers.add(client);
@@ -158,11 +152,8 @@ public class BrokerPort implements BrokerPortType{
 		try{
 			job = jobs.get(id);
 		} catch(IndexOutOfBoundsException e){
-			
 			UnknownTransportFault fault = new UnknownTransportFault();
-			
 			fault.setId(""+id); //change
-			
 			throw new UnknownTransportFault_Exception("The specified job doesn't exist.", fault);
 		}
 		
@@ -176,20 +167,21 @@ public class BrokerPort implements BrokerPortType{
 		return getJob(index);
 	}
 	
-	public TransporterClient getTransporterByJobId(String id) throws UnknownTransportFault_Exception, ClientHandlerProblems_Exception{
+	public TransporterClient getTransporterByJobId(String id) throws UnknownTransportFault_Exception{
 		
 		BrokerJob job = getJobById(id);
 		
 		String serviceName =  job.getCompanyName();
 		
 		for(TransporterClient tc: clientHandlers){
-			
-			if(tc.getServiceName().equals(serviceName)){
-				return tc;
+			if(tc.getServiceName() != null){
+				if(tc.getServiceName().equals(serviceName)){
+					return tc;
+				}
 			}
 		}
 		
-		throw new ClientHandlerProblems_Exception();
+		return null; //????????????????
 	}
 	
 	public BrokerJob createJob(String companyName, String id, String idT, String origin, String destination, int price, JobState state){
@@ -210,15 +202,23 @@ public class BrokerPort implements BrokerPortType{
 		return job;
 	}
 	
-	public void verifyLocations(String origin, String destination) throws UnknownLocationFault_Exception{
+	public void verifyErrorCases(String origin, String destination, int price) throws UnknownLocationFault_Exception, InvalidPriceFault_Exception{
 		
-		if(!(containsLocation(centerTravels,origin)) && !(containsLocation(southTravels, origin)) && !(containsLocation(northTravels, origin))){
+		if(price < 0){
+			InvalidPriceFault fault = new InvalidPriceFault();
+			fault.setPrice(price);
+			throw new InvalidPriceFault_Exception("The price must be positive.", fault);
+		}
+		
+		if(!(containsLocation(centerTravels,origin)) && !(containsLocation(southTravels, origin)) 
+				&& !(containsLocation(northTravels, origin))){
 			UnknownLocationFault fault = new UnknownLocationFault();
 			fault.setLocation(origin);
 			throw new UnknownLocationFault_Exception("Unknown origin.", fault);
 		}
 				
-		if(!(containsLocation(centerTravels,destination)) && !(containsLocation(southTravels, destination)) && !(containsLocation(northTravels, origin))){
+		if(!(containsLocation(centerTravels,destination)) && !(containsLocation(southTravels, destination)) 
+				&& !(containsLocation(northTravels, origin))){
 			UnknownLocationFault fault = new UnknownLocationFault();
 			fault.setLocation(destination);
 			throw new UnknownLocationFault_Exception("Unknown destination.", fault);
@@ -298,23 +298,27 @@ public class BrokerPort implements BrokerPortType{
 	    return newTv;
 	}
 	
-	public JobView bestOffer(String origin, String destination, int price, String id) throws UnavailableTransportFault_Exception, UnknownLocationFault_Exception, InvalidPriceFault_Exception{
+	public JobView bestOffer(String origin, String destination, int price, String id) throws UnavailableTransportFault_Exception, 
+			UnknownLocationFault_Exception, InvalidPriceFault_Exception{
 		
 		int minPrice = Integer.MAX_VALUE, givenPrice;
 		JobView temp = null, view = null;
 		
-		if(clientHandlers.size() == 0){
+		/*if(clientHandlers.size() == 0){
 			UnavailableTransportFault fault = new UnavailableTransportFault();
 			fault.setOrigin(origin);
 			fault.setDestination(destination);
 			throw new UnavailableTransportFault_Exception("No transporters available.", fault);
-		} //é assim?
+		} */
 
 		for(TransporterClient tc: clientHandlers){
-			
 			try {
 				temp = tc.requestJob(origin,destination,price);
-			} catch (BadLocationFault_Exception e) {
+				
+				if(temp == null){
+					continue;
+				}
+			} catch (BadLocationFault_Exception e) { //Sítio desconhecido
 				UnknownLocationFault fault = new UnknownLocationFault();
 				fault.setLocation(e.getFaultInfo().getLocation());
 				throw new UnknownLocationFault_Exception(e.getMessage(),fault);
@@ -326,15 +330,22 @@ public class BrokerPort implements BrokerPortType{
 			}
 			
 			tc.setServiceName(temp.getCompanyName());
-					
 			givenPrice = temp.getJobPrice();
 			
-			//verify conditions
 			if(givenPrice <= minPrice){
 				minPrice = givenPrice;
 				view = temp;
 			}
-		} //falta rejeitar as outras ofertas
+		}
+		
+		if(view == null){
+			UnavailableTransportFault fault = new UnavailableTransportFault();
+			fault.setOrigin(origin);
+			fault.setDestination(destination);
+			throw new UnavailableTransportFault_Exception("No transporters available.", fault);
+		} //nao opera num dos sitios especificados ou preco > 0? ?????????????????????
+		
+		//falta rejeitar as outras ofertas
 				
 		return view;
 	}
@@ -343,17 +354,11 @@ public class BrokerPort implements BrokerPortType{
 		
 		String id = job.getIdentifier(), idT = job.getTransporterIdentifier();
 		int bestPrice = job.getPrice();
-		TransporterClient clientHandler = null;
-		
-		try {
-			clientHandler = getTransporterByJobId(id);
-		} catch (ClientHandlerProblems_Exception e) {
-			e.getMsg();
-		}
-		
+		TransporterClient clientHandler = getTransporterByJobId(id);
 		JobView view = null;
 
 		if(bestPrice >= price){
+			System.out.println(bestPrice + "\n");
 			try {
 				view = clientHandler.decideJob(idT, false);
 			} catch (BadJobFault_Exception e) { // O job com esse id nao existe
@@ -369,7 +374,6 @@ public class BrokerPort implements BrokerPortType{
 			UnavailableTransportPriceFault fault = new UnavailableTransportPriceFault();
 			fault.setBestPriceFound(bestPrice);
 			throw new UnavailableTransportPriceFault_Exception("No transporters with the price requested.",fault);
-		
 		} else{
 			
 			try {
