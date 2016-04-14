@@ -39,22 +39,7 @@ public class EndpointManager {
 	public void setServiceURL(String serviceURL) {
 		this.serviceURL = serviceURL;
 	}
-	
-	/*
-	public void start(){
-		
-	}
-	
-	public void awaitConnections(){
-		
-	}
-	
-	public void stop(){
-		
-		
-	}
-	*/
-	
+
 	public void publish(){
 		
 		Endpoint endpoint = null;
@@ -76,7 +61,8 @@ public class EndpointManager {
 			System.out.println("Awaiting connections");
 			System.out.println("Press enter to shutdown");
 			
-			broker.initHandlersSearch(); //?????
+			//find the transporters available
+			find(broker);
 			
 			System.in.read();
 
@@ -106,6 +92,10 @@ public class EndpointManager {
 		}
 		
 
+	}
+	
+	public void find(BrokerPort b){
+		b.initHandlersSearch();
 	}
 	
 }

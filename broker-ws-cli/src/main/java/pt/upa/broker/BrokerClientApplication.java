@@ -1,5 +1,7 @@
 package pt.upa.broker;
 
+import java.util.List;
+
 import pt.upa.broker.ws.InvalidPriceFault_Exception;
 import pt.upa.broker.ws.TransportView;
 import pt.upa.broker.ws.UnavailableTransportFault_Exception;
@@ -38,7 +40,7 @@ public class BrokerClientApplication {
 		TransportView view = null;
 		
 		try{
-			view = brokerClient.viewTransport("0");
+			view = brokerClient.viewTransport("1");
 		}
 		catch(UnknownTransportFault_Exception e){ System.out.println(e.getMessage());
 		
@@ -50,6 +52,18 @@ public class BrokerClientApplication {
 		System.out.println(view.getTransporterCompany());
 		System.out.println(view.getPrice());
 		System.out.println(view.getState().name()+"\n");
+		
+		List<TransportView> list = brokerClient.listTransports();
+	
+		for(TransportView v: list){
+			System.out.println(v.getId());
+			System.out.println(v.getOrigin());
+			System.out.println(v.getDestination());
+			System.out.println(v.getTransporterCompany());
+			System.out.println(v.getPrice());
+			System.out.println(v.getState().name()+"\n");
+		}
+		
 		/*
 		try{
 			view = brokerClient.viewTransport("2");

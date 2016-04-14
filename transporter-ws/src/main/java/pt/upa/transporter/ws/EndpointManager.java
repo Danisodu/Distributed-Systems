@@ -40,21 +40,6 @@ public class EndpointManager {
 		this.serviceURL = serviceURL;
 	}
 	
-	/*
-	public void start(){
-		
-	}
-	
-	public void awaitConnections(){
-		
-	}
-	
-	public void stop(){
-		
-		
-	}
-	*/
-	
 	public void publish(){
 		
 		Endpoint endpoint = null;
