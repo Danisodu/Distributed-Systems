@@ -9,6 +9,7 @@ import pt.upa.transporter.ws.BadJobFault_Exception;
 import pt.upa.transporter.ws.BadLocationFault_Exception;
 import pt.upa.transporter.ws.BadPriceFault_Exception;
 import pt.upa.transporter.ws.JobView;
+import pt.upa.transporter.ws.JobStateView;
 import pt.upa.transporter.ws.TransporterPortType;
 import pt.upa.transporter.ws.TransporterService;
 
@@ -45,9 +46,9 @@ public class TransporterPortTestIT {
     @Before
     public void setUp() {
         transporterclient = new TransporterClient("http://localhost:9090"); //é isto??
+        transporterclient.setEndpointAddress("http://localhost:8081/transporter-ws/endpoint");
         transporterclient.initServiceSearch(); 
 
-        JobView jobview;
         //jobview = transporterclient.convertJob(new TransporterJob("UpaTransporter1", "1", "Castelo Branco", "Faro", 60, JobState.PROPOSED));
     }
 
@@ -80,10 +81,11 @@ public class TransporterPortTestIT {
         transporterclient.clearJobs();       
     }
 
-    @Test(expected = BadLocationFault_Exception.class)
+    @Test
     public void testImparIDSouth() throws Exception{
 
         transporterclient.requestJob("Braga", "Leiria", 3);
+        assertNull(transporterclient.requestJob("Braga", "Leiria", 3));
         transporterclient.clearJobs();        
     }
 
