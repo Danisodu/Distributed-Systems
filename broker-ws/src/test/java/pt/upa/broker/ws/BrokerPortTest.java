@@ -2,6 +2,7 @@ package pt.upa.broker.ws;
 
 import org.junit.*;
 import static org.junit.Assert.*;
+import mockit.*;
 
 /**
  *  Unit Test example
@@ -45,7 +46,7 @@ public class BrokerPortTest {
     }
 
 
-    // tests
+    // testes ao requestJob
 
     @Test(expected = UnknownLocationFault_Exception)
     public void testUnknownOrigin() throws Exception{
@@ -65,10 +66,10 @@ public class BrokerPortTest {
 
     }
 
-    @Test(expected = UnvailableTransportFault_Exception)
+    /*@Test(expected = UnvailableTransportFault_Exception)
     public void testUnknownDestinity() throws Exception{
             brokerjob.requestTransport("Vila Real", "Amadora", 45);
 
-    }
+    }*/
 
 }
