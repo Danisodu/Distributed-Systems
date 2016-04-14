@@ -90,7 +90,7 @@ public class TransporterPort implements TransporterPortType{
 			}, time*1000, 30*1000);
 		} else{
 			job.setJobState(JobStateView.REJECTED);
-		} // ?????????
+		} // FIXME
 		
 		return job;
 	}
@@ -131,7 +131,7 @@ public class TransporterPort implements TransporterPortType{
 		
 		catch(IndexOutOfBoundsException e){ 
 			BadJobFault fault = new BadJobFault();
-			fault.setId(""+id); //change
+			fault.setId(""+id);
 			throw new BadJobFault_Exception("O id do job específicado não existe",fault); 
 		}		
 		
