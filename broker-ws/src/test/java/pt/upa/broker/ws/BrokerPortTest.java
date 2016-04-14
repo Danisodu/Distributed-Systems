@@ -1,4 +1,4 @@
-/*package pt.upa.broker.ws;
+package pt.upa.broker.ws;
 
 import org.junit.*;
 import static org.junit.Assert.*;
@@ -11,7 +11,7 @@ import mockit.*;
  *  If necessary, should invoke "mock" remote servers 
  */
 
-/*
+
 public class BrokerPortTest {
 
     // static members
@@ -69,10 +69,10 @@ public class BrokerPortTest {
 
     }
 
-    /*@Test(expected = UnvailableTransportFault_Exception)
+    @Test(expected = UnvailableTransportFault_Exception)
     public void testUnknownDestinity() throws Exception{
             brokerjob.requestTransport("Vila Real", "Amadora", 45);
 
-    }*/
+    }
 
-}*/
+}
