@@ -19,23 +19,21 @@ import javax.jws.WebService;
 public class TransporterPort implements TransporterPortType{
 	
 	private int id;
-	private String name;
+	private String companyName;
 	private List<JobView> jobs = new ArrayList<JobView>();
 	private String[] centerTravels = {"Lisboa","Leiria","Santarém","Castelo Branco","Coimbra",
 				"Aveiro","Viseu","Guarda"};
-
-	public TransporterPort(String companyName){
-		name = companyName;
+	private String[] southTravels = {"Setúbal","Évora","Portalegre","Beja","Faro"};
+	private String[] northTravels = {"Porto","Braga","Viana do Castelo","Vila Real","Bragança"};
+	
+	public TransporterPort(String name){
+		companyName = name;
 		id = createIdByCompanyName();
 	}
 
-	public void setTransporterIdentifier(int identifier){
-		id=identifier;
-	}
-	
 	@Override
 	public String ping(String name) {
-		return name;
+		return companyName + " says " + name + ".\n";
 	}
 
 	@Override
@@ -45,24 +43,18 @@ public class TransporterPort implements TransporterPortType{
 		String[] travels;
 		
 		if(id%2==0){
-			travels = new String[] {"Porto","Braga","Viana do Castelo","Vila Real","Bragança"};
+			travels = northTravels;
 		} else{
-			travels = new String[] {"Setúbal","Évora","Portalegre","Beja","Faro"};
+			travels = southTravels;
 		}
 		
-		verifyLocations(origin, destination, travels);
+		verifyErrorCases(origin, destination, price);
 		
-		if(price > 100){ return null; }
-		
-		if(price <0){ 
-			BadPriceFault fault = new BadPriceFault();
-			fault.setPrice(price);
-			throw new BadPriceFault_Exception("O preço tem que ser positivo",fault);
-		}
+		if(verifyNullCases(origin, destination, travels, price)){ return null; }
 		
 		price = decidePrice(price);
 		
-		JobView newJv = createJob(name,""+jobs.size(),origin,destination,price,JobStateView.PROPOSED); 
+		JobView newJv = createJob(companyName, ""+jobs.size(), origin, destination, price, JobStateView.PROPOSED); 
 				
 		return newJv;
 	}
@@ -73,13 +65,11 @@ public class TransporterPort implements TransporterPortType{
 		JobView job = getJobById(id);
 		
 		if(accept){ 
-			Random rand = new Random();
 			Timer timer = new Timer();
-			long time = rand.nextInt(6) + 1;
+			long time = generateRandom(5) + 1;
 			
 			job.setJobState(JobStateView.ACCEPTED);
 			timer.schedule( new TimerTask(){
-
 				@Override
 				public void run() {
 					String state = job.getJobState().name();
@@ -97,10 +87,10 @@ public class TransporterPort implements TransporterPortType{
 						timer.cancel();
 					}
 				}
-			}, time, 30);
+			}, time*1000, 30*1000);
 		} else{
 			job.setJobState(JobStateView.REJECTED);
-		}
+		} // ?????????
 		
 		return job;
 	}
@@ -127,7 +117,11 @@ public class TransporterPort implements TransporterPortType{
 		jobs.clear();
 	}
 
-	public JobView getJob(int id) throws BadJobFault_Exception{
+	public void setTransporterIdentifier(int identifier) {
+		id = identifier;
+	}
+
+	public JobView getJob(int id) throws BadJobFault_Exception {
 		
 		JobView job = null;
 
@@ -144,7 +138,7 @@ public class TransporterPort implements TransporterPortType{
 		return job;
 	}
 	
-	public JobView getJobById(String id) throws BadJobFault_Exception{
+	public JobView getJobById(String id) throws BadJobFault_Exception {
 		
 		int index = Integer.parseInt(id);
 		
@@ -161,7 +155,7 @@ public class TransporterPort implements TransporterPortType{
 	
 	public int createIdByCompanyName(){
 		
-		String id = name.replaceAll("\\D+","");
+		String id = companyName.replaceAll("\\D+","");
 		
 		int idConverted = Integer.parseInt(id);		
 		
@@ -185,19 +179,44 @@ public class TransporterPort implements TransporterPortType{
 		return job;
 	}
 	
-	public void verifyLocations(String origin, String destination, String[] travels) throws BadLocationFault_Exception{
+	public void verifyErrorCases(String origin, String destination, int price) throws BadLocationFault_Exception, BadPriceFault_Exception{
 		
-		if(!(containsLocation(centerTravels,origin)) && !(containsLocation(travels, origin))){
+		if(!(containsLocation(southTravels,origin)) && !(containsLocation(centerTravels, origin)) 
+				&& !(containsLocation(northTravels, origin))){
 			BadLocationFault fault = new BadLocationFault();
 			fault.setLocation(origin);
 			throw new BadLocationFault_Exception("Origem errada", fault);
 		}
 		
-		else if(!(containsLocation(centerTravels,destination)) && !(containsLocation(travels, destination))){
+		else if(!(containsLocation(southTravels,destination)) && !(containsLocation(centerTravels, destination)) 
+				&& !(containsLocation(northTravels, destination))){
 			BadLocationFault fault = new BadLocationFault();
 			fault.setLocation(destination);
 			throw new BadLocationFault_Exception("Destino errado", fault);
 		}
+		
+		if(price <0){
+			BadPriceFault fault = new BadPriceFault();
+			fault.setPrice(price);
+			throw new BadPriceFault_Exception("O preço tem que ser positivo",fault);
+		}
+	}
+	
+	public boolean verifyNullCases(String origin, String destination, String[] travels, int price){
+		
+		boolean test = false;
+		
+		if(price > 100){ return true; }
+		
+		if(!(containsLocation(travels,origin)) && !(containsLocation(centerTravels, origin))){
+			return true;
+		}
+		
+		if(!(containsLocation(travels,destination)) && !(containsLocation(centerTravels, destination))){
+			return true;
+		}
+
+		return test;
 	}
 	
 	public boolean containsLocation(String[] vector, String name){
@@ -208,33 +227,40 @@ public class TransporterPort implements TransporterPortType{
 		
 		return false;
 	}
-
-	public int decidePrice(int price){
+	
+	public int generateRandom(int max){
 		
 		Random rand = new Random();
-				
+		
+		return rand.nextInt(max);
+	}
+	
+	public int decidePrice(int price){
+		
+		int priceRes = 0;
+		
 		if(price <= 10){
-			price = rand.nextInt(price);
+			priceRes = generateRandom(price);
 		}
 		
-		else if(10 < price || price == 100){
-			if(price%3 == 0){
-				if(id%3 == 0){
-					price = rand.nextInt(price);
+		else if(10 < price && price <= 100){
+			if(price%2 != 0){
+				if(id%2 != 0){
+					priceRes = generateRandom(price);
 				} else{
-					price = rand.nextInt(price) + 1 + rand.nextInt(6);
+					priceRes = generateRandom(price) + 1 + price;
 				}
 			}
 			
 			else{
-				if(id%3 == 0){
-					price = rand.nextInt(price) + 1 + rand.nextInt(6);
+				if(id%2 == 0){
+					priceRes = generateRandom(price);
 				} else{
-					price = rand.nextInt(price);
+					priceRes = generateRandom(price) + 1 + price;
 				}
 			}
 		}
 		
-		return price;
-	}	
+		return priceRes;
+	}
 }

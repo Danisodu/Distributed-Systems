@@ -75,7 +75,9 @@ public class EndpointManager {
 			// wait
 			System.out.println("Awaiting connections");
 			System.out.println("Press enter to shutdown");
-			broker.initHandlersSearch();
+			
+			broker.initHandlersSearch(); //?????
+			
 			System.in.read();
 
 		} catch (Exception e) {

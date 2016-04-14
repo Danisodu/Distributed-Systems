@@ -24,8 +24,10 @@ public class BrokerClientApplication {
 		
 		BrokerClient brokerClient = new BrokerClient(uddiURL,serviceName);
 		
+		System.out.println(brokerClient.ping(":jj)"));
+		
 		try{
-			brokerClient.requestTransport("Lisboa", "Castelo Branco", 14);
+			System.out.println(brokerClient.requestTransport("Lisboa", "Beja", 51));
 		}
 		catch( UnavailableTransportFault_Exception e){e.getMessage();}
 		catch( UnavailableTransportPriceFault_Exception e){e.getMessage();}
@@ -41,7 +43,7 @@ public class BrokerClientApplication {
 		catch(UnknownTransportFault_Exception e){ System.out.println(e.getMessage());
 		
 		}
-
+		
 		System.out.println(view.getId());
 		System.out.println(view.getOrigin());
 		System.out.println(view.getDestination());
@@ -49,7 +51,21 @@ public class BrokerClientApplication {
 		System.out.println(view.getPrice());
 		System.out.println(view.getState().name()+"\n");
 		/*
+		try{
+			view = brokerClient.viewTransport("2");
+		}
+		catch(UnknownTransportFault_Exception e){ System.out.println(e.getMessage());
 		
+		}
+		
+		System.out.println(view.getId());
+		System.out.println(view.getOrigin());
+		System.out.println(view.getDestination());
+		System.out.println(view.getTransporterCompany());
+		System.out.println(view.getPrice());
+		System.out.println(view.getState().name()+"\n");
+		
+		/*
 		System.out.println(view.getId());
 		System.out.println(view.getOrigin());
 		System.out.println(view.getDestination());
