@@ -1,4 +1,4 @@
-package pt.upa.transporter.ws.cli;
+package pt.upa.transporter.ws.it;
 
 import org.junit.*;
 import static org.junit.Assert.*;
@@ -12,6 +12,7 @@ import pt.upa.transporter.ws.JobView;
 import pt.upa.transporter.ws.JobStateView;
 import pt.upa.transporter.ws.TransporterPortType;
 import pt.upa.transporter.ws.TransporterService;
+import pt.upa.transporter.ws.cli.TransporterClient;
 
 
 /**
