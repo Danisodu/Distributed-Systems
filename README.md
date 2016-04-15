@@ -56,7 +56,7 @@ mvn -Dws.i=X exec:java
 
 [2] Construir **cliente** e executar testes
 
-cd transporter-ws-cli
+cd transporter-ws-cli  
 mvn clean install
 
 -------------------------------------------------------------------------------
@@ -66,7 +66,7 @@ mvn clean install
 [1] Construir e executar **servidor**
 
 cd broker-ws  
-mvn clean install  
+mvn clean install    
 mvn exec:java  
 
 [2] Construir **cliente** e executar testes
