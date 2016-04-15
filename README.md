@@ -16,20 +16,19 @@ Repositório:
 ## Instruções de instalação 
 
 
-### Ambiente
+### Ambiente  
 
-[0] Iniciar sistema operativo
+[0] Iniciar sistema operativo    
 
-Windows 8.1
+Windows 8.1  
+  
+[1] Iniciar servidores de apoio  
 
-
-[1] Iniciar servidores de apoio
-
-JUDDI:
- cd juddi-3.3.2_tomcat-7.0.64_9090/bin
- startup.bat
-
-[2] Criar pasta temporária
+JUDDI:  
+ cd juddi-3.3.2_tomcat-7.0.64_9090/bin  
+  startup.bat  
+  
+[2] Criar pasta temporária  
 
 
 [3] Obter código fonte do projeto (versão entregue)
