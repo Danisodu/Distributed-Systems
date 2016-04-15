@@ -29,7 +29,7 @@ JUDDI:
   startup.bat 
     
 [2] Criar pasta temporária    
-
+mkdir Projecto
 
 [3] Obter código fonte do projeto (versão entregue)  
 
