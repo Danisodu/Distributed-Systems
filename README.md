@@ -35,8 +35,7 @@ mkdir Projecto
 
 git clone https://github.com/tecnico-distsys/A_53-project/   
 
-git tag -a projSD -m "Projecto SD"  
-*(colocar aqui comandos git para obter a versão entregue a partir da tag e depois apagar esta linha)*
+git checkout -b < tagname > (no nosso caso Project)
   
   
 [4] Instalar módulos de bibliotecas auxiliares  
@@ -57,7 +56,7 @@ mvn -Dws.i=X exec:java
 
 [2] Construir **cliente** e executar testes
 
-cd transporter-ws-cli
+cd transporter-ws-cli  
 mvn clean install
 
 -------------------------------------------------------------------------------
@@ -67,7 +66,7 @@ mvn clean install
 [1] Construir e executar **servidor**
 
 cd broker-ws  
-mvn clean install  
+mvn clean install    
 mvn exec:java  
 
 [2] Construir **cliente** e executar testes
