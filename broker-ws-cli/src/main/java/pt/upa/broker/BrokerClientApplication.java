@@ -25,7 +25,7 @@ public class BrokerClientApplication {
 		String serviceName = args[1];
 		
 		BrokerClient brokerClient = new BrokerClient(uddiURL,serviceName);
-		/*
+		
 		System.out.println("Do ping!\n");
 		System.out.println(brokerClient.ping("hello"));
 		
@@ -39,7 +39,6 @@ public class BrokerClientApplication {
 		catch( UnknownLocationFault_Exception e){e.getMessage();}
 		catch( InvalidPriceFault_Exception e){e.getMessage();}
 
-		*/
 		System.out.println("Viewing created transport!\n");
 		TransportView v = null;
 		
@@ -86,7 +85,7 @@ public class BrokerClientApplication {
 			System.out.println(f.getState().name()+"\n");
 		}
 		
-		/*
+		
 		System.out.println("Request another transport!\n");
 		
 		try{
@@ -109,7 +108,7 @@ public class BrokerClientApplication {
 			System.out.println(t.getState().name()+"\n");
 		}
 		
-		
+		/*
 		TransportView v = null;
 		
 		try{
