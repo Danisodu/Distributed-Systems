@@ -35,8 +35,7 @@ mkdir Projecto
 
 git clone https://github.com/tecnico-distsys/A_53-project/   
 
-git tag -a projSD -m "Projecto SD"  
-*(colocar aqui comandos git para obter a versão entregue a partir da tag e depois apagar esta linha)*
+git checkout -b <tagname> (no nosso caso Project)
   
   
 [4] Instalar módulos de bibliotecas auxiliares  
