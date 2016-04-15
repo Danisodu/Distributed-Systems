@@ -97,9 +97,9 @@ public class BrokerClientApplication {
 		catch( InvalidPriceFault_Exception e){e.getMessage();}
 		
 		System.out.println("List transports!\n");
-		List<TransportView> list = brokerClient.listTransports();
+		List<TransportView> list2 = brokerClient.listTransports();
 	
-		for(TransportView t: list){
+		for(TransportView t: list2){
 			System.out.println(t.getId());
 			System.out.println(t.getOrigin());
 			System.out.println(t.getDestination());
