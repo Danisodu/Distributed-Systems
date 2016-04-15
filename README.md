@@ -35,7 +35,7 @@ mkdir Projecto
 
 git clone https://github.com/tecnico-distsys/A_53-project/   
 
-git checkout -b <tagname> (no nosso caso Project)
+git checkout -b < tagname > (no nosso caso Project)
   
   
 [4] Instalar módulos de bibliotecas auxiliares  
