@@ -1,4 +1,4 @@
-package pt.upa.Broker.ws.it;
+package pt.upa.broker.ws.it;
 
 import org.junit.*;
 import static org.junit.Assert.*;
