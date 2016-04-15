@@ -370,6 +370,8 @@ public class BrokerPort implements BrokerPortType{
 			UnavailableTransportFault fault = new UnavailableTransportFault();
 			fault.setOrigin(origin);
 			fault.setDestination(destination);
+
+			//deve por o estado do transporte a FAILED para alem de lançar a excepçao
 			throw new UnavailableTransportFault_Exception("No transporters available.", fault);
 		}
 		/*
