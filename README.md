@@ -20,46 +20,30 @@ Repositório:
 
 [0] Iniciar sistema operativo
 
-Indicar Windows ou Linux
-*(escolher um dos dois, que esteja disponível nos laboratórios, e depois apagar esta linha)*
+Windows 8.1
 
 
 [1] Iniciar servidores de apoio
 
 JUDDI:
-```
-...
-```
-
+ cd juddi-3.3.2_tomcat-7.0.64_9090/bin
+ startup.bat
 
 [2] Criar pasta temporária
-
-```
-cd ...
-mkdir ...
-```
 
 
 [3] Obter código fonte do projeto (versão entregue)
 
-```
-git clone ... 
-```
+git clone https://github.com/tecnico-distsys/A_53-project/ 
+
+git tag -a projSD -m "Projecto SD"
 *(colocar aqui comandos git para obter a versão entregue a partir da tag e depois apagar esta linha)*
 
 
 [4] Instalar módulos de bibliotecas auxiliares
 
-```
 cd uddi-naming
 mvn clean install
-```
-
-```
-cd ...
-mvn clean install
-```
-
 
 -------------------------------------------------------------------------------
 
@@ -67,21 +51,15 @@ mvn clean install
 
 [1] Construir e executar **servidor**
 
-```
-cd ...-ws
+cd transporter-ws
 mvn clean install
-mvn exec:java
-```
+mvn -Dws.i=X exec:java
+("Substituir X pelo número da transportadora que se quer lançar")
 
 [2] Construir **cliente** e executar testes
 
-```
-cd ...-ws-cli
+cd transporter-ws-cli
 mvn clean install
-```
-
-...
-
 
 -------------------------------------------------------------------------------
 
@@ -89,21 +67,15 @@ mvn clean install
 
 [1] Construir e executar **servidor**
 
-```
-cd ...-ws
+cd broker-ws
 mvn clean install
 mvn exec:java
-```
-
 
 [2] Construir **cliente** e executar testes
 
-```C_XX
-cd ...-ws-cli
+cd broker-ws-cli
 mvn clean install
-```
-
-...
+mvn exec:java
 
 -------------------------------------------------------------------------------
 **FIM**
