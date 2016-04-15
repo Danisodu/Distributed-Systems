@@ -2,8 +2,8 @@
 
 Grupo de SD 53 - Campus AL
 
-Margarida Correia 78352 margarida.correia@ist.utl.pt
-Daniela Duarte 78542 danisodu@gmail.com
+Margarida Correia 78352 margarida.correia@ist.utl.pt  
+Daniela Duarte 78542 danisodu@gmail.com  
 Ana Cláudia Amorim 78576 ana-claudia1995@hotmail.com 
 
 
