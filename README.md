@@ -66,15 +66,15 @@ mvn clean install
 
 [1] Construir e executar **servidor**
 
-cd broker-ws
-mvn clean install
-mvn exec:java
+cd broker-ws  
+mvn clean install  
+mvn exec:java  
 
 [2] Construir **cliente** e executar testes
 
-cd broker-ws-cli
-mvn clean install
-mvn exec:java
+cd broker-ws-cli  
+mvn clean install  
+mvn exec:java  
 
 -------------------------------------------------------------------------------
 **FIM**
