@@ -2,8 +2,8 @@
 
 Grupo de SD 53 - Campus AL
 
-Margarida Correia 78352 margarida.correia@ist.utl.pt
-Daniela Duarte 78542 danisodu@gmail.com
+Margarida Correia 78352 margarida.correia@ist.utl.pt  
+Daniela Duarte 78542 danisodu@gmail.com  
 Ana Cláudia Amorim 78576 ana-claudia1995@hotmail.com 
 
 
@@ -16,72 +16,49 @@ Repositório:
 ## Instruções de instalação 
 
 
-### Ambiente
+### Ambiente  
 
-[0] Iniciar sistema operativo
+[0] Iniciar sistema operativo    
 
-Indicar Windows ou Linux
-*(escolher um dos dois, que esteja disponível nos laboratórios, e depois apagar esta linha)*
+Windows 8.1  
+  
+[1] Iniciar servidores de apoio  
 
+JUDDI:  
+ cd juddi-3.3.2_tomcat-7.0.64_9090/bin  
+  startup.bat 
+    
+[2] Criar pasta temporária    
+mkdir Projecto
 
-[1] Iniciar servidores de apoio
+[3] Obter código fonte do projeto (versão entregue)  
 
-JUDDI:
-```
-...
-```
+git clone https://github.com/tecnico-distsys/A_53-project/   
 
-
-[2] Criar pasta temporária
-
-```
-cd ...
-mkdir ...
-```
-
-
-[3] Obter código fonte do projeto (versão entregue)
-
-```
-git clone ... 
-```
+git tag -a projSD -m "Projecto SD"  
 *(colocar aqui comandos git para obter a versão entregue a partir da tag e depois apagar esta linha)*
+  
+  
+[4] Instalar módulos de bibliotecas auxiliares  
+  
+cd uddi-naming  
+mvn clean install  
 
+-------------------------------------------------------------------------------  
 
-[4] Instalar módulos de bibliotecas auxiliares
+### Serviço TRANSPORTER    
 
-```
-cd uddi-naming
-mvn clean install
-```
+[1] Construir e executar **servidor**    
 
-```
-cd ...
-mvn clean install
-```
-
-
--------------------------------------------------------------------------------
-
-### Serviço TRANSPORTER
-
-[1] Construir e executar **servidor**
-
-```
-cd ...-ws
-mvn clean install
-mvn exec:java
-```
+cd transporter-ws  
+mvn clean install  
+mvn -Dws.i=X exec:java  
+("Substituir X pelo número da transportadora que se quer lançar")  
 
 [2] Construir **cliente** e executar testes
 
-```
-cd ...-ws-cli
+cd transporter-ws-cli
 mvn clean install
-```
-
-...
-
 
 -------------------------------------------------------------------------------
 
@@ -89,21 +66,15 @@ mvn clean install
 
 [1] Construir e executar **servidor**
 
-```
-cd ...-ws
-mvn clean install
-mvn exec:java
-```
-
+cd broker-ws  
+mvn clean install  
+mvn exec:java  
 
 [2] Construir **cliente** e executar testes
 
-```C_XX
-cd ...-ws-cli
-mvn clean install
-```
-
-...
+cd broker-ws-cli  
+mvn clean install  
+mvn exec:java  
 
 -------------------------------------------------------------------------------
 **FIM**
