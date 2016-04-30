@@ -1,8 +1,25 @@
-package pt.upa.broker.ws;
+package pt.upa.broker.ws.it;
 
 import org.junit.*;
 import static org.junit.Assert.*;
-import mockit.*;
+
+import pt.upa.broker.ws.TransportView;
+import pt.upa.broker.ws.cli.BrokerClient;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import pt.upa.broker.ws.UnknownLocationFault_Exception;
+import pt.upa.broker.ws.InvalidPriceFault_Exception;
+import pt.upa.broker.ws.UnavailableTransportFault_Exception;
+import pt.upa.broker.ws.UnknownTransportFault_Exception;
+import pt.upa.broker.ws.UnavailableTransportPriceFault_Exception;
+
+import javax.jws.WebService;
+import javax.xml.registry.JAXRException;
+
+import pt.ulisboa.tecnico.sdis.ws.uddi.UDDINaming;
 
 
 
@@ -12,9 +29,7 @@ import mockit.*;
  *  Invoked by Maven in the "test" life-cycle phase
  *  If necessary, should invoke "mock" remote servers 
  */
-
-
-public class BrokerPortTest {
+public class BrokerPortTestIT {
 
     // static members
 
@@ -31,24 +46,25 @@ public class BrokerPortTest {
 
     }
 
+
     // members
 
-    private BrokerPort broker;
+    private BrokerClient brokerclient;
 
-    private TransportView transportview;
+   TransportView transportview;
 
     // initialization and clean-up for each test
 
     @Before
     public void setUp() {
 
-        broker = new BrokerPort();
-        broker.initHandlersSearch();
+        brokerclient = new BrokerClient("http://localhost:9090", "UpaBroker");
+  
     }
 
     @After
     public void tearDown() {
-        broker = null;
+        brokerclient = null;
     }
 
 
@@ -56,31 +72,33 @@ public class BrokerPortTest {
 
     @Test(expected = UnknownLocationFault_Exception.class)
     public void testUnknownOrigin() throws Exception{
-            broker.requestTransport("Barreiro", "Faro", 45);
-             broker.clearTransports();
+            brokerclient.requestTransport("Barreiro", "Faro", 45);
+            brokerclient.clearTransports();
+
     }
-/*
+
     @Test(expected = UnknownLocationFault_Exception.class)
     public void testUnknownDestinity() throws Exception{
-            broker.requestTransport("Vila Real", "Amadora", 45);
-             broker.clearTransports();
+            brokerclient.requestTransport("Vila Real", "Amadora", 45);
+            brokerclient.clearTransports();
+
     }
-*/
+
     @Test(expected = InvalidPriceFault_Exception.class)
     public void testNegativePrice() throws Exception{
-            broker.requestTransport("Vila Real", "Portalegre", -45);
-             broker.clearTransports();
+            brokerclient.requestTransport("Vila Real", "Portalegre", -45);
+            brokerclient.clearTransports();
 
     }
 
 
     @Test(expected = UnavailableTransportFault_Exception.class)
     public void testUnavailableTransport() throws Exception{
-            broker.requestTransport("Lisboa", "Leiria", 200);
-            broker.clearTransports();
+            brokerclient.requestTransport("Lisboa", "Leiria", 200);
+            brokerclient.clearTransports();
             // nao ha transportes disponiveis se consoante o pedido nao ha ofertas de nenhuma das transportadoras
     }
-/*
+
     @Test(expected = UnavailableTransportPriceFault_Exception.class)
     public void testUnavailablePriceTransport() throws Exception{
 
@@ -88,29 +106,29 @@ public class BrokerPortTest {
             //UpaTransporter1 --> ID impar
             //preço par para mandar acima do preço  ---> manda proposta acima do preço  ---> broker rejeita
 
-            broker.requestTransport("Lisboa", "Leiria", 30);
+            brokerclient.requestTransport("Lisboa", "Leiria", 30);
 
-            broker.clearTransports();
+            brokerclient.clearTransports();
             
-    }*/
-/*
+    }
+
     @Test 
     public void testImparPriceImparID() throws Exception{
           
-        assertNotNull(broker.requestTransport("Leiria", "Lisboa", 31));
-         broker.clearTransports();
+        assertNotNull(brokerclient.requestTransport("Leiria", "Lisboa", 31));
+        brokerclient.clearTransports();
 
 
        
     } 
 
-     //teste ao clearTransports*/
+     //teste ao clearTransports
 
     @Test 
     public void cleartransports() {
 
-        broker.clearTransports();
-        assertTrue(broker.listTransports().isEmpty());
+        brokerclient.clearTransports();
+        assertTrue(brokerclient.listTransports().isEmpty());
 
         
     } 
@@ -128,7 +146,7 @@ public class BrokerPortTest {
     public void testIDTransportUnknown() throws Exception{
 
           
-          broker.viewTransport("3");  
+          brokerclient.viewTransport("3");  
 
           // nao ha transporte nenhum transporte com esse id por exemplo
     }
@@ -138,21 +156,23 @@ public class BrokerPortTest {
     @Test 
     public void testPing() {
         
-        assertNotNull(broker.ping("Olá"));
+        assertNotNull(brokerclient.ping("Olá"));
         
     }  
 
     
     //teste ao listTransports
-/*
+
     @Test
     public void testlisttransports() throws Exception{
           
 
-          String id = broker.requestTransport("Castelo Branco", "Lisboa", 31);
-                    
-          assertNotNull(broker.listTransports());  
 
-    }*/
+          String id= brokerclient.requestTransport("Leiria", "Lisboa", 31);
+                    
+          assertNotNull(brokerclient.listTransports());  
+
+         
+    }
 
 }

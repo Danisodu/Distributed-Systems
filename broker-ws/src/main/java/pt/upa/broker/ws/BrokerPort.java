@@ -32,16 +32,16 @@ public class BrokerPort implements BrokerPortType{
 	private String[] southTravels = {"Setúbal","Évora","Portalegre","Beja","Faro"};
 	private String[] northTravels = {"Porto","Braga","Viana do Castelo","Vila Real","Bragança"};
 	
-	public BrokerPort(){
-	}
+	public BrokerPort(){}
 	
 	public void initHandlersSearch(){
 		
-		System.out.printf("Contacting UDDI to find Transporters...");
+		System.out.printf("Contacting UDDI to find Transporters...\n\n");
 		UDDINaming uddiNaming = null;
+		String uddiURL = "http://localhost:9090";
 		
 		try {
-			uddiNaming = new UDDINaming("http://localhost:9090");
+			uddiNaming = new UDDINaming(uddiURL);
 		
 			Collection<String> endpointAddresses = uddiNaming.list("UpaTransporter%");
 			ArrayList<String> urls = (ArrayList<String>) endpointAddresses;
@@ -49,7 +49,7 @@ public class BrokerPort implements BrokerPortType{
 			for (String url: urls){
 				
 				System.out.println(url);
-				TransporterClient clientHandler = new TransporterClient("http://localhost:9090");
+				TransporterClient clientHandler = new TransporterClient(uddiURL);
 				
 				clientHandler.setEndpointAddress(url);
 				clientHandler.initServiceSearch();
@@ -84,16 +84,23 @@ public class BrokerPort implements BrokerPortType{
 		String id = "" + index, info = null;
 		
 		verifyErrorCases(origin, destination, price);
-		
-		BrokerJob job = createJobRequested(id, origin, destination, price, JobState.REQUESTED);
-		
+				
 		JobView view = bestOffer(origin, destination, price, id);
-
-		job = changeJob(view, id);
+		
+		BrokerJob job = convertJobViewToBrokerJob(view);
+		
+		job.setIdentifier(id);
+		jobs.add(job);
+		
+		for(BrokerJob j: jobs){
+			System.out.println(j.getCompanyName() + " cn  " + j.getTransporterIdentifier() + " tId  " +  j.getIdentifier());
+		}
+		
+		System.out.println("\n");
 
 		try {
 			info = decideOffer(job, price);
-		} catch (UnknownTransportFault_Exception e) {/*No special treatment, because this will never happen*/}
+		} catch (UnknownTransportFault_Exception e) {/*No special treatment, because this will not happen*/}
 	
 		return info;
 	}
@@ -109,7 +116,7 @@ public class BrokerPort implements BrokerPortType{
 			UnknownTransportFault fault = new UnknownTransportFault();
 			fault.setId(id);
 			throw new UnknownTransportFault_Exception("The specified transport doesn't exist",fault);
-		} //meh
+		} //hmmm
 		
 		JobView view = clientHandler.jobStatus(idT);
 		
@@ -138,12 +145,10 @@ public class BrokerPort implements BrokerPortType{
 	public String getIdByTransporterIdentifier(String idT, String companyName){
 				
 		for(BrokerJob job: jobs){
-						
 			if(job.getTransporterIdentifier().equals(idT) && job.getCompanyName().equals(companyName)){
 				return job.getIdentifier();
 			}
 		}
-		
 		return null; // This will never happen
 	}
 
@@ -200,7 +205,7 @@ public class BrokerPort implements BrokerPortType{
 			}
 		}
 		
-		return null;
+		return null;  // Whenever the transporter client is null we assume that no transporters are available
 	}
 	
 	public BrokerJob createJob(String companyName, String id, String idT, String origin, String destination, int price, JobState state){
@@ -341,22 +346,23 @@ public class BrokerPort implements BrokerPortType{
 		for(TransporterClient tc: clientHandlers){
 			try {
 				temp = tc.requestJob(origin,destination,price);
-				proposals.add(temp);
 				
 				if(temp == null){
+					System.out.println("retornou null do transporter client");
 					continue;
 				}
 			} catch (BadLocationFault_Exception e) { //Sítio desconhecido 
 				UnknownLocationFault fault = new UnknownLocationFault();
 				fault.setLocation(e.getFaultInfo().getLocation());
 				throw new UnknownLocationFault_Exception(e.getMessage(),fault);
-				
 			} catch (BadPriceFault_Exception e) {
 				InvalidPriceFault fault = new InvalidPriceFault();
 				fault.setPrice(e.getFaultInfo().getPrice());
 				throw new InvalidPriceFault_Exception(e.getMessage(),fault);
 			}
-			
+						
+			proposals.add(temp);
+
 			tc.setServiceName(temp.getCompanyName());
 			givenPrice = temp.getJobPrice();
 			
@@ -370,26 +376,13 @@ public class BrokerPort implements BrokerPortType{
 			UnavailableTransportFault fault = new UnavailableTransportFault();
 			fault.setOrigin(origin);
 			fault.setDestination(destination);
-
-			//deve por o estado do transporte a FAILED para alem de lançar a excepçao
 			throw new UnavailableTransportFault_Exception("No transporters available.", fault);
 		}
-		/*
-		TransporterClient tc = null;
 		
-		for(JobView prop: proposals){
-			if(prop != view){
-				try {
-					tc = getTransporterByJobId(this.getIdByTransporterIdentifier(prop.getJobIdentifier(),prop.getCompanyName()));
-				} catch (UnknownTransportFault_Exception e) {/* Do nothing}
-				try {
-					tc.decideJob(prop.getJobIdentifier(), false);
-				} catch (BadJobFault_Exception e) {/*Do nothing}				
-			}
-		}*/
-				
+		cancelProposals(proposals, view);
+		
 		return view;
-	} // This function needs to be shortened, too confusing
+	}
 	
 	public String decideOffer(BrokerJob job, int price) throws UnknownTransportFault_Exception, UnavailableTransportPriceFault_Exception,
 		UnavailableTransportFault_Exception{
@@ -426,9 +419,7 @@ public class BrokerPort implements BrokerPortType{
 				view = clientHandler.decideJob(idT, true);
 			} catch (BadJobFault_Exception e) {
 				UnknownTransportFault fault = new UnknownTransportFault();
-
 				fault.setId(id);
-				
 				throw new UnknownTransportFault_Exception(e.getMessage(),fault);
 			}
 		}
@@ -469,4 +460,23 @@ public class BrokerPort implements BrokerPortType{
 		return convertedList;
 	}
 	
+	public void cancelProposals(List<JobView> props, JobView v){
+			
+			TransporterClient tc = null;
+			
+			for(JobView prop: props){
+				
+				if(prop != v){
+	
+					try {
+						String id = getIdByTransporterIdentifier(prop.getJobIdentifier(),prop.getCompanyName());
+						tc = getTransporterByJobId(id);
+					} catch (UnknownTransportFault_Exception e) {/* Do nothing*/}
+					try {
+						tc.decideJob(prop.getJobIdentifier(), false);
+					} catch (BadJobFault_Exception e) {/*Do nothing*/}				
+				}
+			}
+		}	
 }
+

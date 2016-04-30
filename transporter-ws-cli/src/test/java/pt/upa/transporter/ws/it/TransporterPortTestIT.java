@@ -26,7 +26,7 @@ public class TransporterPortTestIT {
     // static members
 
     // one-time initialization and clean-up
-
+/*
     @BeforeClass //pode ser usado para fazer a ligação com o servidor
     public static void oneTimeSetUp() {
 
@@ -189,8 +189,5 @@ public class TransporterPortTestIT {
         transporterclient.clearJobs();
         assertTrue(transporterclient.listJobs().isEmpty());
         //assertNull(transporterclient.listJobs());
-        
+        */
     }   
-
-
-}

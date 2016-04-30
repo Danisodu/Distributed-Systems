@@ -112,9 +112,4 @@ public class TransporterClient{
 	public void clearJobs() {
 		service.clearJobs();
 	}
-
-	
-
-
-	
 }
