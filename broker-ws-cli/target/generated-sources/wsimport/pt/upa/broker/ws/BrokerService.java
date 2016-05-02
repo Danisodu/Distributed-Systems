@@ -17,9 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
-
-@WebServiceClient(name = "BrokerService", targetNamespace = "http://ws.broker.upa.pt/", wsdlLocation = "file:/C:/Users/Margarida/Desktop/Faculdade/3ano/2semestre/SD/Projeto/A_53-project/broker-ws-cli/../broker-ws/src/main/resources/broker.1_0.wsdl")
-
+@WebServiceClient(name = "BrokerService", targetNamespace = "http://ws.broker.upa.pt/", wsdlLocation = "file:/C:/Users/DanielaD/Desktop/A_53-project/broker-ws-cli/../broker-ws/src/main/resources/broker.1_0.wsdl")
 public class BrokerService
     extends Service
 {
@@ -32,8 +30,7 @@ public class BrokerService
         URL url = null;
         WebServiceException e = null;
         try {
-
-            url = new URL("file:/C:/Users/Margarida/Desktop/Faculdade/3ano/2semestre/SD/Projeto/A_53-project/broker-ws-cli/../broker-ws/src/main/resources/broker.1_0.wsdl");
+            url = new URL("file:/C:/Users/DanielaD/Desktop/A_53-project/broker-ws-cli/../broker-ws/src/main/resources/broker.1_0.wsdl");
 
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
