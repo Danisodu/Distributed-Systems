@@ -5,7 +5,7 @@
     <!-- http://maven.apache.org/pom.html#Quick_Overview -->
 
     <groupId>pt.upa.a53</groupId>
-    <artifactId>transporter-ws-cli</artifactId>
+    <artifactId>ca-ws</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -18,23 +18,19 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
-        <wsdl.directory>${basedir}/../transporter-ws/src/main/resources</wsdl.directory>
-        <wsdl.filename>transporter.1_0.wsdl</wsdl.filename>
-            
-        <mainclass>pt.upa.transporter.TransporterClientApplication</mainclass>
+        <wsdl.directory>src/main/resources</wsdl.directory>
+        <wsdl.filename>ca.1_0.wsdl</wsdl.filename>
 
-        <uddi.url>http://localhost:9090</uddi.url>
-        <ws.name>UpaTransporter1</ws.name> <!-- must be changed -->
+        <mainclass>pt.upa.ca.CAApplication</mainclass>
+		
+		<uddi.url>http://localhost:9090</uddi.url>
+        <ws.name>UpaCA</ws.name>
+        <ws.url>http://localhost:8080/ca-ws/endpoint</ws.url>
         
+      
     </properties>
 
     <dependencies>
-        <!-- HANDLRES-WS -->
-        <dependency>
-            <groupId>pt.upa.a53</groupId>
-            <artifactId>ws-handlers</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
         <!-- JAX-WS -->
         <dependency>
             <groupId>com.sun.xml.ws</groupId>
@@ -55,11 +51,16 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
-         <!-- UDDI Naming -->
+            <!-- UDDI Naming -->
         <dependency>
             <groupId>pt.ulisboa.tecnico.sdis</groupId>
             <artifactId>uddi-naming</artifactId>
             <version>1.0</version>
+        </dependency>
+        <dependency>
+        	 <groupId>pt.upa.a53</groupId>
+    		<artifactId>transporter-ws-cli</artifactId>
+    		<version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
@@ -94,6 +95,7 @@
                     <wsdlFiles>
                         <wsdlFile>${wsdl.filename}</wsdlFile>
                     </wsdlFiles>
+                  
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -102,18 +104,6 @@
                         <version>2.2.10</version>
                     </dependency>
                 </dependencies>
-            </plugin>
-             <plugin>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.19.1</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -133,6 +123,7 @@
                     <arguments>
                         <argument>${uddi.url}</argument>
                         <argument>${ws.name}</argument>
+                        <argument>${ws.url}</argument>
                     </arguments>
                 </configuration>
             </plugin>
@@ -159,5 +150,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

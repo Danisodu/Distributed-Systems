@@ -4,8 +4,8 @@
     <modelVersion>4.0.0</modelVersion>
     <!-- http://maven.apache.org/pom.html#Quick_Overview -->
 
-    <groupId>pt.upa.a53</groupId>
-    <artifactId>transporter-ws-cli</artifactId>
+    <groupId>pt.upa.a48</groupId>
+    <artifactId>broker-ws-cli</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -18,23 +18,16 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
-        <wsdl.directory>${basedir}/../transporter-ws/src/main/resources</wsdl.directory>
-        <wsdl.filename>transporter.1_0.wsdl</wsdl.filename>
-            
-        <mainclass>pt.upa.transporter.TransporterClientApplication</mainclass>
+        <wsdl.directory>${basedir}/../broker-ws/src/main/resources</wsdl.directory>
+        <wsdl.filename>broker.1_0.wsdl</wsdl.filename>
 
-        <uddi.url>http://localhost:9090</uddi.url>
-        <ws.name>UpaTransporter1</ws.name> <!-- must be changed -->
-        
+        <mainclass>pt.upa.broker.BrokerClientApplication</mainclass>
+
+		<uddi.url>http://localhost:9090</uddi.url>
+        <ws.name>UpaBroker</ws.name>
     </properties>
 
     <dependencies>
-        <!-- HANDLRES-WS -->
-        <dependency>
-            <groupId>pt.upa.a53</groupId>
-            <artifactId>ws-handlers</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
         <!-- JAX-WS -->
         <dependency>
             <groupId>com.sun.xml.ws</groupId>
@@ -103,7 +96,7 @@
                     </dependency>
                 </dependencies>
             </plugin>
-             <plugin>
+            <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>2.19.1</version>
                 <executions>

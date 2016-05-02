@@ -18,10 +18,10 @@ public class CA {
 	public static void main(String[] args) throws Exception {
 
 	    //como pomos o caminho relativo??
-		//final String publicKeyPathBroker = "\src\";
-		//final String privateKeyPathBroker ="" ;
-		//final String publicKeyPathTransporter = "\src\";
-		//final String privateKeyPathTransporter = "";
+		//final String publicKeyPathBroker = "/broker-ws/target/";
+		//final String privateKeyPathBroker =" /broker-ws/target/" ;
+		//final String publicKeyPathTransporter = "/transporter-ws/";
+		//final String privateKeyPathTransporter = "/transporter-ws/target/";
 		final String privateKeyPath = "./CAprivatekey.txt";
 		final String publicKeyPath= "./CApublickey.txt";
 

@@ -9,6 +9,9 @@ import java.util.TreeMap;
 
 import javax.jws.WebService;
 
+import javax.jws.HandlerChain;
+
+
 @WebService(
 	    endpointInterface="pt.upa.transporter.ws.TransporterPortType",
 	    wsdlLocation="transporter.1_0.wsdl",
@@ -17,6 +20,9 @@ import javax.jws.WebService;
 	    targetNamespace="http://ws.transporter.upa.pt/",
 	    serviceName="TransporterService"
 	)
+
+@HandlerChain(file="/handler-chain.xml")
+
 public class TransporterPort implements TransporterPortType{
 	
 	private int id;
