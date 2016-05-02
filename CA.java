@@ -22,8 +22,8 @@ public class CA {
 		//final String privateKeyPathBroker ="" ;
 		//final String publicKeyPathTransporter = "\src\";
 		//final String privateKeyPathTransporter = "";
-		final String privateKeyPath = "/afs/.ist.utl.pt/users/5/2/ist178352/SD/CAprivatekey.txt";
-		final String publicKeyPath= "/afs/.ist.utl.pt/users/5/2/ist178352/SD/CApublickey.txt";
+		final String privateKeyPath = "./CAprivatekey.txt";
+		final String publicKeyPath= "./CApublickey.txt";
 
 	
 		System.out.println("Generate and save keys");
