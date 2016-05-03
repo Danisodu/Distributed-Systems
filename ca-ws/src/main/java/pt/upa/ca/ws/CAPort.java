@@ -77,7 +77,7 @@ public class CAPort implements CAPortType{
 
 	*/
 	
-	/*
+	
 	public String ping(String name) {
 		
 		String pong = "Hello";
@@ -85,7 +85,7 @@ public class CAPort implements CAPortType{
 		
 		return pong;
 	}
-*/
+
 
 	public static void write(String publicKeyPath, String privateKeyPath) throws Exception {
 

@@ -21,18 +21,22 @@ public class CAApplication {
 
 public static void main(String[] args) throws Exception {
 
-		//final String publicKeyPathBroker = "/broker-ws/target/";
-		//final String privateKeyPathBroker =" /broker-ws/target/" ;
+		CAPort ca = new CAPort();
+
+		//final String publicKeyPathBroker = "/broker-ws/target/";   
+		//final String privateKeyPathBroker =" /broker-ws/target/" ;   na resource do broker
 		//final String publicKeyPathTransporter = "/transporter-ws/";
-		//final String privateKeyPathTransporter = "/transporter-ws/target/";
+		//final String privateKeyPathTransporter = "/transporter-ws/target/";   na resource do transporter
+
 		final String privateKeyPath = "./CAprivatekey.txt";
 		final String publicKeyPath= "./CApublickey.txt";
 
 	
+
 		System.out.println("Generate and save keys");
 		//write(publicKeyPathBorker, privateKeyPathBroker);
 		//write(publicKeyPathTransporter, privateKeyPathTransporter);
-		write(publicKeyPath, privateKeyPath);
+		ca.write(publicKeyPath, privateKeyPath);
 		
 	
 	
