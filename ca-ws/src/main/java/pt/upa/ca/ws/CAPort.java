@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.TreeMap;
+
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.io.FileInputStream;
@@ -30,13 +30,7 @@ import javax.jws.WebService;
 import javax.xml.registry.JAXRException;
 
 import pt.ulisboa.tecnico.sdis.ws.uddi.UDDINaming;
-//import pt.upa.transporter.ws.BadJobFault_Exception;
-//import pt.upa.transporter.ws.BadLocationFault_Exception;
-//import pt.upa.transporter.ws.BadPriceFault_Exception;
-//import pt.upa.transporter.ws.JobStateView;
-//import pt.upa.transporter.ws.JobView;
-//import pt.upa.transporter.ws.cli.TransporterClient;
-//import pt.upa.transporter.ws.cli.TransporterClientException;
+
 
 @WebService(
 	    endpointInterface="pt.upa.ca.ws.CAPortType",
@@ -103,12 +97,12 @@ public class CAPort implements CAPortType{
 		ClassLoader cLoader = cls.getClassLoader();
 		
 		InputStream file = cLoader.getResourceAsStream(name);
-		BufferedReader bf = new BufferedReader(new InputStreamReader(file));
 		byte[] content = new byte[file.available()];
 
 		X509EncodedKeySpec pubSpec = new X509EncodedKeySpec(content);
 		KeyFactory keyFacPub = KeyFactory.getInstance("RSA");
 		PublicKey pub = keyFacPub.generatePublic(pubSpec);
+
 
 		return pub;
 	}
