@@ -1,69 +1,44 @@
 package pt.upa.transporter;
 
-import pt.upa.transporter.ws.JobView;
 import pt.upa.transporter.ws.cli.TransporterClient;
 
 public class TransporterClientApplication {
 
 	public static void main(String[] args) throws Exception {
-				
 		// Check arguments
-		if (args.length < 2) {
+		if (args.length == 0) {
 			System.err.println("Argument(s) missing!");
-			System.err.printf("Usage: java %s uddiURL name%n", TransporterClient.class.getName());
+			System.err.println(
+					"Usage: java " + TransporterClientApplication.class.getName() + " wsURL OR uddiURL wsName");
 			return;
 		}
+		String uddiURL = null;
+		String wsName = null;
+		String wsURL = null;
+		if (args.length == 1) {
+			wsURL = args[0];
+		} else if (args.length >= 2) {
+			uddiURL = args[0];
+			wsName = args[1];
+		}
 
-		String uddiURL = args[0];
-		
-		TransporterClient transporterClient = new TransporterClient(uddiURL);
-				
-		transporterClient.setEndpointAddress("http://localhost:8081/transporter-ws/endpoint");
-		
-		transporterClient.initServiceSearch();
-		
-		JobView j = transporterClient.requestJob("Lisboa","Castelo Branco",14);	
-				
-		System.out.println(j.getCompanyName());
-		System.out.println(j.getJobDestination());
-		System.out.println(j.getJobOrigin());
-		System.out.println(j.getJobPrice());
-		System.out.println(j.getJobState().name());
-		
-		j = transporterClient.jobStatus("0");
-		
-		System.out.println(j.getCompanyName());
-		System.out.println(j.getJobDestination());
-		System.out.println(j.getJobOrigin());
-		System.out.println(j.getJobPrice());
-		System.out.println(j.getJobIdentifier());
-		System.out.println(j.getJobState().name());
-		
-		j = transporterClient.decideJob("0", true);
-				
-		System.out.println(j.getJobIdentifier());
-		System.out.println(j.getJobState().name());
-		
-		j = transporterClient.jobStatus("0");
-		
-		System.out.println(j.getJobIdentifier());
-		System.out.println(j.getJobState().name());
-		
-		j = transporterClient.jobStatus("0");
-		
-		System.out.println(j.getJobIdentifier());
-		System.out.println(j.getJobState().name());
-		
-		j = transporterClient.jobStatus("0");
-		
-		System.out.println(j.getJobIdentifier());
-		System.out.println(j.getJobState().name());
-		
-		j = transporterClient.jobStatus("0");
-		
-		System.out.println(j.getJobIdentifier());
-		System.out.println(j.getJobState().name());
-		
+		// Create client
+		TransporterClient client = null;
+
+		if (wsURL != null) {
+			System.out.printf("Creating client for server at %s%n", wsURL);
+			client = new TransporterClient(wsURL);
+		} else if (uddiURL != null) {
+			System.out.printf("Creating client using UDDI at %s for server with name %s%n", uddiURL, wsName);
+			client = new TransporterClient(uddiURL, wsName);
+		}
+
+		// the following remote invocations are just basic examples
+		// the actual tests are made using JUnit
+
+		System.out.println("Invoke ping()...");
+		String result = client.ping("client");
+		System.out.println(result);
+
 	}
-
 }
