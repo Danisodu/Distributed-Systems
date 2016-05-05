@@ -96,9 +96,9 @@ public class CAPort implements CAPortType{
 		//o tamanho da chave gerada e 1024
 		keyGen.initialize(1024);
 		KeyPair key = keyGen.generateKeyPair();
-
 		//chave publica para ficheiro
 		byte[] pubEncoded = key.getPublic().getEncoded();  //getEncoded -> a chave no formato desejado a ser guardado no ficheiro
+
 		writeFile(publicKeyPath, pubEncoded);
 
 		//chave privada para ficheiro
