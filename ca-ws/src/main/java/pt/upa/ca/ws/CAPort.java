@@ -13,12 +13,17 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutputStream;
 import java.io.IOException;
+
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.Signature;
+import java.security.SignatureException;
 import java.io.BufferedReader;
 
 
@@ -105,6 +110,24 @@ public class CAPort implements CAPortType{
 
 
 		return pub;
+	}
+
+	//falta criar um certificado e enviar com assinatura
+
+
+	public static byte[] makeDigitalSignature(Certificate certificate, PrivateKey privatekey) throws Exception{
+
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		ObjectOutputStream os = new ObjectOutputStream(out);
+		os.writeObject(certificate);
+    	byte[] bytes = out.toByteArray(); 
+			//passar o certificado para bytes
+		Signature sig = Signature.getInstance("SHA1WithRSA");
+		sig.initSign(privatekey);
+		sig.update(bytes);
+		byte[] signature = sig.sign();
+
+		return signature;
 	}
 
 	
