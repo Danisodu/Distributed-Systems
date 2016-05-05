@@ -13,22 +13,17 @@ import java.security.PublicKey;
 /**
  * Program to read and write asymmetric key files
  */
-public class CA {
+public class KeyGenerator {
 
 	public static void main(String[] args) throws Exception {
 
 	    //como pomos o caminho relativo??
-		//final String publicKeyPathBroker = "/broker-ws/target/";
-		//final String privateKeyPathBroker =" /broker-ws/target/" ;
-		//final String publicKeyPathTransporter = "/transporter-ws/";
-		//final String privateKeyPathTransporter = "/transporter-ws/target/";
-		final String privateKeyPath = "./CAprivatekey.txt";
-		final String publicKeyPath= "./CApublickey.txt";
+
+		final String privateKeyPath = "./Privatekey.txt";
+		final String publicKeyPath= "./Publickey.txt";
 
 	
 		System.out.println("Generate and save keys");
-		//write(publicKeyPathBorker, privateKeyPathBroker);
-		//write(publicKeyPathTransporter, privateKeyPathTransporter);
 		write(publicKeyPath, privateKeyPath);
 		
 	

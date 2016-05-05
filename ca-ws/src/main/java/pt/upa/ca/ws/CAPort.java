@@ -1,5 +1,8 @@
 package pt.upa.ca.ws;
 
+import java.lang.*;
+import java.io.*;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -7,6 +10,7 @@ import java.util.TreeMap;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -15,6 +19,9 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.io.BufferedReader;
+
+
 
 import javax.xml.ws.Endpoint;
 
@@ -87,30 +94,28 @@ public class CAPort implements CAPortType{
 	}
 
 
-	public static void write(String publicKeyPath, String privateKeyPath) throws Exception {
-
-		// generate RSA key pair
-
-		KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
-
-		//o tamanho da chave gerada e 1024
-		keyGen.initialize(1024);
-		KeyPair key = keyGen.generateKeyPair();
-
-		//chave publica para ficheiro
-		byte[] pubEncoded = key.getPublic().getEncoded();  //getEncoded -> a chave no formato desejado a ser guardado no ficheiro
-		writeFile(publicKeyPath, pubEncoded);
-
-		//chave privada para ficheiro
-		byte[] privEncoded = key.getPrivate().getEncoded();
-		writeFile(privateKeyPath, privEncoded);
-	}
 	
 
-	private static void writeFile(String path, byte[] content) throws FileNotFoundException, IOException {
-		FileOutputStream fos = new FileOutputStream(path);
-		fos.write(content);
-		fos.close();
+
+	public static PublicKey getPublicKey(String name) throws Exception {
+
+		Class cls = Class.forName("CAPort");
+		ClassLoader cLoader = cls.getClassLoader();
+		
+		InputStream file = cLoader.getResourceAsStream(name);
+		BufferedReader bf = new BufferedReader(new InputStreamReader(file));
+		byte[] content = new byte[file.available()];
+
+		X509EncodedKeySpec pubSpec = new X509EncodedKeySpec(content);
+		KeyFactory keyFacPub = KeyFactory.getInstance("RSA");
+		PublicKey pub = keyFacPub.generatePublic(pubSpec);
+
+		return pub;
 	}
+
+	
+
+	
+	
 }
 

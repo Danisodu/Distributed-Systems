@@ -28,15 +28,15 @@ public static void main(String[] args) throws Exception {
 		//final String publicKeyPathTransporter = "/transporter-ws/";
 		//final String privateKeyPathTransporter = "/transporter-ws/target/";   na resource do transporter
 
-		final String privateKeyPath = "./CAprivatekey.txt";
-		final String publicKeyPath= "./CApublickey.txt";
+		//final String privateKeyPath = "./CAprivatekey.txt";
+		//final String publicKeyPath= "./CApublickey.txt";
 
 	
 
-		System.out.println("Generate and save keys");
+		//System.out.println("Generate and save keys");
 		//write(publicKeyPathBorker, privateKeyPathBroker);
 		//write(publicKeyPathTransporter, privateKeyPathTransporter);
-		ca.write(publicKeyPath, privateKeyPath);
+		//ca.write(publicKeyPath, privateKeyPath);
 		
 	
 	
