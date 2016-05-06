@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.TreeMap;
 
 import javax.jws.WebService;
 
@@ -20,7 +21,7 @@ public class TransporterPort implements TransporterPortType{
 	
 	private int id;
 	private String companyName;
-	private List<JobView> jobs = new ArrayList<JobView>();
+	private TreeMap<String, JobView> jobs = new TreeMap<String, JobView>();
 	private String[] centerTravels = {"Lisboa","Leiria","Santarém","Castelo Branco","Coimbra",
 				"Aveiro","Viseu","Guarda"};
 	private String[] southTravels = {"Setúbal","Évora","Portalegre","Beja","Faro"};
@@ -54,7 +55,7 @@ public class TransporterPort implements TransporterPortType{
 		
 		price = decidePrice(price);
 		
-		JobView newJv = createJob(companyName, ""+jobs.size(), origin, destination, price, JobStateView.PROPOSED); 
+		JobView newJv = createJob(companyName, Integer.toString(jobs.size()), origin, destination, price, JobStateView.PROPOSED); 
 				
 		return newJv;
 	}
@@ -62,7 +63,13 @@ public class TransporterPort implements TransporterPortType{
 	@Override
 	public JobView decideJob(String id, boolean accept) throws BadJobFault_Exception {
 		
-		JobView job = getJobById(id);
+		JobView job = getJob(id);
+		
+		if(!job.getJobState().name().equals("PROPOSED")){
+			BadJobFault fault = new BadJobFault();
+			fault.setId(id);
+			throw new BadJobFault_Exception("O id do job específicado não existe",fault); 
+		}
 		
 		if(accept){ 
 			Timer timer = new Timer();
@@ -86,11 +93,13 @@ public class TransporterPort implements TransporterPortType{
 						job.setJobState(JobStateView.COMPLETED);
 						timer.cancel();
 					}
+					
+					jobs.put(job.getJobIdentifier(), job);
 				}
 			}, time*1000, 30*1000);
 		} else{
 			job.setJobState(JobStateView.REJECTED);
-		} // FIXME
+		}
 		
 		return job;
 	}
@@ -101,7 +110,7 @@ public class TransporterPort implements TransporterPortType{
 		JobView job = null;
 		
 		try{
-			job = getJobById(id);
+			job = getJob(id);
 		} catch(BadJobFault_Exception e){ return null; }
 				
 		return job;
@@ -109,7 +118,7 @@ public class TransporterPort implements TransporterPortType{
 
 	@Override
 	public List<JobView> listJobs() {
-		return jobs;
+		return new ArrayList<JobView>(jobs.values());
 	}
 
 	@Override
@@ -121,38 +130,31 @@ public class TransporterPort implements TransporterPortType{
 		id = identifier;
 	}
 
-	public JobView getJob(int id) throws BadJobFault_Exception {
+	public JobView getJob(String id) throws BadJobFault_Exception {
+				
+		JobView job;
 		
-		JobView job = null;
-
-		try{
-			job = jobs.get(id);
-		} 
-		
-		catch(IndexOutOfBoundsException e){ 
+		if(id == null){
 			BadJobFault fault = new BadJobFault();
-			fault.setId(""+id);
+			fault.setId(id);
 			throw new BadJobFault_Exception("O id do job específicado não existe",fault); 
-		}		
+		}
 		
+		if(jobs.containsKey(id)){
+			job = jobs.get(id);
+		} else{
+			BadJobFault fault = new BadJobFault();
+			fault.setId(id);
+			throw new BadJobFault_Exception("O id do job específicado não existe",fault); 
+		}
+				
 		return job;
-	}
-	
-	public JobView getJobById(String id) throws BadJobFault_Exception {
-		
-		int index = Integer.parseInt(id);
-		
-		return getJob(index);
-	}
+	}		
 
 	public void addJob(JobView job) {
-		jobs.add(job);
+		jobs.put(job.getJobIdentifier(), job);
 	}
-	
-	public void removeJob(int index){
-		jobs.remove(index);
-	}
-	
+
 	public int createIdByCompanyName(){
 		
 		String id = companyName.replaceAll("\\D+","");
@@ -240,13 +242,13 @@ public class TransporterPort implements TransporterPortType{
 		int priceRes = 0;
 		
 		if(price <= 10){
-			priceRes = generateRandom(price);
+			priceRes = generateRandom(price-1) + 1;
 		}
 		
 		else if(10 < price && price <= 100){
 			if(price%2 != 0){
 				if(id%2 != 0){
-					priceRes = generateRandom(price);
+					priceRes = generateRandom(price-1) + 1;
 				} else{
 					priceRes = generateRandom(price) + 1 + price;
 				}
@@ -254,7 +256,7 @@ public class TransporterPort implements TransporterPortType{
 			
 			else{
 				if(id%2 == 0){
-					priceRes = generateRandom(price);
+					priceRes = generateRandom(price-1) + 1;
 				} else{
 					priceRes = generateRandom(price) + 1 + price;
 				}

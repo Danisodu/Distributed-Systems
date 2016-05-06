@@ -3,6 +3,7 @@ package pt.upa.broker.ws;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.TreeMap;
 
 import javax.jws.WebService;
 import javax.xml.registry.JAXRException;
@@ -14,6 +15,7 @@ import pt.upa.transporter.ws.BadPriceFault_Exception;
 import pt.upa.transporter.ws.JobStateView;
 import pt.upa.transporter.ws.JobView;
 import pt.upa.transporter.ws.cli.TransporterClient;
+import pt.upa.transporter.ws.cli.TransporterClientException;
 
 @WebService(
 	    endpointInterface="pt.upa.broker.ws.BrokerPortType",
@@ -26,7 +28,7 @@ import pt.upa.transporter.ws.cli.TransporterClient;
 public class BrokerPort implements BrokerPortType{
 	
 	private List<TransporterClient> clientHandlers = new ArrayList<TransporterClient>();
-	private List<BrokerJob> jobs = new ArrayList<BrokerJob>();
+	private TreeMap<String,BrokerJob> jobs = new TreeMap<String,BrokerJob>();
 	private String[] centerTravels = {"Lisboa","Leiria","Santarém","Castelo Branco","Coimbra",
 			"Aveiro","Viseu","Guarda"};
 	private String[] southTravels = {"Setúbal","Évora","Portalegre","Beja","Faro"};
@@ -49,12 +51,16 @@ public class BrokerPort implements BrokerPortType{
 			for (String url: urls){
 				
 				System.out.println(url);
-				TransporterClient clientHandler = new TransporterClient(uddiURL);
+				TransporterClient clientHandler = null;
 				
-				clientHandler.setEndpointAddress(url);
-				clientHandler.initServiceSearch();
-				
-			    addClientHandler(clientHandler);  
+				try {
+					clientHandler = new TransporterClient(url);
+				    addClientHandler(clientHandler);  
+				} catch (TransporterClientException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+								
 			    // Here, every transporterClient stays with its own transporterServer
 			}
 			
@@ -90,14 +96,8 @@ public class BrokerPort implements BrokerPortType{
 		BrokerJob job = convertJobViewToBrokerJob(view);
 		
 		job.setIdentifier(id);
-		jobs.add(job);
+		jobs.put(id, job);
 		
-		for(BrokerJob j: jobs){
-			System.out.println(j.getCompanyName() + " cn  " + j.getTransporterIdentifier() + " tId  " +  j.getIdentifier());
-		}
-		
-		System.out.println("\n");
-
 		try {
 			info = decideOffer(job, price);
 		} catch (UnknownTransportFault_Exception e) {/*No special treatment, because this will not happen*/}
@@ -108,7 +108,7 @@ public class BrokerPort implements BrokerPortType{
 	@Override
 	public TransportView viewTransport(String id) throws UnknownTransportFault_Exception {
 		
-		BrokerJob job = getJobById(id);
+		BrokerJob job = getJob(id);
 		String idT = job.getTransporterIdentifier();
 		TransporterClient clientHandler = getTransporterByJobId(id);		
 		
@@ -134,21 +134,42 @@ public class BrokerPort implements BrokerPortType{
 
 	@Override
 	public List<TransportView> listTransports() {
-
-		for(TransporterClient tc: clientHandlers){			
-			changeJobs(tc.listJobs());
-		} // Update broker jobs
 		
-		return convertJobsList();
+		BrokerJob job;
+		TransportView view;
+		changeJobs();
+		
+		TreeMap<String, TransportView> map = new TreeMap<String, TransportView>();
+		
+		for(String idKey: jobs.keySet()){
+			try {
+				job = getJob(idKey);
+				view = convertBrokerJobToTransportView(job);
+				map.put(view.getId(), view);
+			} catch (UnknownTransportFault_Exception e) {
+				// Nothing relevant to be done
+			}
+		}
+		
+		return new ArrayList<TransportView>(map.values());
 	}
 
 	public String getIdByTransporterIdentifier(String idT, String companyName){
-				
-		for(BrokerJob job: jobs){
+		
+		BrokerJob job = null;
+		
+		for(String idKey: jobs.keySet()){
+			try {
+				job = getJob(idKey);
+			} catch (UnknownTransportFault_Exception e) {
+				// MAYBE PROBLEMS
+			}
+			
 			if(job.getTransporterIdentifier().equals(idT) && job.getCompanyName().equals(companyName)){
 				return job.getIdentifier();
 			}
 		}
+
 		return null; // This will never happen
 	}
 
@@ -166,34 +187,33 @@ public class BrokerPort implements BrokerPortType{
 	}
 	
 	public void addJob(BrokerJob job){
-		jobs.add(job);
+		jobs.put(job.getIdentifier(), job);
 	}
 	
-	public BrokerJob getJob(int id) throws UnknownTransportFault_Exception{
+	public BrokerJob getJob(String id) throws UnknownTransportFault_Exception{
 		
-		BrokerJob job = null;
+		BrokerJob job;
 		
-		try{
-			job = jobs.get(id);
-		} catch(IndexOutOfBoundsException e){
+		if(id == null){
 			UnknownTransportFault fault = new UnknownTransportFault();
-			fault.setId(""+id);
+			fault.setId(id);
 			throw new UnknownTransportFault_Exception("The specified job doesn't exist.", fault);
 		}
 		
+		if(jobs.containsKey(id)){
+			job = jobs.get(id);
+		} else{
+			UnknownTransportFault fault = new UnknownTransportFault();
+			fault.setId(id);
+			throw new UnknownTransportFault_Exception("The specified job doesn't exist.", fault);
+		}
+				
 		return job;
-	}
-	
-	public BrokerJob getJobById(String id) throws UnknownTransportFault_Exception{
-		
-		int index = Integer.parseInt(id);
-		
-		return getJob(index);
 	}
 	
 	public TransporterClient getTransporterByJobId(String id) throws UnknownTransportFault_Exception {
 		
-		BrokerJob job = getJobById(id);
+		BrokerJob job = getJob(id);
 		
 		String serviceName =  job.getCompanyName();
 		
@@ -242,7 +262,7 @@ public class BrokerPort implements BrokerPortType{
 		}
 				
 		if(!(containsLocation(centerTravels,destination)) && !(containsLocation(southTravels, destination)) 
-				&& !(containsLocation(northTravels, origin))){
+				&& !(containsLocation(northTravels, destination))){
 			UnknownLocationFault fault = new UnknownLocationFault();
 			fault.setLocation(destination);
 			throw new UnknownLocationFault_Exception("Unknown destination.", fault);
@@ -337,7 +357,7 @@ public class BrokerPort implements BrokerPortType{
 	}
 	
 	public JobView bestOffer(String origin, String destination, int price, String id) throws UnavailableTransportFault_Exception, 
-			UnknownLocationFault_Exception, InvalidPriceFault_Exception{
+			UnknownLocationFault_Exception, InvalidPriceFault_Exception {
 		
 		int minPrice = Integer.MAX_VALUE, givenPrice;
 		JobView temp = null, view = null;
@@ -348,7 +368,6 @@ public class BrokerPort implements BrokerPortType{
 				temp = tc.requestJob(origin,destination,price);
 				
 				if(temp == null){
-					System.out.println("retornou null do transporter client");
 					continue;
 				}
 			} catch (BadLocationFault_Exception e) { //Sítio desconhecido 
@@ -379,7 +398,11 @@ public class BrokerPort implements BrokerPortType{
 			throw new UnavailableTransportFault_Exception("No transporters available.", fault);
 		}
 		
-		cancelProposals(proposals, view);
+		try {
+			cancelProposals(proposals, view);
+		} catch (UnknownTransportFault_Exception e) {
+			// Nothing relevant to be done
+		}
 		
 		return view;
 	}
@@ -430,50 +453,70 @@ public class BrokerPort implements BrokerPortType{
 	}
 	
 	public BrokerJob changeJob(JobView view, String id){
-		
-		int index = Integer.parseInt(id);
-				 
+						 
 		BrokerJob job = convertJobViewToBrokerJob(view);
 		
 		job.setIdentifier(id);
-		jobs.add(index,job);
+		jobs.put(job.getIdentifier(), job);
 		
 		return job;
 	}
 	
-	public void changeJobs(List<JobView> views){
-							
-		for(JobView view: views){
-			String id = this.getIdByTransporterIdentifier(view.getJobIdentifier(), view.getCompanyName());
-			changeJob(view, id);
-		}
-	}
-	
-	public List<TransportView> convertJobsList(){
+	public void changeJobs(){
 		
-		List<TransportView> convertedList = new ArrayList<TransportView>();
+		int tId;
+		TransporterClient tc = null;
+		JobView view = null;
+		BrokerJob job = null;
 		
-		for(BrokerJob job: jobs){
-			convertedList.add(convertBrokerJobToTransportView(job));
-		}
-		
-		return convertedList;
-	}
-	
-	public void cancelProposals(List<JobView> props, JobView v){
+		for(String idKey: jobs.keySet()){
+			try {
+				job = getJob(idKey);
+			} catch (UnknownTransportFault_Exception e) {
+				// MAYBE PROBLEMS
+			}
 			
-			TransporterClient tc = null;
+			tId = Integer.parseInt(job.getTransporterIdentifier());
+			
+			try {
+				tc = getTransporterByJobId(job.getIdentifier());
+			} catch (UnknownTransportFault_Exception e) { /* This will not happen */}
+			
+			view = tc.listJobs().get(tId);
+			
+			changeJob(view, job.getIdentifier());
+		}
+	}
+	
+	public TransporterClient getTransporterByCompanyName(String companyName){
+		
+		for(TransporterClient tc: clientHandlers){
+			if(tc.getServiceName().equals(companyName)){
+				return tc;
+			}
+		}
+		
+		return null;
+	}
+	
+	public void cancelProposals(List<JobView> props, JobView v) throws UnknownTransportFault_Exception{
+			
+			TransporterClient clientHandler = null;
 			
 			for(JobView prop: props){
 				
 				if(prop != v){
 	
+					clientHandler = this.getTransporterByCompanyName(prop.getCompanyName());
+					
+					if(clientHandler == null){
+						UnknownTransportFault fault = new UnknownTransportFault();
+						fault.setId("bleh");
+						throw new UnknownTransportFault_Exception("The specified transport doesn't exist",fault);
+					} //hummm
+					
 					try {
-						String id = getIdByTransporterIdentifier(prop.getJobIdentifier(),prop.getCompanyName());
-						tc = getTransporterByJobId(id);
-					} catch (UnknownTransportFault_Exception e) {/* Do nothing*/}
-					try {
-						tc.decideJob(prop.getJobIdentifier(), false);
+						clientHandler.decideJob(prop.getJobIdentifier(), false);
 					} catch (BadJobFault_Exception e) {/*Do nothing*/}				
 				}
 			}
