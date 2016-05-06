@@ -9,7 +9,7 @@ import mockit.*;
 /**
  *  Unit Test example
  *  
- *  Invoked by Maven in the "test" life-cycle phase
+ *  Invoked by Maven in the "test" mmlife-cycle phase 
  *  If necessary, should invoke "mock" remote servers 
  */
 
@@ -59,13 +59,13 @@ public class BrokerPortTest {
             broker.requestTransport("Barreiro", "Faro", 45);
              broker.clearTransports();
     }
-/*
+
     @Test(expected = UnknownLocationFault_Exception.class)
     public void testUnknownDestinity() throws Exception{
             broker.requestTransport("Vila Real", "Amadora", 45);
-             broker.clearTransports();
+            broker.clearTransports();
     }
-*/
+
     @Test(expected = InvalidPriceFault_Exception.class)
     public void testNegativePrice() throws Exception{
             broker.requestTransport("Vila Real", "Portalegre", -45);
@@ -80,7 +80,8 @@ public class BrokerPortTest {
             broker.clearTransports();
             // nao ha transportes disponiveis se consoante o pedido nao ha ofertas de nenhuma das transportadoras
     }
-/*
+    
+    /*
     @Test(expected = UnavailableTransportPriceFault_Exception.class)
     public void testUnavailablePriceTransport() throws Exception{
 
@@ -93,7 +94,7 @@ public class BrokerPortTest {
             broker.clearTransports();
             
     }*/
-/*
+
     @Test 
     public void testImparPriceImparID() throws Exception{
           
@@ -104,7 +105,7 @@ public class BrokerPortTest {
        
     } 
 
-     //teste ao clearTransports*/
+     //teste ao clearTransports
 
     @Test 
     public void cleartransports() {
@@ -144,7 +145,7 @@ public class BrokerPortTest {
 
     
     //teste ao listTransports
-/*
+
     @Test
     public void testlisttransports() throws Exception{
           
@@ -153,6 +154,6 @@ public class BrokerPortTest {
                     
           assertNotNull(broker.listTransports());  
 
-    }*/
+    }
 
 }
