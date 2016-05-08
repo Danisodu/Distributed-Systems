@@ -5,7 +5,7 @@
     <!-- http://maven.apache.org/pom.html#Quick_Overview -->
 
     <groupId>pt.upa.a48</groupId>
-    <artifactId>broker-ws-cli</artifactId>
+    <artifactId>ca-ws-cli</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -18,13 +18,14 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
-        <wsdl.directory>${basedir}/../broker-ws/src/main/resources</wsdl.directory>
-        <wsdl.filename>broker.1_0.wsdl</wsdl.filename>
+        <wsdl.directory>${basedir}/../ca-ws/src/main/resources</wsdl.directory>
+        <wsdl.filename>ca.1_0.wsdl</wsdl.filename>
 
-        <mainclass>pt.upa.broker.BrokerClientApplication</mainclass>
+        <mainclass>pt.upa.ca.CAClientApplication</mainclass>
 
 		<uddi.url>http://localhost:9090</uddi.url>
-        <ws.name>UpaBroker</ws.name>
+        <ws.name>UpaCA</ws.name>
+		
     </properties>
 
     <dependencies>

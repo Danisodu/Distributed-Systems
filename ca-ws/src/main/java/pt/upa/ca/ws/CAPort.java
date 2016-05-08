@@ -26,16 +26,10 @@ import java.security.Signature;
 import java.security.SignatureException;
 import java.io.BufferedReader;
 
-
-
-import javax.xml.ws.Endpoint;
-
-
 import javax.jws.WebService;
 import javax.xml.registry.JAXRException;
 
-import pt.ulisboa.tecnico.sdis.ws.uddi.UDDINaming;
-
+import pt.upa.ca.ws.CAPortType;
 
 @WebService(
 	    endpointInterface="pt.upa.ca.ws.CAPortType",
@@ -48,54 +42,16 @@ import pt.ulisboa.tecnico.sdis.ws.uddi.UDDINaming;
 public class CAPort implements CAPortType{
 
 	public CAPort(){}
-	/*
-	public void initHandlersSearch(){
-		
-		//System.out.printf("Contacting UDDI to find Transporters...\n\n");
-		UDDINaming uddiNaming = null;
-		String uddiURL = "http://localhost:9090";
-		
-		try {
-			uddiNaming = new UDDINaming(uddiURL);
-		
-			Collection<String> endpointAddresses = uddiNaming.list("UpaTransporter%");
-			ArrayList<String> urls = (ArrayList<String>) endpointAddresses;
-			
-			for (String url: urls){
-				
-				System.out.println(url);
-				TransporterClient clientHandler = null;
-				
-				try {
-					clientHandler = new TransporterClient(url);
-				    addClientHandler(clientHandler);  
-				} catch (TransporterClientException e) {
-					e.printStackTrace();
-				}
-								
-			    // Here, every transporterClient stays with its own transporterServer
-			}
-			
-		} catch (JAXRException e) {
-			e.printStackTrace();
-		}
-	}
-
-	*/
-	
 	
 	public String ping(String name) {
 		
 		String pong = "Hello";
 		
-		
 		return pong;
 	}
 
-
-	
-
-
+	////////// Estes metódos têm que ser gerados automaticamente pelo wsdl////////////////
+	////////// Enquanto não estiverem não vai funcionar, portanto testem à parte /////////
 	public static PublicKey getPublicKey(String name) throws Exception {
 
 		Class cls = Class.forName("CAPort");
@@ -128,11 +84,6 @@ public class CAPort implements CAPortType{
 		byte[] signature = sig.sign();
 
 		return signature;
-	}
-
-	
-
-	
-	
+	}	
 }
 
