@@ -24,8 +24,7 @@ public class BrokerApplication {
 		
 		EndpointManager endpointManager = new EndpointManager(uddiURL,name,url);
 		
-		endpointManager.publish();
-/*
+		
 		try{
 			System.out.printf("Contacting UDDI at %s%n", uddiURL);
 			UDDINaming uddiNaming;
@@ -34,13 +33,13 @@ public class BrokerApplication {
 			urlAux = uddiNaming.lookup(args[1]);
 		} catch(Exception e){ e.printStackTrace();}
 		
-		if (urlAux != null) {
+		if (urlAux == null) {
 			endpointManager.publish();
-			
 		} else{
 			FaultManager thread = new FaultManager(url);
 			thread.start();
-		}*/	
+			thread.join();
+		}
 	}
 
 }

@@ -9,13 +9,6 @@ import java.util.List;
 
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectOutputStream;
-
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -27,21 +20,9 @@ import java.security.SignatureException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 
-import java.io.BufferedReader;
-
 import javax.jws.WebService;
 
 import pt.ulisboa.tecnico.sdis.ws.uddi.UDDINaming;
-
-
-@WebService(
-	    endpointInterface="pt.upa.ca.ws.CAPortType",
-	    wsdlLocation="ca.1_0.wsdl",
-	    name="UpaCA",
-	    portName="CAPort",
-	    targetNamespace="http://ws.ca.upa.pt/",
-	    serviceName="CAService"
-	)
 
 
 
@@ -69,7 +50,7 @@ public class CAImpl implements CA{
 
 
 	//os certificados estao nas resources com os nomes das entidades respetivas e estão assinados pela CA
-	public byte[] requestCertificate(String name){
+	public byte[] requestCertificate(String name) throws Exception{
 
 		Class cls = Class.forName("CAPort");
 		ClassLoader cLoader = cls.getClassLoader();
@@ -90,10 +71,17 @@ public class CAImpl implements CA{
 
 		String cert = name + ".cer";
 
-		byte[] certificate = readFile(publicKeyPath);
+		//byte[] certificate = readFile(publicKeyPath); o publicKeyPath nao esta definido
 
-		return certificate;
+		//return certificate;
+		return null;
 
+	}
+
+	@Override
+	public String getPublicKey(String name) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

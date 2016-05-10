@@ -7,6 +7,7 @@ public class FaultManager extends Thread{
 	
 	public FaultManager(String name){
 		setWsURL(name);
+		setAlive(true);
 	}
 
 	public String getWsURL() {
@@ -17,9 +18,14 @@ public class FaultManager extends Thread{
 		this.wsURL = wsURL;
 	}
 	
-	public void run() {
-		
+	public void setAlive(boolean bool){
+		alive = bool;
+	}
 	
+	public void run() {
+		while(alive){
+			
+		}
 	}
 
 	 
