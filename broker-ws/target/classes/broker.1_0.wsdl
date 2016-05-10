@@ -45,6 +45,20 @@
 </xs:sequence>
 </xs:complexType>
 <xs:element name="pingResponse" type="tns:pingResponse"/>
+
+<xs:complexType name="update">
+<xs:sequence>
+<xs:element name="name" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+<xs:element name="update" type="tns:update"/>
+<xs:complexType name="updateResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+<xs:element name="updateResponse" type="tns:updateResponse"/>
+
 <xs:complexType name="requestTransport">
 <xs:sequence>
 <xs:element name="origin" type="xs:string" minOccurs="0"/>

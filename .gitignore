@@ -1,7 +1,7 @@
-target
+/target
 .classpath
 .settings
 .project
-..swp
+.*.swp
 .jar
-.class
+.*.class
