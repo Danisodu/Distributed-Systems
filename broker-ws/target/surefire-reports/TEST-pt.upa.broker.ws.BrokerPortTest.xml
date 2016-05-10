@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="9" failures="0" name="pt.upa.broker.ws.BrokerPortTest" time="8.369" errors="0" skipped="0">
+<testsuite tests="9" failures="0" name="pt.upa.broker.ws.BrokerPortTest" time="28.66" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_77\jre\bin"/>
@@ -44,7 +44,7 @@
     <property name="java.vm.specification.version" value="1.8"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="java.home" value="C:\Program Files\Java\jdk1.8.0_77\jre"/>
-    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher clean install"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher clean install exec:java"/>
     <property name="java.specification.vendor" value="Oracle Corporation"/>
     <property name="user.language" value="pt"/>
     <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
@@ -63,13 +63,13 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="pt.upa.broker.ws.BrokerPortTest" name="testlisttransports" time="4.012"/>
-  <testcase classname="pt.upa.broker.ws.BrokerPortTest" name="testIDTransportUnknown" time="0.616"/>
-  <testcase classname="pt.upa.broker.ws.BrokerPortTest" name="testPing" time="0.568"/>
-  <testcase classname="pt.upa.broker.ws.BrokerPortTest" name="testImparPriceImparID" time="0.624"/>
-  <testcase classname="pt.upa.broker.ws.BrokerPortTest" name="testUnknownDestinity" time="0.548"/>
-  <testcase classname="pt.upa.broker.ws.BrokerPortTest" name="testUnknownOrigin" time="0.544"/>
-  <testcase classname="pt.upa.broker.ws.BrokerPortTest" name="cleartransports" time="0.68"/>
-  <testcase classname="pt.upa.broker.ws.BrokerPortTest" name="testNegativePrice" time="0.409"/>
-  <testcase classname="pt.upa.broker.ws.BrokerPortTest" name="testUnavailableTransport" time="0.368"/>
+  <testcase classname="pt.upa.broker.ws.BrokerPortTest" name="testlisttransports" time="4.885"/>
+  <testcase classname="pt.upa.broker.ws.BrokerPortTest" name="testIDTransportUnknown" time="2.156"/>
+  <testcase classname="pt.upa.broker.ws.BrokerPortTest" name="testPing" time="3.276"/>
+  <testcase classname="pt.upa.broker.ws.BrokerPortTest" name="testImparPriceImparID" time="2.429"/>
+  <testcase classname="pt.upa.broker.ws.BrokerPortTest" name="testUnknownDestinity" time="2.455"/>
+  <testcase classname="pt.upa.broker.ws.BrokerPortTest" name="testUnknownOrigin" time="3.742"/>
+  <testcase classname="pt.upa.broker.ws.BrokerPortTest" name="cleartransports" time="2.443"/>
+  <testcase classname="pt.upa.broker.ws.BrokerPortTest" name="testNegativePrice" time="4.183"/>
+  <testcase classname="pt.upa.broker.ws.BrokerPortTest" name="testUnavailableTransport" time="3.091"/>
 </testsuite>

@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------------
 Test set: pt.upa.broker.ws.it.BrokerPortTestIT
 -------------------------------------------------------------------------------
-Tests run: 10, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 14.912 sec <<< FAILURE! - in pt.upa.broker.ws.it.BrokerPortTestIT
-testUnavailablePriceTransport(pt.upa.broker.ws.it.BrokerPortTestIT)  Time elapsed: 1.468 sec  <<< FAILURE!
-java.lang.AssertionError: Expected exception: pt.upa.broker.ws.UnavailableTransportPriceFault_Exception
+Tests run: 9, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 20.96 sec <<< FAILURE! - in pt.upa.broker.ws.it.BrokerPortTestIT
+testIDTransportUnknown(pt.upa.broker.ws.it.BrokerPortTestIT)  Time elapsed: 1.131 sec  <<< FAILURE!
+java.lang.AssertionError: Expected exception: pt.upa.broker.ws.UnknownTransportFault_Exception
 

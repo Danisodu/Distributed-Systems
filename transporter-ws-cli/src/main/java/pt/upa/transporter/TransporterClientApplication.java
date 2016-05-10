@@ -39,6 +39,6 @@ public class TransporterClientApplication {
 		System.out.println("Invoke ping()...");
 		String result = client.ping("client");
 		System.out.println(result);
-
+		
 	}
 }

@@ -15,16 +15,17 @@ import java.util.Map;
 import javax.xml.ws.BindingProvider;
 
 import pt.ulisboa.tecnico.sdis.ws.uddi.UDDINaming;
+import pt.upa.ca.ws.CA;
+import pt.upa.ca.ws.CAImplService;
 import pt.upa.ca.ws.CAPortType;
 import pt.upa.ca.ws.CAService;
-import pt.upa.ca.ws.Certificate;
 
-public class CAClient implements CAPortType {
+public class CAClient implements CAPortType{
 	/** WS service */
-	CAService service = null;
+	CAImplService service = null;
 
 	/** WS port (port type is the interface, port is the implementation) */
-	CAPortType port = null;
+	CA port = null;
 
 	/** UDDI server URL */
 	private String uddiURL = null;
@@ -40,7 +41,7 @@ public class CAClient implements CAPortType {
 	}
 
 	/** output option **/
-	private boolean verbose = false;
+	private boolean verbose = true;
 
 	public boolean isVerbose() {
 		return verbose;
@@ -93,8 +94,8 @@ public class CAClient implements CAPortType {
 	private void createStub() {
 		if (verbose)
 			System.out.println("Creating stub ...");
-		service = new CAService();
-		port = service.getCAPort();
+		service = new CAImplService();
+		port = service.getCAImplPort();
 
 		if (wsURL != null) {
 			if (verbose)
@@ -106,20 +107,9 @@ public class CAClient implements CAPortType {
 	}
 
 	// remote invocation methods ----------------------------------------------
-
+	
 	@Override
 	public String ping(String name) {
 		return port.ping(name);
-	}	
-	
-	public PublicKey getPublicKey(String name) throws Exception {
-		return null;
-//		return port.getPublicKey(name);
 	}
-	
-	public byte[] makeDigitalSignature(Certificate certificate, PrivateKey privatekey) throws Exception{
-		return null;
-//		return port.makeDigitalSignature(certificate,privatekey);
-	}	
-
 }

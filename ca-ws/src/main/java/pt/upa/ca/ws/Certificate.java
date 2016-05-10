@@ -1,28 +1,20 @@
 package pt.upa.ca.ws;
 
-import pt.upa.ca.ws.CAPort;
-
-
-import java.util.*;
 import java.security.PublicKey;
 import org.joda.time.DateTime;
-
 
 public class Certificate{
 	
  	private String companyName;
-    private PublicKey pubkey;
+//    private PublicKey pubkey;
     private DateTime timeout;
 
-    
     public Certificate(){}
     
-    public Certificate(String companyName, PublicKey pubkey, DateTime timeout) {
-    	
+    public Certificate(String companyName, DateTime timeout) {
     	setCompanyName(companyName);
-    	setPubKey(pubkey);
+    	//setPubKey(pubkey);
     	setTimeout(timeout);
-    	
 	}
 
 	public String getCompanyName() {
@@ -33,14 +25,13 @@ public class Certificate{
 		this.companyName = companyName;
 	}
 	
-	public PublicKey getPubKey() {
+	/*public PublicKey getPubKey() {
 		return pubkey;
-	}
+	}*/
 
-	public void setPubKey(PublicKey pubkey) {
+	/*public void setPubKey(PublicKey pubkey) {
 		this.pubkey=pubkey;
-	}
-	
+	}*/
 	
 	public DateTime getTimeout() {
 		return timeout;

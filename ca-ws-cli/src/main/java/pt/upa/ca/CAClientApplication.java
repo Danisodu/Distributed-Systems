@@ -28,6 +28,7 @@ public class CAClientApplication {
         String uddiURL = null;
         String wsName = null;
         String wsURL = null;
+        
         if (args.length == 1) {
             wsURL = args[0];
         } else if (args.length >= 2) {
@@ -46,9 +47,6 @@ public class CAClientApplication {
                 uddiURL, wsName);
             client = new CAClient(uddiURL, wsName);
         }
-
-        // the following remote invocations are just basic examples
-        // the actual tests are made using JUnit
 
         System.out.println("Invoke ping()...");
         String result = client.ping("CA client");

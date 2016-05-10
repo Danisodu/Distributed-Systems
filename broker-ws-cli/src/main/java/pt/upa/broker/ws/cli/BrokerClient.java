@@ -46,7 +46,7 @@ public class BrokerClient implements BrokerPortType{
 	}
 
 	/** output option **/
-	private boolean verbose = false;
+	private boolean verbose = true;
 
 	public boolean isVerbose() {
 		return verbose;

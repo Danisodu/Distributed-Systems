@@ -104,19 +104,6 @@ public class BrokerPortTestIT {
             brokerclient.clearTransports();
             // nao ha transportes disponiveis se consoante o pedido nao ha ofertas de nenhuma das transportadoras
     }
-/*
-    @Test(expected = UnavailableTransportPriceFault_Exception.class)
-    public void testUnavailablePriceTransport() throws Exception{
-
-            //vamos tratar este caso manipulando o resquestJob da transporter
-            //UpaTransporter1 --> ID impar
-            //preço par para mandar acima do preço  ---> manda proposta acima do preço  ---> broker rejeita
-
-            brokerclient.requestTransport("Lisboa", "Leiria", 30);
-
-            brokerclient.clearTransports();
-            
-    }*/
 
     @Test 
     public void testImparPriceImparID() throws Exception{

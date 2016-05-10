@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="pt.upa.broker.ws.it.RequestTransportIT" time="0.91" tests="20" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="pt.upa.broker.ws.it.RequestTransportIT" time="2.447" tests="20" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_77\jre\bin"/>
@@ -43,7 +43,7 @@
     <property name="java.vm.specification.version" value="1.8"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="java.home" value="C:\Program Files\Java\jdk1.8.0_77\jre"/>
-    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher clean install"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher clean install exec:java"/>
     <property name="java.specification.vendor" value="Oracle Corporation"/>
     <property name="user.language" value="pt"/>
     <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
@@ -62,24 +62,24 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase name="testRequestTransportNegativePrice" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.008"/>
-  <testcase name="testRequestTransportCenterOddPriceBelowUpperLimit" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.036"/>
-  <testcase name="testRequestTransportNullDestination" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.004"/>
-  <testcase name="testRequestTransportSouthBelowSmallestPrice" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.036"/>
-  <testcase name="testRequestTransportSouthEvenPriceBelowUpperLimit" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.032"/>
-  <testcase name="testRequestTransportNullOD" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0"/>
-  <testcase name="testRequestTransportNorthOddPriceBelowUpperLimit" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.028"/>
-  <testcase name="testRequestTransportSouthAboveUpperLimitPrice" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.016"/>
-  <testcase name="testRequestUnavailableLocation" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.02"/>
-  <testcase name="testRequestTransportCenterBelowSmallestPrice" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.028"/>
-  <testcase name="testRequestTransportNorthBelowSmallestPrice" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.016"/>
-  <testcase name="testRequestTransportCenterEvenPriceBelowUpperLimit" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.024"/>
-  <testcase name="testRequestTransportCenterAboveUpperLimitPrice" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.008"/>
-  <testcase name="testRequestTransportInvalidOD" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.008"/>
-  <testcase name="testRequestTransportNorthEvenPriceBelowUpperLimit" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.012"/>
+  <testcase name="testRequestTransportNegativePrice" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.006"/>
+  <testcase name="testRequestTransportCenterOddPriceBelowUpperLimit" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.017"/>
+  <testcase name="testRequestTransportNullDestination" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.006"/>
+  <testcase name="testRequestTransportSouthBelowSmallestPrice" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.021"/>
+  <testcase name="testRequestTransportSouthEvenPriceBelowUpperLimit" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.012"/>
+  <testcase name="testRequestTransportNullOD" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.006"/>
+  <testcase name="testRequestTransportNorthOddPriceBelowUpperLimit" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.016"/>
+  <testcase name="testRequestTransportSouthAboveUpperLimitPrice" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.015"/>
+  <testcase name="testRequestUnavailableLocation" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.011"/>
+  <testcase name="testRequestTransportCenterBelowSmallestPrice" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.016"/>
+  <testcase name="testRequestTransportNorthBelowSmallestPrice" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.015"/>
+  <testcase name="testRequestTransportCenterEvenPriceBelowUpperLimit" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.019"/>
+  <testcase name="testRequestTransportCenterAboveUpperLimitPrice" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.007"/>
+  <testcase name="testRequestTransportInvalidOD" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.004"/>
+  <testcase name="testRequestTransportNorthEvenPriceBelowUpperLimit" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.01"/>
   <testcase name="testRequestTransportNullOrigin" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.004"/>
-  <testcase name="testRequestTransportNorthAboveUpperLimitPrice" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.008"/>
-  <testcase name="testRequestTransportInvalidOrigin" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.008"/>
-  <testcase name="testRequestTransportInvalidDestination" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.004"/>
-  <testcase name="testRequestTransportSouthOddPriceBelowUpperLimit" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.016"/>
+  <testcase name="testRequestTransportNorthAboveUpperLimitPrice" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.007"/>
+  <testcase name="testRequestTransportInvalidOrigin" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.004"/>
+  <testcase name="testRequestTransportInvalidDestination" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.005"/>
+  <testcase name="testRequestTransportSouthOddPriceBelowUpperLimit" classname="pt.upa.broker.ws.it.RequestTransportIT" time="0.012"/>
 </testsuite>

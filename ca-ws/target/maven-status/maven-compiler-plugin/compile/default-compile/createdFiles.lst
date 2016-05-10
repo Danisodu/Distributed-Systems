@@ -1,10 +1,5 @@
 pt\upa\ca\ws\EndpointManager.class
-pt\upa\ca\ws\PingResponse.class
-pt\upa\ca\ws\CAService.class
-pt\upa\ca\ws\package-info.class
-pt\upa\ca\ws\CAPortType.class
-pt\upa\ca\ws\Ping.class
-pt\upa\ca\CAApplication.class
 pt\upa\ca\ws\Certificate.class
-pt\upa\ca\ws\CAPort.class
-pt\upa\ca\ws\ObjectFactory.class
+pt\upa\ca\CAApplication.class
+pt\upa\ca\ws\CA.class
+pt\upa\ca\ws\CAImpl.class

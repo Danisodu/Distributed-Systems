@@ -15,7 +15,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
-import java.io.IOException;
 
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -27,33 +26,18 @@ import java.security.SignatureException;
 import java.io.BufferedReader;
 
 import javax.jws.WebService;
-import javax.xml.registry.JAXRException;
 
-import pt.upa.ca.ws.CAPortType;
+@WebService(endpointInterface = "pt.upa.ca.ws.CA")
+public class CAImpl implements CA{
 
-@WebService(
-	    endpointInterface="pt.upa.ca.ws.CAPortType",
-	    wsdlLocation="ca.1_0.wsdl",
-	    name="UpaCA",
-	    portName="CAPort",
-	    targetNamespace="http://ws.ca.upa.pt/",
-	    serviceName="CAService"
-	)
-public class CAPort implements CAPortType{
-
-	public CAPort(){}
+	public CAImpl(){}
 	
 	public String ping(String name) {
-		
-		String pong = "Hello";
-		
-		return pong;
-	}
+		return name;
+	}	
 
-	////////// Estes metódos têm que ser gerados automaticamente pelo wsdl////////////////
-	////////// Enquanto não estiverem não vai funcionar, portanto testem à parte /////////
-	public static PublicKey getPublicKey(String name) throws Exception {
-
+	public String getPublicKey(String name) throws Exception {
+		
 		Class cls = Class.forName("CAPort");
 		ClassLoader cLoader = cls.getClassLoader();
 		
@@ -64,15 +48,12 @@ public class CAPort implements CAPortType{
 		KeyFactory keyFacPub = KeyFactory.getInstance("RSA");
 		PublicKey pub = keyFacPub.generatePublic(pubSpec);
 
-
-		return pub;
+		return name;
 	}
 
 	//falta criar um certificado e enviar com assinatura
 
-
-	public static byte[] makeDigitalSignature(Certificate certificate, PrivateKey privatekey) throws Exception{
-
+	/*public byte[] makeDigitalSignature(Certificate certificate, PrivateKey privatekey) throws Exception {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		ObjectOutputStream os = new ObjectOutputStream(out);
 		os.writeObject(certificate);
@@ -84,6 +65,6 @@ public class CAPort implements CAPortType{
 		byte[] signature = sig.sign();
 
 		return signature;
-	}	
+	}*/
 }
 

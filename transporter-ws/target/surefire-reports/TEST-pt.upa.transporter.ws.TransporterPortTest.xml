@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="18" failures="0" name="pt.upa.transporter.ws.TransporterPortTest" time="0.056" errors="0" skipped="0">
+<testsuite tests="18" failures="0" name="pt.upa.transporter.ws.TransporterPortTest" time="0.034" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_77\jre\bin"/>
@@ -64,21 +64,21 @@
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
   <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testImparIDSouth" time="0.02"/>
-  <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testImparPriceParID" time="0.008"/>
-  <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testParIDNorth" time="0.008"/>
+  <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testImparPriceParID" time="0.002"/>
+  <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testParIDNorth" time="0"/>
   <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testPriceGreaterThan100" time="0"/>
-  <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testPing" time="0"/>
-  <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testAcceptJobView" time="0"/>
+  <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testPing" time="0.001"/>
+  <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testAcceptJobView" time="0.001"/>
   <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testImparPriceImparID" time="0"/>
-  <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testUnknownOrigin" time="0"/>
-  <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testParPriceImparID" time="0"/>
+  <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testUnknownOrigin" time="0.002"/>
+  <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testParPriceImparID" time="0.001"/>
   <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testParPriceParID" time="0"/>
-  <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testUnknownDestination" time="0.004"/>
-  <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testRejectJobView" time="0"/>
-  <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testinvalidID" time="0.004"/>
-  <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testRequestJobNegativePrice" time="0"/>
-  <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testPriceMinorThan10" time="0.004"/>
-  <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testBadJob" time="0.004"/>
-  <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testclearJobs" time="0.004"/>
+  <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testUnknownDestination" time="0"/>
+  <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testRejectJobView" time="0.002"/>
+  <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testinvalidID" time="0.001"/>
+  <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testRequestJobNegativePrice" time="0.003"/>
+  <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testPriceMinorThan10" time="0"/>
+  <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testBadJob" time="0"/>
+  <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testclearJobs" time="0.001"/>
   <testcase classname="pt.upa.transporter.ws.TransporterPortTest" name="testlistJobs" time="0"/>
 </testsuite>

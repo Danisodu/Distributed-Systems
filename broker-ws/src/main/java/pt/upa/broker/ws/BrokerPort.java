@@ -93,10 +93,7 @@ public class BrokerPort implements BrokerPortType{
 				
 		JobView view = bestOffer(origin, destination, price, id);
 		
-		BrokerJob job = convertJobViewToBrokerJob(view);
-		
-		job.setIdentifier(id);
-		jobs.put(id, job);
+		BrokerJob job = changeJob(view, id);
 		
 		try {
 			info = decideOffer(job, price);
@@ -180,6 +177,10 @@ public class BrokerPort implements BrokerPortType{
 			tc.clearJobs();
 		}
 		jobs.clear();
+	}
+	
+	public void update(){
+		secundaryBroker.
 	}
 	
 	public void addClientHandler(TransporterClient client){

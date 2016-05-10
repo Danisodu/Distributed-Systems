@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="pt.upa.broker.ws.it.BrokerPortTestIT" time="14.912" tests="10" errors="0" skipped="0" failures="1">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="pt.upa.broker.ws.it.BrokerPortTestIT" time="20.96" tests="9" errors="0" skipped="0" failures="1">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_77\jre\bin"/>
@@ -43,7 +43,7 @@
     <property name="java.vm.specification.version" value="1.8"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="java.home" value="C:\Program Files\Java\jdk1.8.0_77\jre"/>
-    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher clean install"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher clean install exec:java"/>
     <property name="java.specification.vendor" value="Oracle Corporation"/>
     <property name="user.language" value="pt"/>
     <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
@@ -62,17 +62,16 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase name="testlisttransports" classname="pt.upa.broker.ws.it.BrokerPortTestIT" time="4.013"/>
-  <testcase name="testIDTransportUnknown" classname="pt.upa.broker.ws.it.BrokerPortTestIT" time="1.725"/>
-  <testcase name="testPing" classname="pt.upa.broker.ws.it.BrokerPortTestIT" time="0.848"/>
-  <testcase name="testUnavailablePriceTransport" classname="pt.upa.broker.ws.it.BrokerPortTestIT" time="1.468">
-    <failure message="Expected exception: pt.upa.broker.ws.UnavailableTransportPriceFault_Exception" type="java.lang.AssertionError">java.lang.AssertionError: Expected exception: pt.upa.broker.ws.UnavailableTransportPriceFault_Exception
+  <testcase name="testlisttransports" classname="pt.upa.broker.ws.it.BrokerPortTestIT" time="4.294"/>
+  <testcase name="testIDTransportUnknown" classname="pt.upa.broker.ws.it.BrokerPortTestIT" time="1.131">
+    <failure message="Expected exception: pt.upa.broker.ws.UnknownTransportFault_Exception" type="java.lang.AssertionError">java.lang.AssertionError: Expected exception: pt.upa.broker.ws.UnknownTransportFault_Exception
 </failure>
   </testcase>
-  <testcase name="testImparPriceImparID" classname="pt.upa.broker.ws.it.BrokerPortTestIT" time="1.7"/>
-  <testcase name="testUnknownDestinity" classname="pt.upa.broker.ws.it.BrokerPortTestIT" time="1.252"/>
-  <testcase name="testUnknownOrigin" classname="pt.upa.broker.ws.it.BrokerPortTestIT" time="1.038"/>
-  <testcase name="cleartransports" classname="pt.upa.broker.ws.it.BrokerPortTestIT" time="1.388"/>
-  <testcase name="testNegativePrice" classname="pt.upa.broker.ws.it.BrokerPortTestIT" time="0.608"/>
-  <testcase name="testUnavailableTransport" classname="pt.upa.broker.ws.it.BrokerPortTestIT" time="0.508"/>
+  <testcase name="testPing" classname="pt.upa.broker.ws.it.BrokerPortTestIT" time="0.898"/>
+  <testcase name="testImparPriceImparID" classname="pt.upa.broker.ws.it.BrokerPortTestIT" time="1.449"/>
+  <testcase name="testUnknownDestinity" classname="pt.upa.broker.ws.it.BrokerPortTestIT" time="0.804"/>
+  <testcase name="testUnknownOrigin" classname="pt.upa.broker.ws.it.BrokerPortTestIT" time="1.171"/>
+  <testcase name="cleartransports" classname="pt.upa.broker.ws.it.BrokerPortTestIT" time="7.667"/>
+  <testcase name="testNegativePrice" classname="pt.upa.broker.ws.it.BrokerPortTestIT" time="1.945"/>
+  <testcase name="testUnavailableTransport" classname="pt.upa.broker.ws.it.BrokerPortTestIT" time="1.047"/>
 </testsuite>

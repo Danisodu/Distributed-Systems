@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="pt.upa.transporter.ws.it.JobStatusIT" time="15.831" tests="5" errors="0" skipped="0" failures="1">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="pt.upa.transporter.ws.it.JobStatusIT" time="91.36" tests="5" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_77\jre\bin"/>
@@ -62,13 +62,9 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase name="testInvalidJobStatus" classname="pt.upa.transporter.ws.it.JobStatusIT" time="0.015"/>
-  <testcase name="testJobStatus1" classname="pt.upa.transporter.ws.it.JobStatusIT" time="0.032"/>
-  <testcase name="testJobStatus2" classname="pt.upa.transporter.ws.it.JobStatusIT" time="0.047"/>
-  <testcase name="testNullJobStatus" classname="pt.upa.transporter.ws.it.JobStatusIT" time="0"/>
-  <testcase name="testJobStateTransition" classname="pt.upa.transporter.ws.it.JobStatusIT" time="15.018">
-    <failure message="expected:&lt;0&gt; but was:&lt;2&gt;" type="java.lang.AssertionError"><![CDATA[java.lang.AssertionError: expected:<0> but was:<2>
-	at pt.upa.transporter.ws.it.JobStatusIT.testJobStateTransition(JobStatusIT.java:113)
-]]></failure>
-  </testcase>
+  <testcase name="testInvalidJobStatus" classname="pt.upa.transporter.ws.it.JobStatusIT" time="0.006"/>
+  <testcase name="testJobStatus1" classname="pt.upa.transporter.ws.it.JobStatusIT" time="0.03"/>
+  <testcase name="testJobStatus2" classname="pt.upa.transporter.ws.it.JobStatusIT" time="0.05"/>
+  <testcase name="testNullJobStatus" classname="pt.upa.transporter.ws.it.JobStatusIT" time="0.003"/>
+  <testcase name="testJobStateTransition" classname="pt.upa.transporter.ws.it.JobStatusIT" time="90.307"/>
 </testsuite>

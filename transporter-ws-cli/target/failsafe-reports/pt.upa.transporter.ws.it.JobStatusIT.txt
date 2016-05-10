@@ -1,8 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: pt.upa.transporter.ws.it.JobStatusIT
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 15.831 sec <<< FAILURE! - in pt.upa.transporter.ws.it.JobStatusIT
-testJobStateTransition(pt.upa.transporter.ws.it.JobStatusIT)  Time elapsed: 15.018 sec  <<< FAILURE!
-java.lang.AssertionError: expected:<0> but was:<2>
-	at pt.upa.transporter.ws.it.JobStatusIT.testJobStateTransition(JobStatusIT.java:113)
-
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 91.36 sec - in pt.upa.transporter.ws.it.JobStatusIT
