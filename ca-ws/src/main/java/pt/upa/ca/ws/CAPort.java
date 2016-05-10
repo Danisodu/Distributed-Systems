@@ -24,6 +24,10 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
+
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
+
 import java.io.BufferedReader;
 
 
@@ -46,6 +50,8 @@ import pt.ulisboa.tecnico.sdis.ws.uddi.UDDINaming;
 	    serviceName="CAService"
 	)
 public class CAPort implements CAPortType{
+
+	private String publicKeyPath = "/main/resources/";
 
 	public CAPort(){}
 	/*
@@ -92,11 +98,54 @@ public class CAPort implements CAPortType{
 		return pong;
 	}
 
+	private static byte[] readFile(String path) throws FileNotFoundException, IOException {
+		FileInputStream fis = new FileInputStream(path);
+		byte[] content = new byte[fis.available()];
+		fis.read(content);
+		fis.close();
+		return content;
+	}
 
-	
+
+	//os certificados estao nas resources com os nomes das entidades respetivas e estão assinados pela CA
+	public byte[] requestCertificate(String name){
+
+		Class cls = Class.forName("CAPort");
+		ClassLoader cLoader = cls.getClassLoader();
+
+		String cert = name + ".cer";
+		InputStream file = cLoader.getResourceAsStream(cert);
+		byte[] content = new byte[file.available()];
+
+		file.read(content);
+		file.close();
+
+		return content;
+	}
 
 
-	public static PublicKey getPublicKey(String name) throws Exception {
+
+	public byte[] requestCertificate2(String name){
+
+		String cert = name + ".cer";
+
+		byte[] certificate = readFile(publicKeyPath);
+
+		return certificate;
+
+	}
+
+
+
+
+	/*public static PublicKey getPublicKeyFromCertificate(Certiticate cer){
+		return cer.getPublicKey();
+	}*/
+
+    
+
+	/*public PublicKey getPublicKey(String name) throws Exception {
+
 
 		Class cls = Class.forName("CAPort");
 		ClassLoader cLoader = cls.getClassLoader();
@@ -110,12 +159,33 @@ public class CAPort implements CAPortType{
 
 
 		return pub;
-	}
+	}*/
 
-	//falta criar um certificado e enviar com assinatura
+	
+	/*public static boolean verifyDigitalSignature(byte[] cipherDigest, byte[] bytes, PublicKey publicKey) throws Exception{
+		Signature sig = Signature.getInstance("SHA1WithRSA");
+		sig.initVerify(publicKey);
+		sig.update(bytes);
+		try{
+			return sig.verify(cipherDigest);
+		}catch(SignatureException se){
+			System.err.println("Caught exception while verifying signature" + se);
+			return false;
+		}
 
+	}*/
+	
 
-	public static byte[] makeDigitalSignature(Certificate certificate, PrivateKey privatekey) throws Exception{
+	/*public static byte[] makeDigitalSignature(byte[] bytes, PrivateKey privatekey) throws Exception{
+		Signature sig = Signature.getInstance("SHA1WithRSA");
+		sig.initSign(privatekey);
+		sig.update(bytes);
+		byte[] signature = sig.sign();
+
+		return signature;
+	}*/
+
+	/*public static byte[] makeDigitalSignature(Certificate certificate, PrivateKey privatekey) throws Exception{
 
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		ObjectOutputStream os = new ObjectOutputStream(out);
@@ -128,7 +198,7 @@ public class CAPort implements CAPortType{
 		byte[] signature = sig.sign();
 
 		return signature;
-	}
+	}*/
 
 	
 
