@@ -33,7 +33,8 @@ public class BrokerPort implements BrokerPortType{
 			"Aveiro","Viseu","Guarda"};
 	private String[] southTravels = {"Setúbal","Évora","Portalegre","Beja","Faro"};
 	private String[] northTravels = {"Porto","Braga","Viana do Castelo","Vila Real","Bragança"};
-	
+	private BrokerPort broker;
+
 	public BrokerPort(){}
 	
 	public void initHandlersSearch(){
@@ -60,8 +61,6 @@ public class BrokerPort implements BrokerPortType{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-								
-			    // Here, every transporterClient stays with its own transporterServer
 			}
 			
 		} catch (JAXRException e) {
