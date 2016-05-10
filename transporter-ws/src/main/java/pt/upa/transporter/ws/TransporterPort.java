@@ -9,6 +9,21 @@ import java.util.TreeMap;
 
 import javax.jws.WebService;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.ObjectOutputStream;
+import java.security.KeyFactory;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Map;
+
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
+
+import pt.upa.ca.ws;
+
 @WebService(
 	    endpointInterface="pt.upa.transporter.ws.TransporterPortType",
 	    wsdlLocation="transporter.1_0.wsdl",
@@ -18,6 +33,8 @@ import javax.jws.WebService;
 	    serviceName="TransporterService"
 	)
 public class TransporterPort implements TransporterPortType{
+
+	private CAClient caclient;
 	
 	private int id;
 	private String companyName;
@@ -26,6 +43,7 @@ public class TransporterPort implements TransporterPortType{
 				"Aveiro","Viseu","Guarda"};
 	private String[] southTravels = {"Setúbal","Évora","Portalegre","Beja","Faro"};
 	private String[] northTravels = {"Porto","Braga","Viana do Castelo","Vila Real","Bragança"};
+
 	
 	public TransporterPort(String name){
 		companyName = name;
@@ -266,5 +284,16 @@ public class TransporterPort implements TransporterPortType{
 		}
 		
 		return priceRes;
+	}
+
+	 //<-----------------------2ªentrega------------------------->
+
+	public PublicKey getPublicKey(){
+
+		Certificate transportercertificate = caclient.GetCertificate(companyName);
+		PublicKey publicKey = transportercertificate.getPublicKey();
+
+		return publickey;
+
 	}
 }

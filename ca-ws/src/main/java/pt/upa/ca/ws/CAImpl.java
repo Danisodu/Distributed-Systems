@@ -24,6 +24,9 @@ import javax.jws.WebService;
 
 import pt.ulisboa.tecnico.sdis.ws.uddi.UDDINaming;
 
+import static javax.xml.bind.DatatypeConverter.printBase64Binary;
+
+
 
 
 @WebService(endpointInterface = "pt.upa.ca.ws.CA")
@@ -50,24 +53,27 @@ public class CAImpl implements CA{
 
 
 	//os certificados estao nas resources com os nomes das entidades respetivas e estão assinados pela CA
-	public byte[] requestCertificate(String name) throws Exception{
+	@Override
+	public String requestCertificate(String name) throws Exception{
 
 		Class cls = Class.forName("CAPort");
 		ClassLoader cLoader = cls.getClassLoader();
 
 		String cert = name + ".cer";
 		InputStream file = cLoader.getResourceAsStream(cert);
-		byte[] content = new byte[file.available()];
+		byte[] bcontent = new byte[file.available()];
 
-		file.read(content);
-		file.close();
+		String content = printBase64Binary(bcontent);
+
+		//file.read(content);
+		//file.close();
 
 		return content;
 	}
 
 
 
-	public byte[] requestCertificate2(String name){
+	/*public byte[] requestCertificate2(String name){
 
 		String cert = name + ".cer";
 
@@ -76,13 +82,13 @@ public class CAImpl implements CA{
 		//return certificate;
 		return null;
 
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public String getPublicKey(String name) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
-	}
+	}*/
 
 
 

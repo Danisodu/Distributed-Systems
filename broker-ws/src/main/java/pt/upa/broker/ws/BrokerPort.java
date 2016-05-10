@@ -17,6 +17,21 @@ import pt.upa.transporter.ws.JobView;
 import pt.upa.transporter.ws.cli.TransporterClient;
 import pt.upa.transporter.ws.cli.TransporterClientException;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.ObjectOutputStream;
+import java.security.KeyFactory;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Map;
+
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
+
+import pt.upa.ca.ws;
+
 @WebService(
 	    endpointInterface="pt.upa.broker.ws.BrokerPortType",
 	    wsdlLocation="broker.1_0.wsdl",
@@ -27,6 +42,8 @@ import pt.upa.transporter.ws.cli.TransporterClientException;
 	)
 public class BrokerPort implements BrokerPortType{
 	
+	private CAClient caclient;
+
 	private List<TransporterClient> clientHandlers = new ArrayList<TransporterClient>();
 	private TreeMap<String,BrokerJob> jobs = new TreeMap<String,BrokerJob>();
 	private String[] centerTravels = {"Lisboa","Leiria","Santarém","Castelo Branco","Coimbra",
@@ -520,6 +537,17 @@ public class BrokerPort implements BrokerPortType{
 					} catch (BadJobFault_Exception e) {/*Do nothing*/}				
 				}
 			}
-		}	
+		}
+  //<-----------------------2ªentrega------------------------->
+
+	public PublicKey getPublicKey(){
+
+		Certificate brokercertificate = caclient.GetCertificate(companyName);
+		PublicKey publicKey = brokercertificate.getPublicKey();
+
+		return publickey;
+
+	}
+
 }
 
