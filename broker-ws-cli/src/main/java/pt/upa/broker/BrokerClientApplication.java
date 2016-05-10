@@ -41,6 +41,12 @@ public class BrokerClientApplication {
         System.out.println("Invoke ping()...");
         String result = client.ping("client");
         System.out.println(result);
+        
+        try{
+        	System.out.println(client.requestTransport("Lisboa", "Leiria", 30));
+        }
+        catch(Exception e){ e.getMessage();}
+        
 
     }
 }

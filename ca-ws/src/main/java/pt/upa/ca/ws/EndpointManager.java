@@ -44,9 +44,9 @@ public class EndpointManager {
 		
 		Endpoint endpoint = null;
 		UDDINaming uddiNaming = null;
-		CAPort ca = new CAPort();
+
 		try {
-			endpoint = Endpoint.create(ca);
+			endpoint = Endpoint.create(new CAImpl());
 
 			// publish endpoint
 			System.out.printf("Starting %s%n", serviceURL);
@@ -59,12 +59,7 @@ public class EndpointManager {
 
 			// wait
 			System.out.println("Awaiting connections");
-			System.out.println("Press enter to shutdown");
-			
-			//find the transporters available
-			
-			//find(ca);
-			
+			System.out.println("Press enter to shutdown");			
 			System.in.read();
 
 		} catch (Exception e) {
@@ -91,10 +86,6 @@ public class EndpointManager {
 				System.out.printf("Caught exception when deleting: %s%n", e);
 			}
 		}
-		
-
 	}
-	
-	
 	
 }

@@ -9,9 +9,6 @@ import java.util.TreeMap;
 
 import javax.jws.WebService;
 
-import javax.jws.HandlerChain;
-
-
 @WebService(
 	    endpointInterface="pt.upa.transporter.ws.TransporterPortType",
 	    wsdlLocation="transporter.1_0.wsdl",
@@ -20,9 +17,6 @@ import javax.jws.HandlerChain;
 	    targetNamespace="http://ws.transporter.upa.pt/",
 	    serviceName="TransporterService"
 	)
-
-@HandlerChain(file="/handler-chain.xml")
-
 public class TransporterPort implements TransporterPortType{
 	
 	private int id;
@@ -82,6 +76,7 @@ public class TransporterPort implements TransporterPortType{
 			long time = generateRandom(5) + 1;
 			
 			job.setJobState(JobStateView.ACCEPTED);
+			
 			timer.schedule( new TimerTask(){
 				@Override
 				public void run() {
@@ -95,17 +90,18 @@ public class TransporterPort implements TransporterPortType{
 						job.setJobState(JobStateView.ONGOING);
 					}
 					
-					else{
+					else if(state.equals("ONGOING")){
 						job.setJobState(JobStateView.COMPLETED);
 						timer.cancel();
 					}
-					
-					jobs.put(job.getJobIdentifier(), job);
 				}
-			}, time*1000, 30*1000);
+			}, time*1000, 40*1000);
 		} else{
 			job.setJobState(JobStateView.REJECTED);
 		}
+		
+		jobs.put(job.getJobIdentifier(), job);
+
 		
 		return job;
 	}

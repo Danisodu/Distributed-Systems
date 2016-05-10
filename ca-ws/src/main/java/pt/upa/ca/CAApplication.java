@@ -1,65 +1,17 @@
 package pt.upa.ca;
 
-import pt.upa.ca.ws.CAPort;
-import java.util.*;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.PrivateKey;
-import java.security.PublicKey;
+import pt.upa.ca.ws.EndpointManager;
 
-
-//import pt.upa.ca.ws.EndpointManager;
 public class CAApplication {
-
-
-public static void main(String[] args) throws Exception {
-
-		CAPort ca = new CAPort();
-
-		//final String publicKeyPathBroker = "/broker-ws/target/";   
-		//final String privateKeyPathBroker =" /broker-ws/target/" ;   na resource do broker
-		//final String publicKeyPathTransporter = "/transporter-ws/";
-		//final String privateKeyPathTransporter = "/transporter-ws/target/";   na resource do transporter
-
-		//final String privateKeyPath = "./CAprivatekey.txt";
-		//final String publicKeyPath= "./CApublickey.txt";
-
-	
-
-		//System.out.println("Generate and save keys");
-		//write(publicKeyPathBorker, privateKeyPathBroker);
-		//write(publicKeyPathTransporter, privateKeyPathTransporter);
-		//ca.write(publicKeyPath, privateKeyPath);
-		
-	
-	
-	}
-
-}
-
-/*package pt.upa.broker;
-
-import pt.upa.broker.ws.EndpointManager;
-
-public class BrokerApplication {
 
 	public static void main(String[] args) throws Exception {
 
-
-			
-		System.out.println(BrokerApplication.class.getSimpleName() + " starting...");
+		System.out.println(CAApplication.class.getSimpleName() + " starting...");
 		
 		// Check arguments
 		if (args.length < 3) {
 			System.err.println("Argument(s) missing!");
-			System.err.printf("Usage: java %s uddiURL wsName wsURL%n", BrokerApplication.class.getName());
+			System.err.printf("Usage: java %s uddiURL wsName wsURL%n", CAApplication.class.getName());
 			return;
 		}
 
@@ -70,7 +22,6 @@ public class BrokerApplication {
 		EndpointManager endpointManager = new EndpointManager(uddiURL,name,url);
 		
 		endpointManager.publish();
-			
 	}
 
-} */
+}

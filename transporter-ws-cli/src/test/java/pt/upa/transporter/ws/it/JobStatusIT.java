@@ -104,13 +104,18 @@ public class JobStatusIT extends AbstractIT {
 		JobStateView jsv2 = CLIENT.jobStatus(jv.getJobIdentifier()).getJobState();
 		assertEquals(JobStateView.ACCEPTED, jsv2);
 
-		for (int t = 1; t <= 15; t++) {
+		for (int t = 1; t <= 90; t++) {
 			Thread.sleep(DELAY_LOWER);
 			jv = CLIENT.jobStatus(jv.getJobIdentifier());
-			if (jobStates.contains(jv.getJobState()))
+			if (jobStates.contains(jv.getJobState())){
 				jobStates.remove(jv.getJobState());
+				System.out.println(jv.getJobState().name());
+			}
 		}
+
 		assertEquals(0, jobStates.size());
+		
+
 		// this test does not strictly validate the correct sequence:
 		// HEADING -> ONGOING -> COMPLETED
 		// it just checks if the job was at each state

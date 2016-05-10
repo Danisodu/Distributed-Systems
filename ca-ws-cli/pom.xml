@@ -5,7 +5,7 @@
     <!-- http://maven.apache.org/pom.html#Quick_Overview -->
 
     <groupId>pt.upa.a48</groupId>
-    <artifactId>broker-ws-cli</artifactId>
+    <artifactId>ca-ws-cli</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -17,14 +17,16 @@
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        
+        <!-- WSDL is required for client code generation -->
+	    <ws.url>http://localhost:8080/ca-ws/endpoint</ws.url>
+        <wsdl.url>${ws.url}?WSDL</wsdl.url>
 
-        <wsdl.directory>${basedir}/../broker-ws/src/main/resources</wsdl.directory>
-        <wsdl.filename>broker.1_0.wsdl</wsdl.filename>
-
-        <mainclass>pt.upa.broker.BrokerClientApplication</mainclass>
+        <mainclass>pt.upa.ca.CAClientApplication</mainclass>
 
 		<uddi.url>http://localhost:9090</uddi.url>
-        <ws.name>UpaBroker</ws.name>
+        <ws.name>CA</ws.name>
+		
     </properties>
 
     <dependencies>
@@ -34,41 +36,15 @@
             <artifactId>jaxws-rt</artifactId>
             <version>2.2.10</version>
         </dependency>
-        <!-- JMockit - must appear before JUnit -->
-        <dependency>
-            <groupId>org.jmockit</groupId>
-            <artifactId>jmockit</artifactId>
-            <version>1.21</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- JUnit -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
          <!-- UDDI Naming -->
         <dependency>
             <groupId>pt.ulisboa.tecnico.sdis</groupId>
             <artifactId>uddi-naming</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
         </dependency>
     </dependencies>
 
     <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-        <testResources>
-            <testResource>
-                <directory>src/test/resources</directory>
-                <filtering>true</filtering>
-            </testResource>
-        </testResources>
         <plugins>
             <plugin>
                 <groupId>org.jvnet.jax-ws-commons</groupId>
@@ -83,10 +59,9 @@
                 </executions>
                 <configuration>
                     <!-- https://jax-ws-commons.java.net/jaxws-maven-plugin/wsimport-mojo.html -->
-                    <wsdlDirectory>${wsdl.directory}</wsdlDirectory>
-                    <wsdlFiles>
-                        <wsdlFile>${wsdl.filename}</wsdlFile>
-                    </wsdlFiles>
+                    <wsdlUrls>
+                        <wsdlFile>${wsdl.url}</wsdlFile>
+                    </wsdlUrls>
                 </configuration>
                 <dependencies>
                     <dependency>
