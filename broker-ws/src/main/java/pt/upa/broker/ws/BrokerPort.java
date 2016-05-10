@@ -180,7 +180,7 @@ public class BrokerPort implements BrokerPortType{
 	}
 	
 	public void update(){
-		secundaryBroker.
+//		secundaryBroker.
 	}
 	
 	public void addClientHandler(TransporterClient client){

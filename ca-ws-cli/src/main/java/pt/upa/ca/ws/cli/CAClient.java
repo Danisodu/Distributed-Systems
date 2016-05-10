@@ -17,10 +17,9 @@ import javax.xml.ws.BindingProvider;
 import pt.ulisboa.tecnico.sdis.ws.uddi.UDDINaming;
 import pt.upa.ca.ws.CA;
 import pt.upa.ca.ws.CAImplService;
-import pt.upa.ca.ws.CAPortType;
-import pt.upa.ca.ws.CAService;
+import pt.upa.ca.ws.Exception_Exception;
 
-public class CAClient implements CAPortType{
+public class CAClient implements CA{
 	/** WS service */
 	CAImplService service = null;
 
@@ -108,8 +107,13 @@ public class CAClient implements CAPortType{
 
 	// remote invocation methods ----------------------------------------------
 	
-	@Override
+	
 	public String ping(String name) {
 		return port.ping(name);
+	}
+
+	@Override
+	public String getPublicKey(String arg0) throws Exception_Exception {
+		return port.getPublicKey(arg0);
 	}
 }
