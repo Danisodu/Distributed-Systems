@@ -40,7 +40,7 @@ public class BrokerApplication {
 		} else{
 			FaultManager thread = new FaultManager(url);
 			thread.start();
-		}	*/
+		}*/	
 	}
 
 }
