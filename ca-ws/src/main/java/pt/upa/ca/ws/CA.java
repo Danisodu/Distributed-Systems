@@ -10,7 +10,6 @@ public interface CA {
 	
 	String getPublicKey(String name) throws Exception; //get broker key
 		
-	//get transproter key(int )
-//	byte[] makeDigitalSignature(Certificate certificate, PrivateKey privatekey) throws Exception;
-	
+	//METER METODOS AQUI
+		
 }
