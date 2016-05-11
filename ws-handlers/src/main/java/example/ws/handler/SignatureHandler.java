@@ -1,3 +1,4 @@
+
 package example.ws.handler;
 
 import java.util.Iterator;
@@ -46,6 +47,8 @@ public class SignatureHandler implements SOAPHandler<SOAPMessageContext> {
 
         try {
             if (outboundElement.booleanValue()) {
+
+        //assinar a mensagem ??
                 System.out.println("Writing header in outbound SOAP message...");
 
                 // get SOAP envelope
@@ -55,8 +58,11 @@ public class SignatureHandler implements SOAPHandler<SOAPMessageContext> {
 
                 // add header
                 SOAPHeader sh = se.getHeader();
+                SOAPBody bd = se.getBody();
                 if (sh == null)
                     sh = se.addHeader();
+                if (bd == null)
+                    bd = se.addHeader();
 
                 // add header element (name, namespace prefix, namespace)
                 Name name = se.createName("myHeader", "d", "http://demo");
@@ -70,11 +76,14 @@ public class SignatureHandler implements SOAPHandler<SOAPMessageContext> {
             } else {
                 System.out.println("Reading header in inbound SOAP message...");
 
+
+//vai verificar a assinatura da mensagem ??
                 // get SOAP envelope header
                 SOAPMessage msg = smc.getMessage();
                 SOAPPart sp = msg.getSOAPPart();
                 SOAPEnvelope se = sp.getEnvelope();
                 SOAPHeader sh = se.getHeader();
+                //por body
 
                 // check header
                 if (sh == null) {

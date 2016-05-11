@@ -1,14 +1,21 @@
 package pt.upa.broker.ws;
 
+import java.io.InputStream;
+import java.security.KeyStore;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.cert.Certificate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.TreeMap;
 
+import javax.jws.HandlerChain;
 import javax.jws.WebService;
 import javax.xml.registry.JAXRException;
 
 import pt.ulisboa.tecnico.sdis.ws.uddi.UDDINaming;
+import pt.upa.ca.ws.cli.CAClient;
 import pt.upa.transporter.ws.BadJobFault_Exception;
 import pt.upa.transporter.ws.BadLocationFault_Exception;
 import pt.upa.transporter.ws.BadPriceFault_Exception;
@@ -17,21 +24,8 @@ import pt.upa.transporter.ws.JobView;
 import pt.upa.transporter.ws.cli.TransporterClient;
 import pt.upa.transporter.ws.cli.TransporterClientException;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.ObjectOutputStream;
-import java.security.KeyFactory;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.Signature;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.Map;
 
-import java.security.cert.Certificate;
-import java.security.cert.CertificateFactory;
-
-import pt.upa.ca.ws;
-
+@HandlerChain(file="/handler-chain.xml")
 @WebService(
 	    endpointInterface="pt.upa.broker.ws.BrokerPortType",
 	    wsdlLocation="broker.1_0.wsdl",
@@ -530,7 +524,7 @@ public class BrokerPort implements BrokerPortType{
 						UnknownTransportFault fault = new UnknownTransportFault();
 						fault.setId("bleh");
 						throw new UnknownTransportFault_Exception("The specified transport doesn't exist",fault);
-					} //hummm
+					} 
 					
 					try {
 						clientHandler.decideJob(prop.getJobIdentifier(), false);
@@ -540,14 +534,38 @@ public class BrokerPort implements BrokerPortType{
 		}
   //<-----------------------2ªentrega------------------------->
 
-	public PublicKey getPublicKey(){
+	public PublicKey getPublicKey() throws Exception{
 
-		Certificate brokercertificate = caclient.GetCertificate(companyName);
+		Certificate brokercertificate = caclient.GetCertificate("UpaBroker");
 		PublicKey publicKey = brokercertificate.getPublicKey();
 
-		return publickey;
+		return publicKey;
 
 	}
 
+	public PrivateKey getPrivateKeyFromkeystore(char[] keyStorePassowrd, String keyAlias, char[] keypassowrd) throws Exception {
+		KeyStore keystore = readKeystoreFile(keyStorePassowrd);
+		PrivateKey pkey= (PrivateKey) keystore.getKey(keyAlias, keypassowrd);
+
+		return pkey;
+
+	}
+
+	public KeyStore readKeystoreFile(char[] keyStorePassowrd)throws Exception{
+		Class cls = Class.forName("TransporterPort");
+		ClassLoader cLoader = cls.getClassLoader();
+
+		String keystore = "UpaBroker" + ".jks";
+		InputStream file = cLoader.getResourceAsStream(keystore);
+
+		KeyStore keystore1 = KeyStore.getInstance(KeyStore.getDefaultType());
+		keystore1.load(file, keyStorePassowrd);
+		
+		return keystore1;
+
+
 }
+}
+
+
 

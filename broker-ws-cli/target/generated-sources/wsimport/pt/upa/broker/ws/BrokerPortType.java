@@ -49,9 +49,9 @@ public interface BrokerPortType {
      * @return
      *     returns java.lang.String
      * @throws UnavailableTransportPriceFault_Exception
+     * @throws UnavailableTransportFault_Exception
      * @throws UnknownLocationFault_Exception
      * @throws InvalidPriceFault_Exception
-     * @throws UnavailableTransportFault_Exception
      */
     @WebMethod
     @WebResult(targetNamespace = "")

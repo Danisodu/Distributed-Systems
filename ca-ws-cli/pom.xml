@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <!-- http://maven.apache.org/pom.html#Quick_Overview -->
 
-    <groupId>pt.upa.a48</groupId>
+    <groupId>pt.upa.a53</groupId>
     <artifactId>ca-ws-cli</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>

@@ -7,6 +7,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeMap;
 
+import javax.jws.HandlerChain;
 import javax.jws.WebService;
 
 import java.io.ByteArrayOutputStream;
@@ -22,8 +23,11 @@ import java.util.Map;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 
-import pt.upa.ca.ws;
+import java.security.KeyStore;
 
+import pt.upa.ca.ws.cli.CAClient;
+
+@HandlerChain(file="/handler-chain.xml")
 @WebService(
 	    endpointInterface="pt.upa.transporter.ws.TransporterPortType",
 	    wsdlLocation="transporter.1_0.wsdl",
@@ -35,6 +39,10 @@ import pt.upa.ca.ws;
 public class TransporterPort implements TransporterPortType{
 
 	private CAClient caclient;
+	private static String KEY_PASSWORD = "ins3cur3";
+	private static String KEY_ALIAS = "keypair";
+	private static String KEYSTORE_PASSWORD = "1nsecure";
+
 	
 	private int id;
 	private String companyName;
@@ -288,12 +296,34 @@ public class TransporterPort implements TransporterPortType{
 
 	 //<-----------------------2ªentrega------------------------->
 
-	public PublicKey getPublicKey(){
+	public PublicKey getPublicKey() throws Exception{
 
 		Certificate transportercertificate = caclient.GetCertificate(companyName);
 		PublicKey publicKey = transportercertificate.getPublicKey();
 
-		return publickey;
+		return publicKey;
+
+	}
+
+	public PrivateKey getPrivateKeyFromkeystore(char[] keyStorePassowrd, String keyAlias, char[] keypassowrd) throws Exception {
+		KeyStore keystore = readKeystoreFile(keyStorePassowrd);
+		PrivateKey pkey= (PrivateKey) keystore.getKey(keyAlias, keypassowrd);
+
+		return pkey;
+
+	}
+
+	public KeyStore readKeystoreFile(char[] keyStorePassowrd)throws Exception{
+		Class cls = Class.forName("TransporterPort");
+		ClassLoader cLoader = cls.getClassLoader();
+
+		String keystore = companyName + ".jks";
+		InputStream file = cLoader.getResourceAsStream(keystore);
+
+		KeyStore keystore1 = KeyStore.getInstance(KeyStore.getDefaultType());
+		keystore1.load(file, keyStorePassowrd);
+		
+		return keystore1;
 
 	}
 }

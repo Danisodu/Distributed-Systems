@@ -61,6 +61,13 @@
             <artifactId>uddi-naming</artifactId>
             <version>1.0</version>
         </dependency>
+              <!-- CA-ws-cli -->
+        <dependency>
+             <groupId>pt.upa.a53</groupId>
+            <artifactId>ca-ws-cli</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        
     </dependencies>
 
     <build>

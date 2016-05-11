@@ -43,23 +43,15 @@ public class CAImpl implements CA{
 		return pong;
 	}
 
-	private static byte[] readFile(String path) throws FileNotFoundException, IOException {
-		FileInputStream fis = new FileInputStream(path);
-		byte[] content = new byte[fis.available()];
-		fis.read(content);
-		fis.close();
-		return content;
-	}
-
-
-	//os certificados estao nas resources com os nomes das entidades respetivas e estão assinados pela CA
 	@Override
 	public String requestCertificate(String name) throws Exception{
 
-		Class cls = Class.forName("CAPort");
+		Class cls = Class.forName("CAImpl");
 		ClassLoader cLoader = cls.getClassLoader();
 
 		String cert = name + ".cer";
+
+		//isto implica que os certificados estao na resource do ca?
 		InputStream file = cLoader.getResourceAsStream(cert);
 		byte[] bcontent = new byte[file.available()];
 
@@ -71,6 +63,17 @@ public class CAImpl implements CA{
 		return content;
 	}
 
+	/*private static byte[] readFile(String path) throws FileNotFoundException, IOException {
+		FileInputStream fis = new FileInputStream(path);
+		byte[] content = new byte[fis.available()];
+		fis.read(content);
+		fis.close();
+		return content;
+	}
+*/
+
+	//os certificados estao nas resources com os nomes das entidades respetivas e estão assinados pela CA
+	
 
 
 	/*public byte[] requestCertificate2(String name){
