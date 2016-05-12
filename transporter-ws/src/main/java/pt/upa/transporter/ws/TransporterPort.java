@@ -38,7 +38,16 @@ import pt.upa.ca.ws.cli.CAClient;
 	)
 public class TransporterPort implements TransporterPortType{
 
-	private CAClient caclient;
+//###################################Handlers config stuff###############################
+	
+	//duvidas no que isto faz?????
+	@Resource
+	private WebServiceContext webServiceContext;
+
+	private static String TOKEN = "TransporterServer";
+//#######################################################################################
+
+	
 	private static String KEY_PASSWORD = "ins3cur3";
 	private static String KEY_ALIAS = "keypair";
 	private static String KEYSTORE_PASSWORD = "1nsecure";
@@ -296,12 +305,14 @@ public class TransporterPort implements TransporterPortType{
 
 	 //<-----------------------2ªentrega------------------------->
 
-	public PublicKey getPublicKey() throws Exception{
+	/*public Certificate GetCertificate() throws Exception{
+		return caclient.GetCertificate(companyName);
+	}
 
-		Certificate transportercertificate = caclient.GetCertificate(companyName);
-		PublicKey publicKey = transportercertificate.getPublicKey();
+	public PublicKey getPublicKey(Certificate transportercertificate) throws Exception{
 
-		return publicKey;
+	
+		return transportercertificate.getPublicKey();
 
 	}
 
@@ -325,5 +336,5 @@ public class TransporterPort implements TransporterPortType{
 		
 		return keystore1;
 
-	}
+	}*/
 }

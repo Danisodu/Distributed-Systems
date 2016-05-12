@@ -108,20 +108,23 @@ public class CAClient implements CA{
 
 	// remote invocation methods ----------------------------------------------
 	
-	
+	@Override
 	public String ping(String name) {
 		return port.ping(name);
 	}
 
 	@Override 
-	public String requestCertificate(String name) throws Exception_Exception{
+	public String requestCertificate(String name) {
 
-		return port.requestCertificate(name);
+		
+				return port.requestCertificate(name);
+		
+		
 	}
 
 
 	//nao faz mal termos um método que nao esta no serviço porque é implementation first
-	public Certificate GetCertificate(String name) throws Exception_Exception{
+	public Certificate GetCertificate(String name) throws Exception{
 	
 
 		try{

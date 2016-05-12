@@ -26,9 +26,6 @@ import pt.ulisboa.tecnico.sdis.ws.uddi.UDDINaming;
 
 import static javax.xml.bind.DatatypeConverter.printBase64Binary;
 
-
-
-
 @WebService(endpointInterface = "pt.upa.ca.ws.CA")
 public class CAImpl implements CA{
 

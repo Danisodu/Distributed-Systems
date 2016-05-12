@@ -35,8 +35,16 @@ import pt.upa.transporter.ws.cli.TransporterClientException;
 	    serviceName="BrokerService"
 	)
 public class BrokerPort implements BrokerPortType{
+//###################################Handlers config stuff###############################
 	
-	private CAClient caclient;
+	//duvidas no que isto faz?????
+	@Resource
+	private WebServiceContext webServiceContext;
+
+	private static String TOKEN = "BrokerServer";
+//#######################################################################################
+
+
 
 	private List<TransporterClient> clientHandlers = new ArrayList<TransporterClient>();
 	private TreeMap<String,BrokerJob> jobs = new TreeMap<String,BrokerJob>();
@@ -534,9 +542,14 @@ public class BrokerPort implements BrokerPortType{
 		}
   //<-----------------------2ªentrega------------------------->
 
-	public PublicKey getPublicKey() throws Exception{
+	/*public Certificate GetCertificate()throws Exception{
 
-		Certificate brokercertificate = caclient.GetCertificate("UpaBroker");
+		return caclient.GetCertificate("UpaBroker");
+	}
+
+	public PublicKey getPublicKey(Certificate brokercertificate ) throws Exception{
+
+	
 		PublicKey publicKey = brokercertificate.getPublicKey();
 
 		return publicKey;
@@ -564,7 +577,7 @@ public class BrokerPort implements BrokerPortType{
 		return keystore1;
 
 
-}
+	}*/
 }
 
 
