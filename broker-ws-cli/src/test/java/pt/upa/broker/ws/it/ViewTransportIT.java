@@ -35,16 +35,19 @@ public class ViewTransportIT extends AbstractIT {
 	      tS.remove(vt.getState());
 	  }
 	  assertEquals(0, tS.size());
+		CLIENT.clearTransports();
 	}
 
 	@Test(expected = UnknownTransportFault_Exception.class)
 	public void testViewInvalidTransport() throws Exception {
 		CLIENT.viewTransport(null);
+		CLIENT.clearTransports();
 	}
 
 	@Test(expected = UnknownTransportFault_Exception.class)
 	public void testViewNullTransport() throws Exception {
 		CLIENT.viewTransport(EMPTY_STRING);
+		CLIENT.clearTransports();
 	}
 
 }

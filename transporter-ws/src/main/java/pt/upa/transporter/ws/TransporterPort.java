@@ -7,7 +7,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeMap;
 
+import javax.annotation.Resource;
 import javax.jws.WebService;
+import javax.xml.ws.WebServiceContext;
 
 @WebService(
 	    endpointInterface="pt.upa.transporter.ws.TransporterPortType",
@@ -18,6 +20,15 @@ import javax.jws.WebService;
 	    serviceName="TransporterService"
 	)
 public class TransporterPort implements TransporterPortType{
+	
+	//###################################Handlers config stuff###############################
+	
+	//duvidas no que isto faz?????
+	@Resource
+	private WebServiceContext webServiceContext;
+
+	private static String TOKEN = "TransporterServer";
+//#######################################################################################
 	
 	private int id;
 	private String companyName;
@@ -50,13 +61,11 @@ public class TransporterPort implements TransporterPortType{
 		}
 		
 		verifyErrorCases(origin, destination, price);
-		
 		if(verifyNullCases(origin, destination, travels, price)){ return null; }
-		
 		price = decidePrice(price);
-		
-		JobView newJv = createJob(companyName, Integer.toString(jobs.size()), origin, destination, price, JobStateView.PROPOSED); 
-				
+		String id = createJobId();
+		JobView newJv = createJob(companyName, id, origin, destination, price, JobStateView.PROPOSED); 
+
 		return newJv;
 	}
 
@@ -76,7 +85,7 @@ public class TransporterPort implements TransporterPortType{
 			long time = generateRandom(5) + 1;
 			
 			job.setJobState(JobStateView.ACCEPTED);
-			
+						
 			timer.schedule( new TimerTask(){
 				@Override
 				public void run() {
@@ -95,7 +104,7 @@ public class TransporterPort implements TransporterPortType{
 						timer.cancel();
 					}
 				}
-			}, time*1000, 40*1000);
+			}, time*1000, time*1000);
 		} else{
 			job.setJobState(JobStateView.REJECTED);
 		}
@@ -131,8 +140,12 @@ public class TransporterPort implements TransporterPortType{
 	public void setTransporterIdentifier(int identifier) {
 		id = identifier;
 	}
-
-	public JobView getJob(String id) throws BadJobFault_Exception {
+	
+	private String createJobId() {
+		return companyName + "_" + jobs.size();
+	}
+	
+	private JobView getJob(String id) throws BadJobFault_Exception {
 				
 		JobView job;
 		
@@ -153,20 +166,17 @@ public class TransporterPort implements TransporterPortType{
 		return job;
 	}		
 
-	public void addJob(JobView job) {
+	private void addJob(JobView job) {
 		jobs.put(job.getJobIdentifier(), job);
 	}
 
-	public int createIdByCompanyName(){
-		
+	private int createIdByCompanyName(){
 		String id = companyName.replaceAll("\\D+","");
-		
 		int idConverted = Integer.parseInt(id);		
-		
 		return idConverted;
 	}
 	
-	public JobView createJob(String companyName, String identifier, String origin, String destination, 
+	private JobView createJob(String companyName, String identifier, String origin, String destination, 
 			int price, JobStateView state){
 		
 		JobView job = new JobView();
@@ -183,7 +193,7 @@ public class TransporterPort implements TransporterPortType{
 		return job;
 	}
 	
-	public void verifyErrorCases(String origin, String destination, int price) throws BadLocationFault_Exception, BadPriceFault_Exception{
+	private void verifyErrorCases(String origin, String destination, int price) throws BadLocationFault_Exception, BadPriceFault_Exception{
 		
 		if(!(containsLocation(southTravels,origin)) && !(containsLocation(centerTravels, origin)) 
 				&& !(containsLocation(northTravels, origin))){
@@ -206,7 +216,7 @@ public class TransporterPort implements TransporterPortType{
 		}
 	}
 	
-	public boolean verifyNullCases(String origin, String destination, String[] travels, int price){
+	private boolean verifyNullCases(String origin, String destination, String[] travels, int price){
 		
 		boolean test = false;
 		
@@ -223,7 +233,7 @@ public class TransporterPort implements TransporterPortType{
 		return test;
 	}
 	
-	public boolean containsLocation(String[] vector, String name){
+	private boolean containsLocation(String[] vector, String name){
 		
 		for(String s: vector){
 			if(s.equals(name)) return true;
@@ -232,14 +242,12 @@ public class TransporterPort implements TransporterPortType{
 		return false;
 	}
 	
-	public int generateRandom(int max){
-		
+	private int generateRandom(int max){
 		Random rand = new Random();
-		
 		return rand.nextInt(max);
 	}
 	
-	public int decidePrice(int price){
+	private int decidePrice(int price){
 		
 		int priceRes = 0;
 		

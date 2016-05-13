@@ -104,7 +104,7 @@ public class JobStatusIT extends AbstractIT {
 		JobStateView jsv2 = CLIENT.jobStatus(jv.getJobIdentifier()).getJobState();
 		assertEquals(JobStateView.ACCEPTED, jsv2);
 
-		for (int t = 1; t <= 90; t++) {
+		for (int t = 1; t <= 15; t++) {
 			Thread.sleep(DELAY_LOWER);
 			jv = CLIENT.jobStatus(jv.getJobIdentifier());
 			if (jobStates.contains(jv.getJobState())){

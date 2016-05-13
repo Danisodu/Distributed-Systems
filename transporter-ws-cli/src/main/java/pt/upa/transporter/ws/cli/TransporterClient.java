@@ -24,6 +24,16 @@ import pt.upa.transporter.ws.TransporterService;
  */
 public class TransporterClient implements TransporterPortType {
 
+	
+	//###############################Handlers config stuff###############################
+
+	public static final String CLASS_NAME= TransporterClient.class.getSimpleName();
+	public static final String TOKEN = "transporterclient";
+
+//	public BindingProvider bindingProvider = (BindingProvider) port;
+	
+//##################################################################################
+
 	/** WS service */
 	TransporterService service = null;
 
@@ -44,8 +54,10 @@ public class TransporterClient implements TransporterPortType {
 	}
 
 	/** output option **/
-	private boolean verbose = false;
-
+	private boolean verbose = true;
+	
+	private BindingProvider bindingProvider;
+	
 	public boolean isVerbose() {
 		return verbose;
 	}
@@ -108,7 +120,7 @@ public class TransporterClient implements TransporterPortType {
 		if (wsURL != null) {
 			if (verbose)
 				System.out.println("Setting endpoint address ...");
-			BindingProvider bindingProvider = (BindingProvider) port;
+			bindingProvider = (BindingProvider) port;
 			Map<String, Object> requestContext = bindingProvider.getRequestContext();
 			requestContext.put(ENDPOINT_ADDRESS_PROPERTY, wsURL);
 		}
@@ -146,5 +158,24 @@ public class TransporterClient implements TransporterPortType {
 	public void clearJobs() {
 		port.clearJobs();
 	}
+	
+	//#################################Handlers methods ###########################
+
+ 	 public void putTokenRequestContext(){
+
+		//BindingProvider bindingProvider = (BindingProvider) port;
+		Map<String, Object> requestContext = bindingProvider.getRequestContext();
+
+		//fazer RelayClientHandler????
+		requestContext.put(SignatureHandler.REQUEST_PROPERTY,TOKEN);
+		requestContext.put(ENDPOINT_ADDRESS_PROPERTY, ?????);
+
+	}
+
+	public String getTokenResponseContext(){
+		Map<String, Object> responseContext = bindingProvider.getResponseContext();
+		String finalValue = (String) responseContext.get(SignatureHandler.RESPONSE_PROPERTY);
+	}
+	//##############################################################################
 
 }

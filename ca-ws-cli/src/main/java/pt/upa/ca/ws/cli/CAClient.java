@@ -2,13 +2,18 @@ package pt.upa.ca.ws.cli;
 
 import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
+import java.security.Certificate;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Map;
 
@@ -112,8 +117,33 @@ public class CAClient implements CA{
 		return port.ping(name);
 	}
 
-	@Override
-	public String getPublicKey(String arg0) throws Exception_Exception {
-		return port.getPublicKey(arg0);
+	@Override 
+	public String requestCertificate(String name) {
+		
+		return port.requestCertificate(name);
 	}
+
+
+	//nao faz mal termos um método que nao esta no serviço porque é implementation first
+	public Certificate GetCertificate(String name) throws Exception{
+	
+
+		try{
+			/* PARA CONVERTER DE STRING PARA CERTIFICADO! */
+			String certificate = this.requestCertificate(name);
+//			byte[] certificatebytes = parseBase64Binary(certificate);
+
+			CertificateFactory cf = CertificateFactory.getInstance("X.509");
+			InputStream in = new ByteArrayInputStream(certificatebytes);
+			X509Certificate cert = (X509Certificate)cf.generateCertificate(in);
+			return cert;
+
+		} catch ( CertificateException e ) {
+			System.err.println("There was a problem converting Certificate_string to CertificateX509: " + e.getMessage() );
+			return null;
+		}
+
+	
+	}
+
 }

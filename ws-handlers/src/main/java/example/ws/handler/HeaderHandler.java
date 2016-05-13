@@ -16,6 +16,9 @@ import javax.xml.ws.handler.MessageContext.Scope;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 
+
+//é substituido pelo signature
+
 /**
  *  This SOAPHandler shows how to set/get values from headers in
  *  inbound/outbound SOAP messages.
