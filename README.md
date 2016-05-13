@@ -18,9 +18,11 @@ Repositório:
 ### Gerar Certificados
 
 Na pasta do projeto, correr o script com o nome da entidade à frente 
+
 ./gen_keys.sh [entidade]
 
 Arrastar para as respetivas pastas "resources" os .jks
+
 Guardar todos os .cer nas resources do CA 
 
 ### Ambiente  
