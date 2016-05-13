@@ -3,5 +3,5 @@
 .settings
 .project
 .*.swp
-.jar
-.*.class
+*.jar
+*.class
