@@ -7,10 +7,30 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeMap;
 
+
 import javax.annotation.Resource;
+import javax.jws.HandlerChain;
+
 import javax.jws.WebService;
 import javax.xml.ws.WebServiceContext;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.ObjectOutputStream;
+import java.security.KeyFactory;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Map;
+
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
+
+import java.security.KeyStore;
+
+
+@HandlerChain(file="/handler-chain.xml")
 @WebService(
 	    endpointInterface="pt.upa.transporter.ws.TransporterPortType",
 	    wsdlLocation="transporter.1_0.wsdl",
@@ -20,8 +40,8 @@ import javax.xml.ws.WebServiceContext;
 	    serviceName="TransporterService"
 	)
 public class TransporterPort implements TransporterPortType{
-	
-	//###################################Handlers config stuff###############################
+
+//###################################Handlers config stuff###############################
 	
 	//duvidas no que isto faz?????
 	@Resource
@@ -29,6 +49,15 @@ public class TransporterPort implements TransporterPortType{
 
 	private static String TOKEN = "TransporterServer";
 //#######################################################################################
+
+	
+	private static String KEY_PASSWORD = "ins3cur3";
+	private static String KEY_ALIAS = "keypair";
+	private static String KEYSTORE_PASSWORD = "1nsecure";
+
+	
+	//###################################Handlers config stuff###############################
+
 	
 	private int id;
 	private String companyName;
@@ -37,6 +66,7 @@ public class TransporterPort implements TransporterPortType{
 				"Aveiro","Viseu","Guarda"};
 	private String[] southTravels = {"Setúbal","Évora","Portalegre","Beja","Faro"};
 	private String[] northTravels = {"Porto","Braga","Viana do Castelo","Vila Real","Bragança"};
+
 	
 	public TransporterPort(String name){
 		companyName = name;
@@ -275,4 +305,39 @@ public class TransporterPort implements TransporterPortType{
 		
 		return priceRes;
 	}
+
+	 //<-----------------------2ªentrega------------------------->
+
+	/*public Certificate GetCertificate() throws Exception{
+		return caclient.GetCertificate(companyName);
+	}
+
+	public PublicKey getPublicKey(Certificate transportercertificate) throws Exception{
+
+	
+		return transportercertificate.getPublicKey();
+
+	}
+
+	public PrivateKey getPrivateKeyFromkeystore(char[] keyStorePassowrd, String keyAlias, char[] keypassowrd) throws Exception {
+		KeyStore keystore = readKeystoreFile(keyStorePassowrd);
+		PrivateKey pkey= (PrivateKey) keystore.getKey(keyAlias, keypassowrd);
+
+		return pkey;
+
+	}
+
+	public KeyStore readKeystoreFile(char[] keyStorePassowrd)throws Exception{
+		Class cls = Class.forName("TransporterPort");
+		ClassLoader cLoader = cls.getClassLoader();
+
+		String keystore = companyName + ".jks";
+		InputStream file = cLoader.getResourceAsStream(keystore);
+
+		KeyStore keystore1 = KeyStore.getInstance(KeyStore.getDefaultType());
+		keystore1.load(file, keyStorePassowrd);
+		
+		return keystore1;
+
+	}*/
 }

@@ -9,8 +9,10 @@ public interface CA {
 	String ping(String name);
 	
 	String requestCertificate(String name) throws Exception; //get broker key
+<<<<<<< HEAD
+=======
 		
-	//get transproter key(int )
-//	byte[] makeDigitalSignature(Certificate certificate, PrivateKey privatekey) throws Exception;
-	
+	//METER METODOS AQUI
+>>>>>>> master
+		
 }

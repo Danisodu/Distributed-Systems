@@ -1,8 +1,10 @@
 package pt.upa.ca.ws.cli;
 
+import static javax.xml.bind.DatatypeConverter.parseBase64Binary;
 import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
 
 import java.io.ByteArrayInputStream;
+<<<<<<< HEAD
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
@@ -15,14 +17,23 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.security.spec.X509EncodedKeySpec;
+=======
+import java.io.InputStream;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
+>>>>>>> master
 import java.util.Map;
+
+import pt.upa.ca.ws.CA;
+import pt.upa.ca.ws.CAImplService;
+import pt.upa.ca.ws.Exception_Exception;
 
 import javax.xml.ws.BindingProvider;
 
 import pt.ulisboa.tecnico.sdis.ws.uddi.UDDINaming;
-import pt.upa.ca.ws.CA;
-import pt.upa.ca.ws.CAImplService;
-import pt.upa.ca.ws.Exception_Exception;
+
 
 public class CAClient implements CA{
 	/** WS service */
@@ -112,15 +123,14 @@ public class CAClient implements CA{
 
 	// remote invocation methods ----------------------------------------------
 	
-	
+	@Override
 	public String ping(String name) {
 		return port.ping(name);
 	}
 
 	@Override 
 	public String requestCertificate(String name) {
-		
-		return port.requestCertificate(name);
+			return port.requestCertificate(name);
 	}
 
 
@@ -131,7 +141,7 @@ public class CAClient implements CA{
 		try{
 			/* PARA CONVERTER DE STRING PARA CERTIFICADO! */
 			String certificate = this.requestCertificate(name);
-//			byte[] certificatebytes = parseBase64Binary(certificate);
+			byte[] certificatebytes = parseBase64Binary(certificate);
 
 			CertificateFactory cf = CertificateFactory.getInstance("X.509");
 			InputStream in = new ByteArrayInputStream(certificatebytes);
@@ -145,5 +155,4 @@ public class CAClient implements CA{
 
 	
 	}
-
 }

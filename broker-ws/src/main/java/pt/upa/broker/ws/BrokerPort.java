@@ -2,6 +2,11 @@ package pt.upa.broker.ws;
 
 import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
 
+import java.io.InputStream;
+import java.security.KeyStore;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.cert.Certificate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -9,6 +14,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import javax.annotation.Resource;
+import javax.jws.HandlerChain;
 import javax.jws.WebService;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.registry.JAXRException;
@@ -25,6 +31,8 @@ import pt.upa.transporter.ws.JobView;
 import pt.upa.transporter.ws.cli.TransporterClient;
 import pt.upa.transporter.ws.cli.TransporterClientException;
 
+
+@HandlerChain(file="/handler-chain.xml")
 @WebService(
 	    endpointInterface="pt.upa.broker.ws.BrokerPortType",
 	    wsdlLocation="broker.1_0.wsdl",
@@ -32,8 +40,7 @@ import pt.upa.transporter.ws.cli.TransporterClientException;
 	    portName="BrokerPort",
 	    targetNamespace="http://ws.broker.upa.pt/",
 	    serviceName="BrokerService"
-	)
-public class BrokerPort implements BrokerPortType {
+	)public class BrokerPort implements BrokerPortType {
 	
 	//###################################Handlers config stuff###############################
 	
@@ -43,7 +50,9 @@ public class BrokerPort implements BrokerPortType {
 
 	private static String TOKEN = "BrokerServer";
 	//#######################################################################################
-	
+
+
+
 	private List<TransporterClient> clientHandlers = new ArrayList<TransporterClient>();
 	private TreeMap<String,TransportView> jobs = new TreeMap<String,TransportView>();
 	private String[] centerTravels = {"Lisboa","Leiria","Santarém","Castelo Branco","Coimbra",
@@ -498,6 +507,7 @@ public class BrokerPort implements BrokerPortType {
 						fault.setId("bleh");
 						throw new UnknownTransportFault_Exception("The specified transport doesn't exist",fault);
 					} //Will not happen
+
 					
 					try {
 						clientHandler.decideJob(prop.getJobIdentifier(), false);
@@ -505,7 +515,7 @@ public class BrokerPort implements BrokerPortType {
 				}
 			}
 	}	
-	
+
 	public void initSecondaryBroker() {
 		
 		String url = null;
@@ -528,4 +538,42 @@ public class BrokerPort implements BrokerPortType {
 		}		
 	}
 
-}
+}		
+  //<-----------------------2ªentrega------------------------->
+
+	/*public Certificate GetCertificate()throws Exception{
+
+		return caclient.GetCertificate("UpaBroker");
+	}
+
+	public PublicKey getPublicKey(Certificate brokercertificate ) throws Exception{
+
+	
+		PublicKey publicKey = brokercertificate.getPublicKey();
+
+		return publicKey;
+
+	}
+
+	public PrivateKey getPrivateKeyFromkeystore(char[] keyStorePassowrd, String keyAlias, char[] keypassowrd) throws Exception {
+		KeyStore keystore = readKeystoreFile(keyStorePassowrd);
+		PrivateKey pkey= (PrivateKey) keystore.getKey(keyAlias, keypassowrd);
+
+		return pkey;
+
+	}
+
+	public KeyStore readKeystoreFile(char[] keyStorePassowrd)throws Exception{
+		Class cls = Class.forName("TransporterPort");
+		ClassLoader cLoader = cls.getClassLoader();
+
+		String keystore = "UpaBroker" + ".jks";
+		InputStream file = cLoader.getResourceAsStream(keystore);
+
+		KeyStore keystore1 = KeyStore.getInstance(KeyStore.getDefaultType());
+		keystore1.load(file, keyStorePassowrd);
+		
+		return keystore1;
+
+
+	}*/
