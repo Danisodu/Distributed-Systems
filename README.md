@@ -44,6 +44,8 @@ cd uddi-naming
 mvn clean install  
 (Usar uddi publicado no repositório do grupo - versão 1.1 com uma alteraçao: lookup retorna null quando não encontra nenhum
 serviço publicado com o nome dado)
+
+
 -------------------------------------------------------------------------------  
 
 ### Serviço TRANSPORTER    
@@ -70,16 +72,16 @@ cd broker-ws
 mvn clean install    
 mvn exec:java  
 
-[2] Construir e executar **servidor** secundário
-Executar [1]
-
-[2] Construir **cliente** e executar testes (1)
-
-cd broker-ws-cli  
-mvn clean install  
-mvn exec:java 
-
-(1) Para se verificara a salvaguarda do estado no broker secundário, correr cliente
+[2] Construir e executar **servidor** secundário  
+Executar [1]  
+  
+[2] Construir **cliente** e executar testes (1)  
+  
+cd broker-ws-cli    
+mvn clean install    
+mvn exec:java   
+  
+(1) Para se verificara a salvaguarda do estado no broker secundário, correr cliente  
 como mvn clean install -Dmaven.test.skip=true exec:java
 
 -------------------------------------------------------------------------------
