@@ -4,38 +4,29 @@ import static javax.xml.bind.DatatypeConverter.parseBase64Binary;
 import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
 
 import java.io.ByteArrayInputStream;
-<<<<<<< HEAD
+
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
-import java.security.Certificate;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
-import java.security.spec.X509EncodedKeySpec;
-=======
-import java.io.InputStream;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
->>>>>>> master
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Map;
 
 import pt.upa.ca.ws.CA;
 import pt.upa.ca.ws.CAImplService;
-import pt.upa.ca.ws.Exception_Exception;
-
 import javax.xml.ws.BindingProvider;
 
 import pt.ulisboa.tecnico.sdis.ws.uddi.UDDINaming;
 
 
-public class CAClient implements CA{
+public class CAClient implements CA {
 	/** WS service */
 	CAImplService service = null;
 
@@ -129,38 +120,36 @@ public class CAClient implements CA{
 	}
 
 	@Override 
-	public String requestCertificate(String name) {
-<<<<<<< HEAD
-		String cert = null;
-		
-				try {
-					cert = port.requestCertificate(name);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				return cert;
-		
-		
-=======
-			return port.requestCertificate(name);
->>>>>>> 982e39d53cee3b73eae32f408bb74075e746af35
+	public String requestCertificate(String name){
+		return port.requestCertificate(name);
 	}
 
 
 	public Certificate GetCertificate(String name) throws Exception{
 	
-
 		try{
 			/* PARA CONVERTER DE STRING PARA CERTIFICADO! */
 			String certificate = this.requestCertificate(name);
+	
+	
+			if(certificate == null) {
+				System.out.println("Exception trying to request certificate");
+				return null;
+			}
 			byte[] certificatebytes = parseBase64Binary(certificate);
 
+
+			
 			CertificateFactory cf = CertificateFactory.getInstance("X.509");
 			InputStream in = new ByteArrayInputStream(certificatebytes);
-			X509Certificate cert = (X509Certificate)cf.generateCertificate(in);
+		
+
+			X509Certificate cert =(X509Certificate)cf.generateCertificate(in);
+
 			return cert;
 
 		} catch ( CertificateException e ) {
+	
 			System.err.println("There was a problem converting Certificate_string to CertificateX509: " + e.getMessage() );
 			return null;
 		}

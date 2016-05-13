@@ -2,18 +2,9 @@ package pt.upa.ca;
 
 import pt.upa.ca.ws.cli.CAClient;
 
-import java.util.*;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.cert.Certificate;
+
 
 public class CAClientApplication {
 
@@ -51,18 +42,12 @@ public class CAClientApplication {
         System.out.println("Invoke ping()...");
         String result = client.ping("CA client");
         System.out.println(result);  
+        
+        Certificate cert = client.GetCertificate("UpaBroker");
+        
+        PublicKey pc = cert.getPublicKey();
 
-		//final String publicKeyPathBroker = "/broker-ws/target/";   
-		//final String privateKeyPathBroker =" /broker-ws/target/" ;   na resource do broker
-		//final String publicKeyPathTransporter = "/transporter-ws/";
-		//final String privateKeyPathTransporter = "/transporter-ws/target/";   na resource do transporter
+    
 
-		//final String privateKeyPath = "./CAprivatekey.txt";
-		//final String publicKeyPath= "./CApublickey.txt";
-
-		//System.out.println("Generate and save keys");
-		//write(publicKeyPathBorker, privateKeyPathBroker);
-		//write(publicKeyPathTransporter, privateKeyPathTransporter);
-		//client.write(publicKeyPath, privateKeyPath);
     }
 }

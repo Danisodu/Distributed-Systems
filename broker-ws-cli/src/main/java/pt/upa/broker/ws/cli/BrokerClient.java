@@ -21,8 +21,6 @@ import pt.upa.broker.ws.UnavailableTransportPriceFault_Exception;
 import pt.upa.broker.ws.UnknownLocationFault_Exception;
 import pt.upa.broker.ws.UnknownTransportFault_Exception;
 
-import example.ws.handler.SignatureHandler;
-
 
 /**
  * Client.

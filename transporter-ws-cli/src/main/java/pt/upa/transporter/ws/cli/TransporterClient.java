@@ -160,7 +160,7 @@ public class TransporterClient implements TransporterPortType {
 	
 //#################################Handlers methods ###########################
 
- 	 public void putTokenRequestContext(){
+ 	 /*public void putTokenRequestContext(){
 
 		//BindingProvider bindingProvider = (BindingProvider) port;
 		Map<String, Object> requestContext = bindingProvider.getRequestContext();
@@ -174,6 +174,6 @@ public class TransporterClient implements TransporterPortType {
 	public String getTokenResponseContext(){
 		Map<String, Object> responseContext = bindingProvider.getResponseContext();
 		String finalValue = (String) responseContext.get(SignatureHandler.RESPONSE_PROPERTY);
-	}
+	}*/
 //##############################################################################
 }

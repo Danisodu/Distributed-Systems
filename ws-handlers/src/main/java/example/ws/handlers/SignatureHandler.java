@@ -1,7 +1,6 @@
 
-package example.ws.handler;
+package example.ws.handlers;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
@@ -54,6 +53,8 @@ import pt.upa.ca.ws.cli.CAClient;
  *  is placed in a SOAP message context property
  *  that can be accessed by other handlers or by the application.
  */
+
+
 public class SignatureHandler implements SOAPHandler<SOAPMessageContext> {
 
     public CAClient caclient;
@@ -84,7 +85,7 @@ public class SignatureHandler implements SOAPHandler<SOAPMessageContext> {
         try {
             if (outboundElement.booleanValue()) {
 
-        //assinar a mensagem ??
+            //#########################make signature##############################
                 System.out.println("Writing header in outbound SOAP message...");
 
                 // get SOAP envelope
@@ -102,8 +103,7 @@ public class SignatureHandler implements SOAPHandler<SOAPMessageContext> {
             
 
                 // add header element (name, namespace prefix, namespace)
-            
-                //o que é o namespace??
+           
                 Name name = se.createName("Header", "h", "http://upa");
                 SOAPHeaderElement element = sh.addHeaderElement(name);
 
@@ -129,8 +129,9 @@ public class SignatureHandler implements SOAPHandler<SOAPMessageContext> {
 
             } else {
                 System.out.println("Reading header in inbound SOAP message...");
-
-               //vai verificar a assinatura da mensagem 
+                
+                //####################verify signature########################
+        
                 // get SOAP envelope header
                 SOAPMessage msg = smc.getMessage();
                 SOAPPart sp = msg.getSOAPPart();
@@ -138,19 +139,16 @@ public class SignatureHandler implements SOAPHandler<SOAPMessageContext> {
                 SOAPHeader sh = se.getHeader();
                 SOAPBody bd = (SOAPBody) se.getBody();
 
-                //por body
+            
 
                 // check header
                 if (sh == null) {
                     System.out.println("Header not found.");
+                    //System.err.println(whoAmI);
                     return true;
                 }
 
-                
 
-                // get header element value
-                //String valueString = element.getValue();
-                //int value = Integer.parseInt(valueString);
 
                 //##############1 obter assinatura recebida (em bytes)#######
                 
@@ -159,6 +157,7 @@ public class SignatureHandler implements SOAPHandler<SOAPMessageContext> {
                 Iterator it = sh.getChildElements(name);
                 // check header element
                 if (!it.hasNext()) {
+                	System.err.println(whoAmI);
                     System.out.println("Header element not found.");
                     return true;
                 }
@@ -243,7 +242,7 @@ public class SignatureHandler implements SOAPHandler<SOAPMessageContext> {
     }
 
     public KeyStore readKeystoreFile(String whoAmI, char[] keyStorePassword)throws Exception{
-        Class cls = Class.forName("SignatureHandler");
+        Class cls = Class.forName("example.ws.handlers.SignatureHandler");
         ClassLoader cLoader = cls.getClassLoader();
 
         String keystore = whoAmI + ".jks";
@@ -279,7 +278,7 @@ public class SignatureHandler implements SOAPHandler<SOAPMessageContext> {
     }
 
     public PublicKey getPublicKeyCA() throws ClassNotFoundException, IOException, NoSuchAlgorithmException, InvalidKeySpecException{
-        Class cls = Class.forName("SignatureHandler");
+        Class cls = Class.forName("example.ws.handlers.SignatureHandler");
         ClassLoader cLoader = cls.getClassLoader();
 
         String keystore = "ca-key.pem";

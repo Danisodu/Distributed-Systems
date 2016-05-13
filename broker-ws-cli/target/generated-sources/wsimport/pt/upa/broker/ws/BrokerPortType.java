@@ -43,13 +43,25 @@ public interface BrokerPortType {
 
     /**
      * 
+     * @param jobsList
+     */
+    @WebMethod
+    @RequestWrapper(localName = "update", targetNamespace = "http://ws.broker.upa.pt/", className = "pt.upa.broker.ws.Update")
+    @ResponseWrapper(localName = "updateResponse", targetNamespace = "http://ws.broker.upa.pt/", className = "pt.upa.broker.ws.UpdateResponse")
+    @Action(input = "http://ws.broker.upa.pt/BrokerPort/updateRequest", output = "http://ws.broker.upa.pt/BrokerPort/updateResponse")
+    public void update(
+        @WebParam(name = "jobsList", targetNamespace = "")
+        List<TransportView> jobsList);
+
+    /**
+     * 
      * @param price
      * @param origin
      * @param destination
      * @return
      *     returns java.lang.String
-     * @throws UnavailableTransportPriceFault_Exception
      * @throws UnavailableTransportFault_Exception
+     * @throws UnavailableTransportPriceFault_Exception
      * @throws UnknownLocationFault_Exception
      * @throws InvalidPriceFault_Exception
      */

@@ -58,22 +58,15 @@ public class BrokerApplication {
 
 //		remove(name);
 		
-<<<<<<< HEAD
-		try {
-=======
-		EndpointManager endpointManager = new EndpointManager(uddiURL,name,url);
-		
-		
 		try{
->>>>>>> master
 			System.out.printf("Contacting UDDI at %s%n", uddiURL);
 			UDDINaming uddiNaming = new UDDINaming(uddiURL);
 			System.out.printf("Looking for '%s'%n", name);
 //			uddiNaming.unbind("UpaBrokerBackUp");
 			urlAux = uddiNaming.lookup(name);			
-		} catch(Exception e){ }
-		
-<<<<<<< HEAD
+		} catch(Exception e){ e.printStackTrace(); }
+
+
 		if (urlAux != null) {
 			endpointManager.setServiceName("UpaBrokerBackUp");
 			endpointManager.setServiceURL("http://localhost:8079/broker-ws/endpoint");
@@ -93,15 +86,6 @@ public class BrokerApplication {
 		endpointManager.stop();
 		
 		System.out.print("Finished process");
-=======
-		if (urlAux == null) {
-			endpointManager.publish();
-		} else{
-			FaultManager thread = new FaultManager(url);
-			thread.start();
-			thread.join();
-		}
->>>>>>> master
 	}
 
 }

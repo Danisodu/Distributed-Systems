@@ -34,7 +34,6 @@ import pt.upa.transporter.ws.cli.TransporterClient;
 import pt.upa.transporter.ws.cli.TransporterClientException;
 
 
-@HandlerChain(file="/handler-chain.xml")
 @WebService(
 	    endpointInterface="pt.upa.broker.ws.BrokerPortType",
 	    wsdlLocation="broker.1_0.wsdl",

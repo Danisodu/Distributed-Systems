@@ -20,14 +20,9 @@
 
         <mainclass>pt.upa.ca.CAApplication</mainclass>
 		
-		<uddi.url>http://localhost:9090</uddi.url>
-<<<<<<< HEAD
+	<uddi.url>http://localhost:9090</uddi.url>
         <ws.name>CA</ws.name>
         <ws.url>http://localhost:8084/ca-ws/endpoint</ws.url>
-=======
-        <ws.name>CAImpl</ws.name>
-        <ws.url>http://localhost:8080/ca-ws/endpoint</ws.url>
->>>>>>> master
       
     </properties>
 
