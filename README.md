@@ -15,6 +15,15 @@ Repositório:
 
 ## Instruções de instalação 
 
+### Gerar Certificados
+
+Na pasta do projeto, correr o script com o nome da entidade à frente 
+
+./gen_keys.sh [entidade]
+
+Arrastar para as respetivas pastas "resources" os .jks
+
+Guardar todos os .cer nas resources do CA 
 
 ### Ambiente  
 
@@ -44,6 +53,30 @@ cd uddi-naming
 mvn clean install  
 (Usar uddi publicado no repositório do grupo - versão 1.1 com uma alteraçao: lookup retorna null quando não encontra nenhum
 serviço publicado com o nome dado)
+
+-------------------------------------------------------------------------------  
+
+### Serviço CA    
+
+[1] Construir e executar **servidor**    
+
+cd ca-ws  
+mvn clean install exec:java 
+
+[2] Construir **cliente** e executar testes
+
+cd ca-ws-cli  
+mvn generate-sources
+mvn clean install exec:java
+
+-------------------------------------------------------------------------------  
+
+### Serviço Handlers    
+
+[1] Construir e executar **servidor**    
+
+cd ws-handlers
+mvn clean install 
 
 
 -------------------------------------------------------------------------------  
