@@ -66,13 +66,13 @@ mvn clean install
 
 ### Serviço BROKER
 
-[1] Construir e executar **servidor** primário
+[1] Construir e executar **servidor primário**
 
 cd broker-ws  
 mvn clean install    
 mvn exec:java  
 
-[2] Construir e executar **servidor** secundário  
+[2] Construir e executar **servidor secundário**
 Executar [1]  
   
 [2] Construir **cliente** e executar testes (1)  
@@ -81,7 +81,7 @@ cd broker-ws-cli
 mvn clean install    
 mvn exec:java   
   
-(1) Para se verificara a salvaguarda do estado no broker secundário, correr cliente  
+(1) Para se verificar a salvaguarda do estado no broker secundário, correr cliente  
 como mvn clean install -Dmaven.test.skip=true exec:java
 
 -------------------------------------------------------------------------------
