@@ -40,8 +40,11 @@ git checkout -b < tagname > (no nosso caso Project)
   
 [4] Instalar módulos de bibliotecas auxiliares  
   
-cd uddi-naming  
+cd uddi-naming
 mvn clean install  
+(Usar uddi publicado no repositório do grupo - versão 1.1 com uma alteraçao: lookup retorna null quando não encontra nenhum
+serviço publicado com o nome dado)
+
 
 -------------------------------------------------------------------------------  
 
@@ -52,7 +55,7 @@ mvn clean install
 cd transporter-ws  
 mvn clean install  
 mvn -Dws.i=X exec:java  
-("Substituir X pelo número da transportadora que se quer lançar")  
+("Substituir X pelo número da transportadora que se pretende lançar")  
 
 [2] Construir **cliente** e executar testes
 
@@ -63,17 +66,23 @@ mvn clean install
 
 ### Serviço BROKER
 
-[1] Construir e executar **servidor**
-
+[1] Construir e executar **servidor primário**  
+  
 cd broker-ws  
 mvn clean install    
 mvn exec:java  
 
-[2] Construir **cliente** e executar testes
-
-cd broker-ws-cli  
-mvn clean install  
-mvn exec:java  
+[2] Construir e executar **servidor secundário**  
+Executar [1]  
+  
+[2] Construir **cliente** e executar testes (1)  
+  
+cd broker-ws-cli    
+mvn clean install    
+mvn exec:java   
+  
+(1) Para se verificar a salvaguarda do estado no broker secundário, correr cliente  
+como mvn clean install -Dmaven.test.skip=true exec:java
 
 -------------------------------------------------------------------------------
 **FIM**

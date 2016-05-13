@@ -226,5 +226,6 @@ public class RequestTransportIT extends AbstractIT {
 	@Test(expected = UnavailableTransportFault_Exception.class)
 	public void testRequestUnavailableLocation() throws Exception {
 		CLIENT.requestTransport(SOUTH_1, NORTH_1, PRICE_SMALLEST_LIMIT);
+		CLIENT.clearTransports();
 	}
 }

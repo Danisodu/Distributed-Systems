@@ -33,6 +33,8 @@ public class CAImpl implements CA{
 	
 	public String ping(String name) {
 
+<<<<<<< HEAD
+=======
 		
 		String pong = "Hello";
 		
@@ -40,10 +42,13 @@ public class CAImpl implements CA{
 		return pong;
 	}
 
+>>>>>>> master
 	@Override
 	public String requestCertificate(String name) throws Exception{
 
 		Class cls = Class.forName("CAImpl");
+<<<<<<< HEAD
+=======
 		ClassLoader cLoader = cls.getClassLoader();
 
 		String cert = name + ".cer";
@@ -104,15 +109,23 @@ public class CAImpl implements CA{
 	/*public String getPublicKey(String name) throws Exception {
 		
 		Class cls = Class.forName("CAPort");
+>>>>>>> master
 		ClassLoader cLoader = cls.getClassLoader();
-		
-		InputStream file = cLoader.getResourceAsStream(name);
-		byte[] content = new byte[file.available()];
 
-		X509EncodedKeySpec pubSpec = new X509EncodedKeySpec(content);
-		KeyFactory keyFacPub = KeyFactory.getInstance("RSA");
-		PublicKey pub = keyFacPub.generatePublic(pubSpec);
+		String cert = name + ".cer";
 
+<<<<<<< HEAD
+		//isto implica que os certificados estao na resource do ca?
+		InputStream file = cLoader.getResourceAsStream(cert);
+		byte[] bcontent = new byte[file.available()];
+
+		String content = printBase64Binary(bcontent);
+
+		//file.read(content);
+		//file.close();
+
+		return content;
+=======
 
 
 		
@@ -131,6 +144,7 @@ public class CAImpl implements CA{
 		}
 
 		return name;
+>>>>>>> master
 	}
 
 

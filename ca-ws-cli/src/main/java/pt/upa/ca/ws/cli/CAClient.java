@@ -4,11 +4,26 @@ import static javax.xml.bind.DatatypeConverter.parseBase64Binary;
 import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
 
 import java.io.ByteArrayInputStream;
+<<<<<<< HEAD
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.ObjectOutputStream;
+import java.security.Certificate;
+import java.security.KeyFactory;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
+import java.security.spec.X509EncodedKeySpec;
+=======
 import java.io.InputStream;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+>>>>>>> master
 import java.util.Map;
 
 import pt.upa.ca.ws.CA;
@@ -115,6 +130,7 @@ public class CAClient implements CA{
 
 	@Override 
 	public String requestCertificate(String name) {
+<<<<<<< HEAD
 		String cert = null;
 		
 				try {
@@ -125,6 +141,9 @@ public class CAClient implements CA{
 				return cert;
 		
 		
+=======
+			return port.requestCertificate(name);
+>>>>>>> 982e39d53cee3b73eae32f408bb74075e746af35
 	}
 
 
@@ -148,7 +167,4 @@ public class CAClient implements CA{
 
 	
 	}
-
-
-
 }

@@ -1,5 +1,8 @@
 package pt.upa.broker;
 
+import java.util.List;
+
+import pt.upa.broker.ws.TransportView;
 import pt.upa.broker.ws.cli.BrokerClient;
 
 
@@ -38,15 +41,30 @@ public class BrokerClientApplication {
         // the following remote invocations are just basic examples
         // the actual tests are made using JUnit
 
-        System.out.println("Invoke ping()...");
-        String result = client.ping("client");
-        System.out.println(result);
         
-        try{
-        	System.out.println(client.requestTransport("Lisboa", "Leiria", 30));
-        }
-        catch(Exception e){ e.getMessage();}
-        
+        System.out.println("Ping...");
 
+        System.out.println(client.ping("ohh"));
+
+        System.out.println("List...");
+
+        List<TransportView> list = client.listTransports();
+                
+        for(TransportView view: list){
+            System.out.println(view.getId());
+        }
+        
+        System.out.println("Request...");
+        
+        System.out.println(client.requestTransport("Leiria", "Lisboa", 31));
+        
+        System.out.println("List...");
+
+        list = client.listTransports();
+        
+        for(TransportView view: list){
+            System.out.println(view.getId());
+        }
     }
+    
 }
