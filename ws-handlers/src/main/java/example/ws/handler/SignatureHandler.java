@@ -2,7 +2,9 @@
 package example.ws.handler;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.security.InvalidKeyException;
+import java.security.KeyFactory;
 import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -12,6 +14,8 @@ import java.security.Signature;
 import java.security.SignatureException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -112,7 +116,6 @@ public class SignatureHandler implements SOAPHandler<SOAPMessageContext> {
 
 
                 PrivateKey pkwhoami = getPrivateKey(whoAmI);
-
                 byte[] cipherdigest =makedigitalSignature(soapbodymessage,pkwhoami);
 
                 
@@ -120,19 +123,21 @@ public class SignatureHandler implements SOAPHandler<SOAPMessageContext> {
                 
                 String header = printBase64Binary(cipherdigest);
                 element.addTextNode(header);
-                Name sender = se.createName("Sender", "s", "http://demo");
+                Name sender = se.createName("Sender", "s", "http://sender");
                 SOAPHeaderElement element1 = sh.addHeaderElement(sender);
                 element1.addTextNode(whoAmI);
 
             } else {
                 System.out.println("Reading header in inbound SOAP message...");
 
-               //vai verificar a assinatura da mensagem ??
+               //vai verificar a assinatura da mensagem 
                 // get SOAP envelope header
                 SOAPMessage msg = smc.getMessage();
                 SOAPPart sp = msg.getSOAPPart();
                 SOAPEnvelope se = sp.getEnvelope();
                 SOAPHeader sh = se.getHeader();
+                SOAPBody bd = (SOAPBody) se.getBody();
+
                 //por body
 
                 // check header
@@ -141,8 +146,16 @@ public class SignatureHandler implements SOAPHandler<SOAPMessageContext> {
                     return true;
                 }
 
+                
+
+                // get header element value
+                //String valueString = element.getValue();
+                //int value = Integer.parseInt(valueString);
+
+                //##############1 obter assinatura recebida (em bytes)#######
+                
                 // get first header element
-                Name name = se.createName("myHeader", "d", "http://upa");
+                Name name = se.createName("Header", "h", "http://upa");
                 Iterator it = sh.getChildElements(name);
                 // check header element
                 if (!it.hasNext()) {
@@ -150,16 +163,39 @@ public class SignatureHandler implements SOAPHandler<SOAPMessageContext> {
                     return true;
                 }
                 SOAPElement element = (SOAPElement) it.next();
-
-                // get header element value
                 String valueString = element.getValue();
-                int value = Integer.parseInt(valueString);
 
-                // print received header
-                System.out.println("Header value is " + value);
+                byte[] signature = parseBase64Binary(valueString);
+
+
+                //#####################2 obter whoAmI#########################
+                Name name1 = se.createName("Sender", "s", "http://sender");
+                Iterator it1 = sh.getChildElements(name1);
+                // check header element
+                if (!it1.hasNext()) {
+                    System.out.println("Sender element not found.");
+                    return true;
+                }
+                SOAPElement element1 = (SOAPElement) it1.next();
+
+                whoAmI = element1.getValue();
+
+                //#####################3 obter o soapBody#####################
+
+                byte[] soapbodymessage = SOAPMessageToByteArray(bd);
+
+                //#####################Digest Verify########################
+
+                    //########obter chave publica do whoAmI########
+
+                PublicKey pubkey = getPublicKeyFromSender();
+               
+                DigestVerify(soapbodymessage, signature, pubkey);
+
+
 
                 // put header in a property context
-                smc.put(CONTEXT_PROPERTY, value);
+                smc.put(CONTEXT_PROPERTY, signature);
                 // set property scope to application client/server class can access it
                 smc.setScope(CONTEXT_PROPERTY, Scope.APPLICATION);
 
@@ -191,8 +227,6 @@ public class SignatureHandler implements SOAPHandler<SOAPMessageContext> {
     }
 
 
-
-
     public byte[] makedigitalSignature(byte[] bytearraybody, PrivateKey pkwhoiam) throws InvalidKeyException, SignatureException, NoSuchAlgorithmException{
     
         Signature sig= Signature.getInstance("SHA1WithRSA");
@@ -212,12 +246,8 @@ public class SignatureHandler implements SOAPHandler<SOAPMessageContext> {
         Class cls = Class.forName("SignatureHandler");
         ClassLoader cLoader = cls.getClassLoader();
 
-        //é preciso dar o caminho e retornar o caminho
-
         String keystore = whoAmI + ".jks";
         InputStream file = cLoader.getResourceAsStream(keystore);
-
-        //byte[] bcontent = new byte[file.available()];
 
         
         KeyStore keystore1 = KeyStore.getInstance(KeyStore.getDefaultType());
@@ -240,7 +270,30 @@ public class SignatureHandler implements SOAPHandler<SOAPMessageContext> {
    
 
     public Certificate GetCertificate(String companyName) throws Exception{
-        return caclient.GetCertificate(companyName);
+        Certificate cer = caclient.GetCertificate(companyName);
+        PublicKey pubkeyca = getPublicKeyCA();
+        verifySignedCertificate(cer,pubkeyca);
+        return cer;
+        
+        
+    }
+
+    public PublicKey getPublicKeyCA() throws ClassNotFoundException, IOException, NoSuchAlgorithmException, InvalidKeySpecException{
+        Class cls = Class.forName("SignatureHandler");
+        ClassLoader cLoader = cls.getClassLoader();
+
+        String keystore = "ca-key.pem";
+        InputStream file = cLoader.getResourceAsStream(keystore);
+
+        byte[] content = new byte[file.available()];
+        file.read(content);
+        file.close();
+
+        X509EncodedKeySpec pubspec = new X509EncodedKeySpec(content);
+        KeyFactory keyfacPub = KeyFactory.getInstance("RSA");
+
+        return keyfacPub.generatePublic(pubspec); 
+
     }
     
     public boolean verifySignedCertificate(Certificate certificate, PublicKey caPublicKey) {
@@ -254,6 +307,30 @@ public class SignatureHandler implements SOAPHandler<SOAPMessageContext> {
         return true;
     }
 
+    public PublicKey getPublicKeyFromCertificate(Certificate certificate) {
+        return certificate.getPublicKey();
+    }
+
+    public PublicKey getPublicKeyFromSender() throws Exception{
+
+        Certificate cer = GetCertificate(whoAmI);
+        return getPublicKeyFromCertificate(cer);
+
+
+    }
+
+
+    public boolean DigestVerify(byte[] soapbody, byte[] signature, PublicKey pubkeysender)throws Exception{
+        Signature sig = Signature.getInstance("SHA1WithRSA");
+        sig.initVerify(pubkeysender);
+        sig.update(soapbody);
+        try{
+            return sig.verify(signature);
+        } catch(SignatureException se){
+            System.err.println("Caught exception while verifying " + se);
+            return false;
+        }
+    }
 
 
 }

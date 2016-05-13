@@ -115,15 +115,19 @@ public class CAClient implements CA{
 
 	@Override 
 	public String requestCertificate(String name) {
-
+		String cert = null;
 		
-				return port.requestCertificate(name);
+				try {
+					cert = port.requestCertificate(name);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return cert;
 		
 		
 	}
 
 
-	//nao faz mal termos um método que nao esta no serviço porque é implementation first
 	public Certificate GetCertificate(String name) throws Exception{
 	
 

@@ -10,9 +10,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.TreeMap;
 
+import javax.annotation.Resource;
 import javax.jws.HandlerChain;
 import javax.jws.WebService;
 import javax.xml.registry.JAXRException;
+import javax.xml.ws.WebServiceContext;
 
 import pt.ulisboa.tecnico.sdis.ws.uddi.UDDINaming;
 import pt.upa.ca.ws.cli.CAClient;
