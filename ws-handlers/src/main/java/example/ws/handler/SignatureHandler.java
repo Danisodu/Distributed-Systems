@@ -100,7 +100,7 @@ public class SignatureHandler implements SOAPHandler<SOAPMessageContext> {
                 // add header element (name, namespace prefix, namespace)
             
                 //o que é o namespace??
-                Name name = se.createName("Header", "h", "http://demo");
+                Name name = se.createName("Header", "h", "http://upa");
                 SOAPHeaderElement element = sh.addHeaderElement(name);
 
           
@@ -142,7 +142,7 @@ public class SignatureHandler implements SOAPHandler<SOAPMessageContext> {
                 }
 
                 // get first header element
-                Name name = se.createName("myHeader", "d", "http://demo");
+                Name name = se.createName("myHeader", "d", "http://upa");
                 Iterator it = sh.getChildElements(name);
                 // check header element
                 if (!it.hasNext()) {
